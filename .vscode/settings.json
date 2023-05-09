@@ -1,0 +1,5 @@
+{
+    "files.autoSave": "onFocusChange",
+    "omnisharp.enableRoslynAnalyzers": true,
+    "omnisharp.enableEditorConfigSupport": true
+}
