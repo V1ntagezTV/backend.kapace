@@ -1,0 +1,12 @@
+C:\Users\insur\RiderProjects\backend-kapace\backend.Infrastructure\bin\Debug\net7.0\backend.Infrastructure.deps.json
+C:\Users\insur\RiderProjects\backend-kapace\backend.Infrastructure\bin\Debug\net7.0\backend.Infrastructure.dll
+C:\Users\insur\RiderProjects\backend-kapace\backend.Infrastructure\bin\Debug\net7.0\backend.Infrastructure.pdb
+C:\Users\insur\RiderProjects\backend-kapace\backend.Infrastructure\obj\Debug\net7.0\backend.Infrastructure.csproj.AssemblyReference.cache
+C:\Users\insur\RiderProjects\backend-kapace\backend.Infrastructure\obj\Debug\net7.0\backend.Infrastructure.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\insur\RiderProjects\backend-kapace\backend.Infrastructure\obj\Debug\net7.0\backend.Infrastructure.AssemblyInfoInputs.cache
+C:\Users\insur\RiderProjects\backend-kapace\backend.Infrastructure\obj\Debug\net7.0\backend.Infrastructure.AssemblyInfo.cs
+C:\Users\insur\RiderProjects\backend-kapace\backend.Infrastructure\obj\Debug\net7.0\backend.Infrastructure.csproj.CoreCompileInputs.cache
+C:\Users\insur\RiderProjects\backend-kapace\backend.Infrastructure\obj\Debug\net7.0\backend.Infrastructure.dll
+C:\Users\insur\RiderProjects\backend-kapace\backend.Infrastructure\obj\Debug\net7.0\refint\backend.Infrastructure.dll
+C:\Users\insur\RiderProjects\backend-kapace\backend.Infrastructure\obj\Debug\net7.0\backend.Infrastructure.pdb
+C:\Users\insur\RiderProjects\backend-kapace\backend.Infrastructure\obj\Debug\net7.0\ref\backend.Infrastructure.dll

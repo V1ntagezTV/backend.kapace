@@ -1,0 +1,21 @@
+﻿version: "3"
+services:
+  
+  backend-kapace:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    depends_on:
+      - backend-kapace-db
+    ports:
+      - "5000:5000"
+
+  backend-kapace-db:
+    image: postgres
+    restart: always
+    environment:
+      - "POSTGRES_DB=backend-kapace-db"
+      - "POSTGRES_USER=backend-kapace-user"
+      - "POSTGRES_PASSWORD=Fgtkmcby1998"
+    ports:
+      - "22499:5432"

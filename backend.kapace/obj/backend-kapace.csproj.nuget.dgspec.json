@@ -1,0 +1,67 @@
+{
+  "format": 1,
+  "restore": {
+    "C:\\Users\\insur\\RiderProjects\\backend-kapace\\backend-kapace\\backend-kapace.csproj": {}
+  },
+  "projects": {
+    "C:\\Users\\insur\\RiderProjects\\backend-kapace\\backend-kapace\\backend-kapace.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "C:\\Users\\insur\\RiderProjects\\backend-kapace\\backend-kapace\\backend-kapace.csproj",
+        "projectName": "backend-kapace",
+        "projectPath": "C:\\Users\\insur\\RiderProjects\\backend-kapace\\backend-kapace\\backend-kapace.csproj",
+        "packagesPath": "C:\\Users\\insur\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\insur\\RiderProjects\\backend-kapace\\backend-kapace\\obj\\",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "C:\\Users\\insur\\AppData\\Roaming\\NuGet\\NuGet.Config"
+        ],
+        "originalTargetFrameworks": [
+          "net7.0"
+        ],
+        "sources": {
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net7.0": {
+            "targetAlias": "net7.0",
+            "projectReferences": {}
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "net7.0": {
+          "targetAlias": "net7.0",
+          "dependencies": {
+            "GraphQL": {
+              "target": "Package",
+              "version": "[7.3.0, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Users\\insur\\.dotnet\\sdk\\7.0.101\\RuntimeIdentifierGraph.json"
+        }
+      }
+    }
+  }
+}
