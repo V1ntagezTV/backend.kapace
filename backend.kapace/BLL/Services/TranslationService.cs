@@ -1,3 +1,4 @@
+using backend.kapace.BLL.Enums;
 using backend.kapace.BLL.Models;
 using backend.kapace.BLL.Services.Interfaces;
 using backend.kapace.DAL.Repository.Interfaces;
@@ -22,7 +23,14 @@ public class TranslationService : ITranslationService
         }
 
         return episodes
-            .Select(x => new Translation(x.Id, x.EpisodeId, x.Language, x.Link, x.TranslationType, x.CreatedAt, x.CreatedBy))
+            .Select(x => new Translation(
+                x.Id,
+                x.EpisodeId,
+                (Language) x.Language,
+                x.Link,
+                x.TranslationType,
+                x.CreatedAt, 
+                x.CreatedBy))
             .ToArray();
     }
 }

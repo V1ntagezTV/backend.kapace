@@ -52,6 +52,9 @@ public record V1GetByQueryResponse
         public required TranslationType TranslationType { get; init; }
         public required DateTimeOffset CreatedAt { get; init; }
         public required long CreatedBy { get; init; }
+        public required long? TranslatorId { get; init; }
+        public required string? TranslatorName { get; init; }
+        public required string? TranslatorLink { get; init; }
     }
 
     public record V1GetByQueryGenre

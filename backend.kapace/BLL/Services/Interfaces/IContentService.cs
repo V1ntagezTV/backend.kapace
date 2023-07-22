@@ -26,4 +26,6 @@ public interface IContentService
         QueryPaging queryPaging,
         ContentSelectedInfo selectedInfo,
         CancellationToken token);
+
+    Task UpsertAsync(UpsertModel upsertModel, CancellationToken token=default);
 }

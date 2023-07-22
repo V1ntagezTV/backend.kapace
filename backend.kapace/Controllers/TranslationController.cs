@@ -23,7 +23,7 @@ public class TranslationController : Controller {
         var episode = await _translationService.GetByEpisodeAsync(request.EpisodeId, token);
 
         return new OkObjectResult(new V1GetByEpisodeResponse() {
-            Translations = episode.Select(x => new V1GetByEpisodeResponse.V1GetByEpisodeTranslation() 
+            Translations = episode.Select(x => new V1GetByEpisodeResponse.V1GetByEpisodeTranslation
             {
                 TranslationId = x.TranslationId,
                 EpisodeId = x.EpisodeId,
@@ -32,6 +32,10 @@ public class TranslationController : Controller {
                 TranslationType = x.TranslationType,
                 CreatedAt = x.CreatedAt,
                 CreatedBy = x.CreatedBy,
+                TranslatorId = x.TranslationId,
+                Translator = "Азалии переводчик",
+                TranslatorLink = "https://vk.com",
+                Quality = 720,
             }).ToArray()
         });
     }

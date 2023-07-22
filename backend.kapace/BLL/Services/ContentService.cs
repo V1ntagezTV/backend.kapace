@@ -141,7 +141,8 @@ internal class ContentService : IContentService
     {
         var contentIds = Array.Empty<long>();
         var genresMapByContentIdTask = Task.FromResult(new Dictionary<long, GetByQueryResult.GetByQueryGenre[]>());
-        var translatesMapByContentIdTask = Task.FromResult((IReadOnlyCollection<Translation>)Array.Empty<Translation>());
+        var translatesMapByContentIdTask =
+            Task.FromResult((IReadOnlyCollection<Translation.WithTranslator>)Array.Empty<Translation.WithTranslator>());
         var episodesMapByContentIdTask = Task.FromResult(Array.Empty<Episode>());
         
         Dictionary<long, GetByQueryResult.GetByQueryGenre[]> genresMapByContentId;
@@ -216,7 +217,10 @@ internal class ContentService : IContentService
                         Link = translate.Link,
                         TranslationType = translate.TranslationType,
                         CreatedAt = translate.CreatedAt,
-                        CreatedBy = translate.CreatedBy
+                        CreatedBy = translate.CreatedBy,
+                        TranslatorId = translate.TranslatorId,
+                        TranslatorName = translate.TranslatorName,
+                        TranslatorLink = translate.TranslatorLink,
                     }).ToArray());
         
         var episodesMapByContentId = episodesMapByContentIdTask.Result
@@ -265,6 +269,11 @@ internal class ContentService : IContentService
                 ? contentEpisodes
                 : Array.Empty<GetByQueryResult.GetByQueryEpisode>(),
         }).ToArray();
+    }
+
+    public Task UpsertAsync(UpsertModel upsertModel, CancellationToken token = default)
+    {
+        throw new NotImplementedException();
     }
 
     private async Task<Dictionary<long, GetByQueryResult.GetByQueryGenre[]>> GetByQueryGenresMapByContentIds(

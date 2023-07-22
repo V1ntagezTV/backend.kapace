@@ -27,7 +27,7 @@ public class TranslationRepository : BaseKapaceRepository, ITranslationRepositor
         return result.ToArray();
     }
 
-    public async Task<IReadOnlyCollection<Translation>> GetByContentsAsync(long[] contentIds, CancellationToken token)
+    public async Task<IReadOnlyCollection<Translation.WithTranslator>> GetByContentsAsync(long[] contentIds, CancellationToken token)
     {
         const string initSql = @"
             SELECT * FROM content_translation 
@@ -40,7 +40,7 @@ public class TranslationRepository : BaseKapaceRepository, ITranslationRepositor
 
         await using var connection = CreateConnection();
         var command = new CommandDefinition(initSql, parameters, cancellationToken: token);
-        var result = await connection.QueryAsync<Translation>(command);
+        var result = await connection.QueryAsync<Translation.WithTranslator>(command);
         return result.ToArray();
     }
 }

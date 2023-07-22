@@ -1,11 +1,8 @@
-﻿using System.Collections.Immutable;
-using backend.kapace.BLL.Enums;
-using backend.kapace.BLL.Models;
+﻿using backend.kapace.BLL.Models;
 using backend.kapace.BLL.Services.Interfaces;
 using backend.kapace.Models;
 using backend.kapace.Models.Requests;
 using backend.kapace.Models.Response;
-using backend.Models.Enums;
 using Microsoft.AspNetCore.Mvc;
 
 namespace backend.kapace.Controllers;
@@ -166,7 +163,10 @@ public class ContentController : Controller
                     Link = x.Link,
                     TranslationType = x.TranslationType,
                     CreatedAt = x.CreatedAt,
-                    CreatedBy = x.CreatedBy
+                    CreatedBy = x.CreatedBy,
+                    TranslatorId = x.TranslatorId,
+                    TranslatorName = x.TranslatorName,
+                    TranslatorLink = x.TranslatorLink,
                 }).ToArray(),
                 Episodes = x.Episodes.Select(x => new V1GetByQueryResponse.V1GetByQueryEpisode
                 {
@@ -186,5 +186,24 @@ public class ContentController : Controller
                 }).ToArray(),
             }).ToArray()
         });
-    }   
+    }
+
+    [HttpPost("upsert")]
+    public async Task<ActionResult> V1Upsert(V1UpsertRequest request, CancellationToken token)
+    {
+        await _contentService.UpsertAsync(new UpsertModel(
+            request.Id,
+            request.Title,
+            request.Description,
+            request.Country,
+            request.Type,
+            request.Genre,
+            request.Duration,
+            request.ReleasedAt,
+            request.PlannedSeriesCount,
+            request.AgeLimit
+        ), token);
+
+        return Ok();
+    }
 }
