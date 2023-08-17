@@ -8,7 +8,7 @@ public class CreateContentTable : Migration {
     {
         const string sql = @"
 CREATE TABLE IF NOT EXISTS content(
-    id BIGINT PRIMARY KEY,
+    id BIGSERIAL PRIMARY KEY,
     title varchar not null,
     description VARCHAR NOT NULL,
     type INTEGER NOT NULL,

@@ -8,7 +8,7 @@ public class CreateEpisodeTable : Migration {
     {
         Execute.Sql(@"
 CREATE TABLE IF NOT EXISTS episode(
-    id BIGINT PRIMARY KEY,
+    id BIGSERIAL PRIMARY KEY,
     content_id BIGINT NOT NULL,
     title VARCHAR,
     image VARCHAR,
@@ -16,7 +16,7 @@ CREATE TABLE IF NOT EXISTS episode(
 );
 
 CREATE TABLE IF NOT EXISTS genre(
-    id BIGINT PRIMARY KEY,
+    id BIGSERIAL PRIMARY KEY,
     name VARCHAR NOT NULL,
     created_at TIMESTAMP WITH TIME ZONE,
     created_by bigint

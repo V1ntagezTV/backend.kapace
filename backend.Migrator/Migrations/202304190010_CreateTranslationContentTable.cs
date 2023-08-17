@@ -9,7 +9,7 @@ public class CreateTranslationContentTable : Migration
     {
         const string initSql = @"
         CREATE TABLE content_translation(
-            id BIGINT PRIMARY KEY,
+            id BIGSERIAL PRIMARY KEY,
             episode_id BIGINT NOT NULL,
             language VARCHAR NOT NULL,
             link VARCHAR NOT NULL,

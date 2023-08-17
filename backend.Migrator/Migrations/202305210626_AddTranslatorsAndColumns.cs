@@ -2,13 +2,13 @@
 
 namespace backend.Migrator.Migrations;
 
-[Migration(2023052106260626)]
+[Migration(202305210626)]
 public class _AddTranslatorsAndColumns: Migration {
     public override void Up()
     {
         const string sql = @"
 CREATE TABLE translator(
-    id BIGINT PRIMARY KEY NOT NULL,
+    id BIGSERIAL PRIMARY KEY NOT NULL,
     name varchar not null,
     link varchar null
 );
