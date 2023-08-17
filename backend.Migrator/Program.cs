@@ -8,10 +8,9 @@ namespace backend.Migrator;
 
 public static class Program
 {
-    public static void  Main()
+    public static void Main()
     {
         var host = Host.CreateDefaultBuilder();
-
         host.ConfigureServices((hostBuilder, services) =>
         {
             var connectionString = hostBuilder.Configuration.GetSection("SqlConnection")?.Value
@@ -23,7 +22,24 @@ public static class Program
                     .WithGlobalConnectionString(connectionString)
                     .ScanIn(Assembly.GetExecutingAssembly()).For.Migrations());
         });
-        
-        host.Build().MigrateDatabase().Run();
+
+        host.Build().MigrateDatabase();
+    }
+
+    private static void MigrateDatabase(this IHost host)
+    {
+        using var scope = host.Services.CreateScope();
+        var migrationRunner = scope.ServiceProvider.GetService<IMigrationRunner>() 
+                              ?? throw new ArgumentNullException(nameof(IMigrationRunner));
+        try
+        {
+            migrationRunner.ListMigrations();
+            migrationRunner.MigrateUp();
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            throw;
+        }
     }
 }
