@@ -3,9 +3,12 @@ using backend.kapace.BLL.Exceptions;
 using backend.kapace.BLL.Models;
 using backend.kapace.BLL.Services.Interfaces;
 using backend.kapace.DAL.Models;
+using backend.kapace.DAL.Repository;
 using backend.kapace.DAL.Repository.Interfaces;
 using backend.kapace.Models;
 using backend.Models.Enums;
+using Dapper;
+using Microsoft.AspNetCore.Mvc.ModelBinding.Metadata;
 using Content = backend.kapace.BLL.Models.VideoService.Content;
 using ContentQuery = backend.kapace.BLL.Models.ContentQuery;
 using Translation = backend.kapace.DAL.Models.Translation;
@@ -271,9 +274,32 @@ internal class ContentService : IContentService
         }).ToArray();
     }
 
-    public Task UpsertAsync(UpsertModel upsertModel, CancellationToken token = default)
+    public async Task<long> InsertAsync(InsertContentModel model, CancellationToken token)
     {
-        throw new NotImplementedException();
+        var id = await _contentRepository.InsertAsync(
+            new InsertContentQuery
+            {
+                Image = model.Image,
+                Title = model.Title,
+                Description = model.Description,
+                ContentType = (int)model.ContentType,
+                Country = (int)model.Country,
+                OriginTitle = model.OriginTitle,
+                EngTitle = model.EngTitle,
+                Status = (int?) model.Status ?? (int) ContentStatus.Null,
+                Channel = model.Channel,
+                MinAge = model.MinAge,
+                Duration = model.Duration,
+                PlannedSeries = model.PlannedSeries,
+                ImportStars = 0,
+                OutSeries = 0,
+                Views = 0,
+                ReleasedAt = model.ReleasedAt,
+                CreatedAt = DateTimeOffset.Now,
+                LastUpdatedAt = DateTimeOffset.Now
+            }, token);
+
+        return id;
     }
 
     private async Task<Dictionary<long, GetByQueryResult.GetByQueryGenre[]>> GetByQueryGenresMapByContentIds(

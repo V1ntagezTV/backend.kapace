@@ -2,7 +2,8 @@
 
 public enum ContentStatus
 {
-    Released = 0,
-    Ongoing = 1,
-    Finished = 2,
+    Null = 0,
+    Released = 1,
+    Ongoing = 2,
+    Finished = 3,
 }

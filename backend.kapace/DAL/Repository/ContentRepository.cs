@@ -1,4 +1,5 @@
-﻿using backend.kapace.DAL.Models;
+﻿using backend.kapace.BLL.Enums;
+using backend.kapace.DAL.Models;
 using backend.kapace.DAL.Repository.Interfaces;
 using backend.kapace.Infrastructure.Database;
 using backend.kapace.Models;
@@ -133,5 +134,72 @@ OFFSET @Offset";
         var command = new CommandDefinition(initSql, parameters, cancellationToken: token);
         var result = await connection.QueryAsync<Content>(command);
         return result.ToArray();
+    }
+
+    public async Task<long> InsertAsync(InsertContentQuery query, CancellationToken token)
+    {
+        const string sql = $@"
+            insert into content(title,
+                                description,
+                                type,
+                                status,
+                                image,
+                                import_stars,
+                                out_series,
+                                planned_series,
+                                views,
+                                country,
+                                released_at,
+                                created_at,
+                                last_update_at,
+                                min_age_limit,
+                                duration,
+                                eng_title,
+                                channel,
+                                origin_title)
+                        values (@Title,
+                                @Description,
+                                @ContentType,
+                                @Status, 
+                                @Image, 
+                                @ImportStars,
+                                @OutSeries,
+                                @PlannedSeries,
+                                @Views, 
+                                @Country,
+                                @ReleasedAt,
+                                @CreatedAt,
+                                @LastUpdateAt,
+                                @MinAge,
+                                @Duration, 
+                                @EngTitle, 
+                                @Channel,
+                                @OriginTitle) returing id;";
+
+        var parameters = new
+        {
+            query.Title,
+            query.Description,
+            query.ContentType,
+            query.Status,
+            query.Image,
+            query.ImportStars,
+            query.OutSeries,
+            query.PlannedSeries,
+            query.Views,
+            query.Country,
+            query.ReleasedAt,
+            query.CreatedAt,
+            query.LastUpdatedAt,
+            query.MinAge,
+            query.Duration,
+            query.EngTitle,
+            query.Channel,
+            query.OriginTitle,
+        };
+        
+        await using var connection = CreateConnection();
+        var command = new CommandDefinition(sql, parameters, cancellationToken: token);
+        return await connection.QueryFirstOrDefaultAsync<long>(command);
     }
 }

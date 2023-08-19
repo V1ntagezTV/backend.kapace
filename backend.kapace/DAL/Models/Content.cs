@@ -2,7 +2,6 @@
 
 public class Content
 {
-
     internal long Id { get; init; }
     
     internal string Title { get; init; }

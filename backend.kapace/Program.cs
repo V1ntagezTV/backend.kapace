@@ -5,7 +5,6 @@ using backend.kapace.DAL;
 using backend.kapace.DAL.Repository;
 using backend.kapace.DAL.Repository.Interfaces;
 using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.OpenApi.Models;
 using Npgsql;
@@ -26,6 +25,9 @@ services.AddScoped<ITranslationService, TranslationService>();
 
 var connection = config.GetSection("SqlConnection").Value ?? throw new ArgumentException();
 var dataSource = new NpgsqlDataSourceBuilder(connection).MapComposites(connection).Build();
+
+backend.Migrator.Program.Main();
+
 services.AddSingleton<NpgsqlDataSource>(_ => dataSource);
 services
     .AddMvc()

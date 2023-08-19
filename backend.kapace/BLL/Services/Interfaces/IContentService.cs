@@ -27,5 +27,5 @@ public interface IContentService
         ContentSelectedInfo selectedInfo,
         CancellationToken token);
 
-    Task UpsertAsync(UpsertModel upsertModel, CancellationToken token=default);
+    Task<long> InsertAsync(InsertContentModel model, CancellationToken token);
 }

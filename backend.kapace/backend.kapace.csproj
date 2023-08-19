@@ -16,6 +16,7 @@
       <PackageReference Include="Microsoft.Data.SqlClient" Version="5.1.0" />
       <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="7.0.0" />
       <PackageReference Include="Microsoft.OpenApi" Version="1.6.3" />
+      <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
       <PackageReference Include="Npgsql" Version="7.0.2" />
       <PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
     </ItemGroup>
@@ -36,6 +37,11 @@
     </ItemGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\backend.Migrator\backend.Migrator.csproj" />
       <ProjectReference Include="..\backend.Models\backend.Models.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="StaticFiles" />
     </ItemGroup>
 </Project>

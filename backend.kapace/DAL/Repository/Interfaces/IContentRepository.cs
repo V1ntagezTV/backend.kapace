@@ -19,4 +19,6 @@ public interface IContentRepository
     Task<IReadOnlyCollection<Content>> GetOrderedByLastUpdatedAsync(
         QueryPaging paging,
         CancellationToken token);
+
+    Task<long> InsertAsync(InsertContentQuery query, CancellationToken token);
 }

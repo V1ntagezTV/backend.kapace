@@ -187,23 +187,4 @@ public class ContentController : Controller
             }).ToArray()
         });
     }
-
-    [HttpPost("upsert")]
-    public async Task<ActionResult> V1Upsert(V1UpsertRequest request, CancellationToken token)
-    {
-        await _contentService.UpsertAsync(new UpsertModel(
-            request.Id,
-            request.Title,
-            request.Description,
-            request.Country,
-            request.Type,
-            request.Genre,
-            request.Duration,
-            request.ReleasedAt,
-            request.PlannedSeriesCount,
-            request.AgeLimit
-        ), token);
-
-        return Ok();
-    }
 }
