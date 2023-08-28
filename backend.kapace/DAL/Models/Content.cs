@@ -16,7 +16,7 @@ public class Content
     
     internal int Status { get; init; }
     
-    internal string Image { get; init; }
+    internal long ImageId { get; init; }
     
     internal decimal ImportStars { get; init; }
     

@@ -8,7 +8,7 @@ public record V1GetFullContentResponse(
     string Description,
     ContentType Type,
     ContentStatus Status,
-    string Image,
+    long ImageId,
     decimal ImportStars,
     int OutSeries,
     int PlannedSeries,

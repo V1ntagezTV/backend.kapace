@@ -22,6 +22,10 @@ services.AddScoped<IGenreRepository, GenreRepository>();
 services.AddScoped<IContentGenreRepository, ContentGenreRepository>();
 services.AddScoped<ITranslationRepository, TranslationRepository>();
 services.AddScoped<ITranslationService, TranslationService>();
+services.AddScoped<IImageService, ImageService>();
+services.AddScoped<IStaticFilesRepository, StaticFilesRepository>();
+services.AddScoped<IChangesHistoryRepository, ChangesHistoryRepository>();
+services.AddScoped<IChangesHistoryService, ChangesHistoryService>();
 
 var connection = config.GetSection("SqlConnection").Value ?? throw new ArgumentException();
 var dataSource = new NpgsqlDataSourceBuilder(connection).MapComposites(connection).Build();

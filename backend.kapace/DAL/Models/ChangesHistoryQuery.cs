@@ -2,7 +2,7 @@
 
 namespace backend.kapace.DAL.Models;
 
-internal class ChangesHistoryQuery
+public class ChangesHistoryQuery
 {
     public long[] Ids { get; init; }
     public long[] TargetIds { get; init; }

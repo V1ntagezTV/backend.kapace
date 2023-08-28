@@ -12,7 +12,7 @@ public record GetByQueryResult
     public string Description { get; init; }
     public ContentType Type { get; init; }
     public ContentStatus Status { get; init; }
-    public string Image { get; init; }
+    public long ImageId { get; init; }
     public decimal ImportStars { get; init; }
     public int OutSeries { get; init; }
     public int PlannedSeries { get; init; }

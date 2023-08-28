@@ -20,7 +20,7 @@ public record Content
     
     internal ContentStatus Status { get;  private init; }
     
-    internal string Image { get;  private init; }
+    internal long ImageId { get;  private init; }
     
     internal decimal ImportStars { get;  private init; }
     
@@ -53,7 +53,7 @@ public record Content
             Description = content.Description,
             Type = (ContentType)content.Type,
             Status = (ContentStatus)content.Status,
-            Image = content.Image,
+            ImageId = content.ImageId,
             ImportStars = content.ImportStars,
             OutSeries = content.OutSeries,
             PlannedSeries = content.PlannedSeries,

@@ -64,6 +64,21 @@ internal class ChangesHistoryRepository : BaseKapaceRepository, IChangesHistoryR
         return result.ToArray();
     }
 
+    public async Task UpdateTextAsync(long historyId, string text, CancellationToken token)
+    {
+        const string sql = @"UPDATE changes_history WHERE id = @HistoryId SET text = @Text;";
+        
+        var parameters = new
+        {
+            HistoryId = historyId,
+            Text = text
+        };
+        
+        await using var connection = CreateConnection();
+        var command = new CommandDefinition(sql, parameters, cancellationToken: token);
+        await connection.QueryAsync(command);
+    }
+
     public async Task<HistoryUnit> InsertAsync(
         HistoryUnit historyUnit,
         CancellationToken token)

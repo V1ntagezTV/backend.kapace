@@ -14,7 +14,7 @@ public record V1GetMainPageContentResponse(V1GetMainPageContentResponse.V1GetMai
     public class V1GetMainPageContent
     {
         public long Id { get; set; }
-        public string Image { get; set; }
+        public long ImageId { get; set; }
         public string Title { get; set; }
         public int Views { get; set; }
         public decimal ImportStars { get; set; }

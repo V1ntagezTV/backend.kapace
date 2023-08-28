@@ -1,7 +1,8 @@
 ﻿namespace backend.kapace.BLL.Services.Interfaces;
 
-internal interface IChangesHistoryService
+public interface IChangesHistoryService
 {
     Task ApproveAsync(long historyId, long userId, CancellationToken token);
     Task InsertChangesAsync(HistoryUnit historyUnit, CancellationToken token);
+    Task UpdateImageAsync(long historyId, long imageId, CancellationToken token);
 }
