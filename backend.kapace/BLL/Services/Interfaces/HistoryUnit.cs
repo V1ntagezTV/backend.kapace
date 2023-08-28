@@ -4,9 +4,9 @@ using backend.Models.Enums;
 
 namespace backend.kapace.BLL.Services.Interfaces;
 
-internal class HistoryUnit
+public class HistoryUnit
 {
-    public long Id { get; set; }
+    public long Id { get; init; }
     public long? TargetId { get; init; }
     public HistoryType HistoryType { get; init; }
     public JsonChanges Changes { get; init; }
@@ -16,11 +16,11 @@ internal class HistoryUnit
     public DateTimeOffset? ApprovedAt { get; init; }
     
     
-    internal record JsonChanges { }
+    public record JsonChanges { }
     
-    internal record JsonContentChanges : JsonChanges
+    public record JsonContentChanges : JsonChanges
     {
-        public string? Image { get; init; }
+        public long? ImageId { get; set; }
         public string? Title { get; init; }
         public string? EngTitle { get; init; }
         public string? OriginalTitle { get; init; }
@@ -37,7 +37,7 @@ internal class HistoryUnit
 
     }
 
-    internal record JsonEpisodeChanges : JsonChanges
+    public record JsonEpisodeChanges : JsonChanges
     {
         public string? Title { get; init; }
     }

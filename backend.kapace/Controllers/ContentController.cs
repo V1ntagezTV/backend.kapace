@@ -35,7 +35,7 @@ public class ContentController : Controller
             Description = x.Description,
             Type = x.Type,
             Status = x.Status,
-            Image = x.Image,
+            ImageId = x.ImageId,
             ImportStars = x.ImportStars,
             OutSeries = x.OutSeries,
             PlannedSeries = x.PlannedSeries,
@@ -69,7 +69,7 @@ public class ContentController : Controller
                         {
                             Id = x.Id,
                             Title = x.Title,
-                            Image = x.Image,
+                            ImageId = x.ImageId,
                             Views = x.Views,
                             ImportStars = x.ImportStars,
                             SeriesOut = x.OutSeries,
@@ -96,7 +96,7 @@ public class ContentController : Controller
             content.Description,
             content.Type,
             content.Status,
-            content.Image,
+            content.ImageId,
             content.ImportStars,
             content.OutSeries,
             content.PlannedSeries,
@@ -131,7 +131,7 @@ public class ContentController : Controller
             request.QueryPaging, 
             request.SelectedInfo,
             token);
-
+    
         return new OkObjectResult(new V1GetByQueryResponse()
         {
             Content = contents.Select(x => new V1GetByQueryResponse.V1GetByQueryContent
@@ -143,7 +143,7 @@ public class ContentController : Controller
                 Description = x.Description,
                 Type = x.Type,
                 Status = x.Status,
-                Image = x.Image,
+                ImageId = x.ImageId,
                 ImportStars = x.ImportStars,
                 OutSeries = x.OutSeries,
                 PlannedSeries = x.PlannedSeries,

@@ -1,6 +1,6 @@
 ﻿namespace backend.kapace.BLL.Enums;
 
-internal enum HistoryType
+public enum HistoryType
 {
     Content = 0,
     Episode = 1,

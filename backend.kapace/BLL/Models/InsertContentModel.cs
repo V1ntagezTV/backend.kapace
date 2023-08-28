@@ -4,7 +4,7 @@ using backend.Models.Enums;
 namespace backend.kapace.BLL.Models;
 
 public sealed record InsertContentModel(
-    string Image, 
+    long ImageId, 
     string Title, 
     string Description,
     ContentType ContentType, 

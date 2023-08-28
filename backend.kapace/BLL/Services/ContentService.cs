@@ -92,7 +92,7 @@ internal class ContentService : IContentService
             content.Description,
             content.Type,
             content.Status,
-            content.Image,
+            content.ImageId,
             content.ImportStars,
             content.OutSeries,
             content.PlannedSeries,
@@ -251,7 +251,7 @@ internal class ContentService : IContentService
             Description = x.Description,
             Type = (ContentType)x.Type,
             Status = (ContentStatus)x.Status,
-            Image = x.Image,
+            ImageId = x.ImageId,
             ImportStars = x.ImportStars,
             OutSeries = x.OutSeries,
             PlannedSeries = x.PlannedSeries,
@@ -279,7 +279,7 @@ internal class ContentService : IContentService
         var id = await _contentRepository.InsertAsync(
             new InsertContentQuery
             {
-                Image = model.Image,
+                ImageId = model.ImageId,
                 Title = model.Title,
                 Description = model.Description,
                 ContentType = (int)model.ContentType,

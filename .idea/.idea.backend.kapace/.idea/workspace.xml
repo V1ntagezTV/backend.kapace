@@ -19,29 +19,44 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="e863d32b-f8af-451f-8084-8db13fa65ff5" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/backend.kapace/BLL/Enums/HistoryType.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend.kapace/BLL/Models/InsertContentModel.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend.kapace/BLL/Services/ChangesHistoryService.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend.kapace/BLL/Services/Interfaces/HistoryUnit.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend.kapace/BLL/Services/Interfaces/IChangesHistoryService.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend.kapace/BLL/Validators/ContentValidator.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend.kapace/Controllers/ChangesHistoryController.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend.kapace/DAL/Models/ChangesHistoryQuery.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend.kapace/DAL/Models/HistoryUnit.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend.kapace/DAL/Repository/ChangesHistoryRepository.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend.kapace/DAL/Repository/InsertContentQuery.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend.kapace/DAL/Repository/Interfaces/IChangesHistoryRepository.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend.kapace/Models/Requests/V1ApproveRequest.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend.Migrator/Migrations/202308220121_CreateImagesTable.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend.kapace/BLL/Enums/StaticFileLinkType.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend.kapace/BLL/Enums/StaticFileTypes.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend.kapace/BLL/ProjectDirectoryHelper.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend.kapace/BLL/Services/ImageService.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend.kapace/BLL/Services/Interfaces/IImageService.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend.kapace/Controllers/ImagesController.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend.kapace/DAL/Models/StaticFile.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend.kapace/DAL/Repository/IStaticFilesRepository.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend.kapace/DAL/Repository/StaticFilesRepository.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend.kapace/Models/Requests/InsertContentImageRequest.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend.kapace/Models/Response/V1CreateContentResponse.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.backend.kapace/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.backend.kapace/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend.Models/Enums/ContentStatus.cs" beforeDir="false" afterPath="$PROJECT_DIR$/backend.Models/Enums/ContentStatus.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend.kapace/BLL/Models/UpsertModel.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend.Migrator/Migrations/202303280147_CreateContentTable.cs" beforeDir="false" afterPath="$PROJECT_DIR$/backend.Migrator/Migrations/202303280147_CreateContentTable.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend.kapace/BLL/Enums/HistoryType.cs" beforeDir="false" afterPath="$PROJECT_DIR$/backend.kapace/BLL/Enums/HistoryType.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend.kapace/BLL/Models/FullContent.cs" beforeDir="false" afterPath="$PROJECT_DIR$/backend.kapace/BLL/Models/FullContent.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend.kapace/BLL/Models/GetByQueryResult.cs" beforeDir="false" afterPath="$PROJECT_DIR$/backend.kapace/BLL/Models/GetByQueryResult.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend.kapace/BLL/Models/InsertContentModel.cs" beforeDir="false" afterPath="$PROJECT_DIR$/backend.kapace/BLL/Models/InsertContentModel.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend.kapace/BLL/Models/VideoService/Content.cs" beforeDir="false" afterPath="$PROJECT_DIR$/backend.kapace/BLL/Models/VideoService/Content.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend.kapace/BLL/Services/ChangesHistoryService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/backend.kapace/BLL/Services/ChangesHistoryService.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/backend.kapace/BLL/Services/ContentService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/backend.kapace/BLL/Services/ContentService.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend.kapace/BLL/Services/Interfaces/IContentService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/backend.kapace/BLL/Services/Interfaces/IContentService.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend.kapace/BLL/Services/Interfaces/HistoryUnit.cs" beforeDir="false" afterPath="$PROJECT_DIR$/backend.kapace/BLL/Services/Interfaces/HistoryUnit.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend.kapace/BLL/Services/Interfaces/IChangesHistoryService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/backend.kapace/BLL/Services/Interfaces/IChangesHistoryService.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend.kapace/BLL/Validators/ContentValidator.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend.kapace/Controllers/ChangesHistoryController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/backend.kapace/Controllers/ChangesHistoryController.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/backend.kapace/Controllers/ContentController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/backend.kapace/Controllers/ContentController.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend.kapace/DAL/Models/ChangesHistoryQuery.cs" beforeDir="false" afterPath="$PROJECT_DIR$/backend.kapace/DAL/Models/ChangesHistoryQuery.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/backend.kapace/DAL/Models/Content.cs" beforeDir="false" afterPath="$PROJECT_DIR$/backend.kapace/DAL/Models/Content.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend.kapace/DAL/Models/HistoryUnit.cs" beforeDir="false" afterPath="$PROJECT_DIR$/backend.kapace/DAL/Models/HistoryUnit.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend.kapace/DAL/Repository/ChangesHistoryRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/backend.kapace/DAL/Repository/ChangesHistoryRepository.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/backend.kapace/DAL/Repository/ContentRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/backend.kapace/DAL/Repository/ContentRepository.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend.kapace/DAL/Repository/Interfaces/IContentRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/backend.kapace/DAL/Repository/Interfaces/IContentRepository.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend.kapace/DAL/Repository/InsertContentQuery.cs" beforeDir="false" afterPath="$PROJECT_DIR$/backend.kapace/DAL/Repository/InsertContentQuery.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend.kapace/DAL/Repository/Interfaces/IChangesHistoryRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/backend.kapace/DAL/Repository/Interfaces/IChangesHistoryRepository.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/backend.kapace/Models/Requests/V1UpsertRequest.cs" beforeDir="false" afterPath="$PROJECT_DIR$/backend.kapace/Models/Requests/V1UpsertRequest.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend.kapace/Models/Response/V1GetByQueryResponse.cs" beforeDir="false" afterPath="$PROJECT_DIR$/backend.kapace/Models/Response/V1GetByQueryResponse.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend.kapace/Models/Response/V1GetFullContentResponse.cs" beforeDir="false" afterPath="$PROJECT_DIR$/backend.kapace/Models/Response/V1GetFullContentResponse.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend.kapace/Models/Response/V1GetMainPageContentResponse.cs" beforeDir="false" afterPath="$PROJECT_DIR$/backend.kapace/Models/Response/V1GetMainPageContentResponse.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend.kapace/Models/Response/V1QueryResponse.cs" beforeDir="false" afterPath="$PROJECT_DIR$/backend.kapace/Models/Response/V1QueryResponse.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/backend.kapace/Program.cs" beforeDir="false" afterPath="$PROJECT_DIR$/backend.kapace/Program.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/backend.kapace/backend.kapace.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/backend.kapace/backend.kapace.csproj" afterDir="false" />
     </list>
@@ -51,12 +66,18 @@
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="HighlightingSettingsPerFile">
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/0569b0077204454f81bddfb6b9cedcdb11878/d7/15bd8890/IFormFile.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/44c0db71b152418abf938b97293d7c9118878/8c/e04def16/WebApplicationBuilder.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/44c0db71b152418abf938b97293d7c9118878/cb/74eff772/ConfigureHostBuilder.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/7e62198beab24380bbac29171862d1d8adf10/8b/524d76d8/JsonConvert.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/a2747906576a46259d8a8aaa0318775f10c80/a6/564227f5/ImmutableHashSet`1.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/b616a04aee234f559f7397d94bd90dadf8a0/74/5ce75e9c/IHostBuilder.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/dd85d1af76a544e1a8083607f687e374b1d8a0/1b/a532f517/FileMode.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/dd85d1af76a544e1a8083607f687e374b1d8a0/da/a8f07ca8/FileStream.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/27633a066f89dc9a0c637aaa4ab422ea3485c058fefc65fe8cbaa534bca92/System.Drawing.Common.notsupported.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/2fc4c8cf3df228218c71fb73de47eda7c4e6d3c0aaac3da0b2e83ffd2b84b/MarshalByRefObject.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/4eae6449caa21e90c2ff2d63846343457a0e4192fb25892da80d78feb4774f/JsonSerializer.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/79fbf5ff554b611622a4207ff363d1c026ccac52f8ef8f6318a1cc5ab7e4/ObjectResult.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/bd55fb26296f9ba7a688ddc8a1b7add6c71c28f1f4f0e4e4e4fad8bccf518ea6/Single.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/e74356f198b598e97eaeea83e8b7b1f2bfe27c0a39fedf86bb7dc44827fbda/ActionMethodExecutor.cs" root0="SKIP_HIGHLIGHTING" />
   </component>
@@ -83,7 +104,7 @@
     &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
     &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
     &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;settings.space&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.pluginManager&quot;,
     &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   },
   &quot;keyToStringList&quot;: {
@@ -301,8 +322,25 @@
       <workItem from="1692129341800" duration="140000" />
       <workItem from="1692151023121" duration="1375000" />
       <workItem from="1692212031195" duration="958000" />
-      <workItem from="1692326460344" duration="9511000" />
+      <workItem from="1692326460344" duration="11820000" />
+      <workItem from="1692571482546" duration="3880000" />
+      <workItem from="1692605995792" duration="5507000" />
+      <workItem from="1692612740307" duration="2669000" />
+      <workItem from="1692655855589" duration="13386000" />
+      <workItem from="1692712342959" duration="2812000" />
+      <workItem from="1692762935334" duration="23600000" />
+      <workItem from="1692990457538" duration="1788000" />
+      <workItem from="1693114297931" duration="7625000" />
+      <workItem from="1693152884679" duration="2677000" />
     </task>
+    <task id="LOCAL-00001" summary="add changes history, insert content and approve it">
+      <created>1692487739565</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1692487739565</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -339,6 +377,8 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="true" />
+    <MESSAGE value="add changes history, insert content and approve it" />
+    <option name="LAST_COMMIT_MESSAGE" value="add changes history, insert content and approve it" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -366,6 +406,7 @@
     </breakpoint-manager>
     <pin-to-top-manager>
       <pinned-members>
+        <PinnedItemInfo parentTag="Type#Microsoft.AspNetCore.Http.FormFile" memberName="ContentType" />
         <PinnedItemInfo parentTag="Type#System.Threading.Tasks.Task" memberName="m_action" />
       </pinned-members>
     </pin-to-top-manager>

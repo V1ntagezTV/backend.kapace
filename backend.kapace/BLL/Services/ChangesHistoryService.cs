@@ -1,10 +1,8 @@
 ﻿using backend.kapace.BLL.Enums;
 using backend.kapace.BLL.Models;
 using backend.kapace.BLL.Services.Interfaces;
-using backend.kapace.BLL.Validators;
 using backend.kapace.DAL.Models;
 using backend.kapace.DAL.Repository.Interfaces;
-using backend.Models.Enums;
 using Newtonsoft.Json;
 using HistoryUnit = backend.kapace.BLL.Services.Interfaces.HistoryUnit;
 
@@ -12,8 +10,7 @@ namespace backend.kapace.BLL.Services;
 
 internal class ChangesHistoryService : IChangesHistoryService
 {
-    private static JsonSerializerSettings _jsonSerializerSettings = new JsonSerializerSettings
-    {
+    private static readonly JsonSerializerSettings JsonSerializerSettings = new() {
         NullValueHandling = NullValueHandling.Ignore
     };
     
@@ -46,13 +43,12 @@ internal class ChangesHistoryService : IChangesHistoryService
                 var contentChanges = (HistoryUnit.JsonContentChanges)changeUnit.Changes;
                 if (changeUnit.TargetId is null)
                 {
-                    ContentValidator.ValidateContentRequiredProperties(contentChanges);
                     await _contentService.InsertAsync(new InsertContentModel(
-                            Image: contentChanges.Image ?? throw new ArgumentException(""),
-                            Title: contentChanges.Title,
-                            Description: contentChanges.Description,
-                            ContentType: (ContentType)contentChanges.ContentType,
-                            Country: (Country)contentChanges.Country,
+                            ImageId: contentChanges.ImageId ?? throw new ArgumentException(),
+                            Title: contentChanges.Title ?? throw new ArgumentException(),
+                            Description: contentChanges.Description ?? throw new ArgumentException(),
+                            ContentType: contentChanges.ContentType ?? throw new ArgumentException(),
+                            Country: contentChanges.Country ?? throw new ArgumentException(),
                             Status: contentChanges.Status,
                             Channel: contentChanges.Channel,
                             EngTitle: contentChanges.EngTitle,
@@ -116,7 +112,7 @@ internal class ChangesHistoryService : IChangesHistoryService
 
     public async Task InsertChangesAsync(HistoryUnit historyUnit, CancellationToken token)
     {
-        var jsonContentChanges = JsonConvert.SerializeObject(historyUnit.Changes, _jsonSerializerSettings);
+        var jsonContentChanges = JsonConvert.SerializeObject(historyUnit.Changes, JsonSerializerSettings);
 
         await _changesHistoryService.InsertAsync(new DAL.Models.HistoryUnit
         {
@@ -128,5 +124,33 @@ internal class ChangesHistoryService : IChangesHistoryService
             ApprovedBy = historyUnit.ApprovedBy,
             ApprovedAt = historyUnit.ApprovedAt
         }, token);
+    }
+
+    public async Task UpdateImageAsync(long historyId, long imageId, CancellationToken token)
+    {
+        var histories = await _changesHistoryService.QueryAsync(
+            new ChangesHistoryQuery
+            {
+                Ids = new[] { historyId },
+                HistoryTypes = new[] { HistoryType.Content }
+            },
+            token
+        );
+
+        var history = histories.FirstOrDefault();
+        if (history is null)
+        {
+            return;
+        }
+
+        var changes = JsonConvert.DeserializeObject<HistoryUnit.JsonContentChanges>(
+            history.Text,
+            JsonSerializerSettings
+        );
+
+        changes.ImageId = imageId;
+        
+        var jsonContentChanges = JsonConvert.SerializeObject(changes, JsonSerializerSettings);
+        await _changesHistoryService.UpdateTextAsync(historyId, jsonContentChanges, token);
     }
 }

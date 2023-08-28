@@ -2,7 +2,7 @@
 
 namespace backend.kapace.DAL.Models;
 
-internal sealed class HistoryUnit
+public sealed class HistoryUnit
 {
     public long Id { get; set; }
     public long? TargetId { get; set; }

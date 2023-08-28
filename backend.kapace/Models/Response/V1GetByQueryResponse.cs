@@ -16,7 +16,7 @@ public record V1GetByQueryResponse
         public required string Description { get; init; }
         public required ContentType Type { get; init; }
         public required ContentStatus Status { get; init; }
-        public required string Image { get; init; }
+        public required long ImageId { get; init; }
         public required decimal ImportStars { get; init; }
         public required int OutSeries { get; init; }
         public required int PlannedSeries { get; init; }
