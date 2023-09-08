@@ -1,4 +1,5 @@
-﻿using backend.kapace.DAL.Models;
+﻿using backend.Infrastructure.Database;
+using backend.kapace.DAL.Models;
 using backend.kapace.DAL.Repository.Interfaces;
 using backend.kapace.Infrastructure.Database;
 using Dapper;
@@ -34,19 +35,20 @@ internal class ChangesHistoryRepository : BaseKapaceRepository, IChangesHistoryR
         var parameters = new DynamicParameters();
         var filters = new List<string>();
 
-        if (query.Ids.Any())
+        if (query.Ids is {Length: > 0})
         {
             parameters.Add("@Ids", query.Ids);
             filters.Add("id = Any(@Ids)");
         }
 
-        if (query.HistoryTypes.Any())
+        if (query.HistoryTypes is {Length: > 0})
         {
-            parameters.Add("@HistoryTypes", query.HistoryTypes);
+            var values = query.HistoryTypes.Cast<int>().ToArray();
+            parameters.Add("@HistoryTypes", values);
             filters.Add("history_type = ANY(@HistoryTypes)");
         }
 
-        if (query.TargetIds.Any())
+        if (query.TargetIds is {Length: > 0})
         {
             parameters.Add("@TargetIds", query.HistoryTypes);
             filters.Add("target_id = ANY(@TargetIds)");
@@ -66,12 +68,11 @@ internal class ChangesHistoryRepository : BaseKapaceRepository, IChangesHistoryR
 
     public async Task UpdateTextAsync(long historyId, string text, CancellationToken token)
     {
-        const string sql = @"UPDATE changes_history WHERE id = @HistoryId SET text = @Text;";
-        
+        const string sql = @"UPDATE changes_history SET text = @Text WHERE id = @HistoryId;";
         var parameters = new
         {
             HistoryId = historyId,
-            Text = text
+            Text = new JsonbParameter(text),
         };
         
         await using var connection = CreateConnection();
@@ -79,27 +80,27 @@ internal class ChangesHistoryRepository : BaseKapaceRepository, IChangesHistoryR
         await connection.QueryAsync(command);
     }
 
-    public async Task<HistoryUnit> InsertAsync(
+    public async Task<long> InsertAsync(
         HistoryUnit historyUnit,
         CancellationToken token)
     {
-        const string columns = "id, target_id, history_type, text, created_by, created_at";
+        const string columns = "target_id, history_type, text, created_by, created_at";
         
         const string sql = @$"
             INSERT INTO changes_history({columns})
-            VALUES(@Id, @TargetId, @HistoryType, @Text, @CreatedBy, current_timestamp);";
+            VALUES(@TargetId, @HistoryType, @Text, @CreatedBy, current_timestamp)
+            RETURNING id;";
 
         var parameters = new
         {
-            historyUnit.Id,
             historyUnit.TargetId,
             historyUnit.HistoryType,
-            historyUnit.Text,
+            Text = new JsonbParameter(historyUnit.Text),
             historyUnit.CreatedBy,
         };
 
         await using var connection = CreateConnection();
         var command = new CommandDefinition(sql, parameters, cancellationToken: token);
-        return await connection.QueryFirstAsync<HistoryUnit>(command);
+        return await connection.QueryFirstAsync<long>(command);
     }
 }

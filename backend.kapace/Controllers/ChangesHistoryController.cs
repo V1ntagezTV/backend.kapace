@@ -6,12 +6,13 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace backend.kapace.Controllers;
 
+[ApiController]
 [Route("v1/changes")]
 public class ChangesHistoryController : Controller
 {
     private readonly IChangesHistoryService _changesHistoryService;
 
-    internal ChangesHistoryController(IChangesHistoryService changesHistoryService)
+    public ChangesHistoryController(IChangesHistoryService changesHistoryService)
     {
         _changesHistoryService = changesHistoryService;
     }
@@ -46,9 +47,9 @@ public class ChangesHistoryController : Controller
             ApprovedAt = null,
         };
 
-        await _changesHistoryService.InsertChangesAsync(newHistoryUnit, token);
+        var insertedId = await _changesHistoryService.InsertChangesAsync(newHistoryUnit, token);
 
-        return new V1CreateContentResponse(newHistoryUnit.Id);
+        return new V1CreateContentResponse(insertedId);
     }
 
     [HttpPost("approve")]

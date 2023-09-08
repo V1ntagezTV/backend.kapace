@@ -32,18 +32,20 @@ internal class ChangesHistoryService : IChangesHistoryService
 
         if (changeUnit is null)
             throw new NullReferenceException(nameof(changeUnit));
-        if (changeUnit.CreatedBy == userId)
+        if (false) //TODO: changeUnit.CreatedBy == userId)
             throw new ArgumentException($"User - {userId} can't self-approve changes - {historyId}.");
 
-        await _changesHistoryService.ApproveAsync(historyId, userId, approvedAt: DateTimeOffset.Now, token);
+        await _changesHistoryService.ApproveAsync(historyId, userId, approvedAt: DateTimeOffset.UtcNow, token);
 
         switch (changeUnit.HistoryType)
         {
             case HistoryType.Content:
                 var contentChanges = (HistoryUnit.JsonContentChanges)changeUnit.Changes;
-                if (changeUnit.TargetId is null)
+                if (changeUnit.TargetId is 0 or null)
                 {
                     await _contentService.InsertAsync(new InsertContentModel(
+                            // Для создания контента используется идентификатор из changes_history записи.
+                            Id: changeUnit.Id,
                             ImageId: contentChanges.ImageId ?? throw new ArgumentException(),
                             Title: contentChanges.Title ?? throw new ArgumentException(),
                             Description: contentChanges.Description ?? throw new ArgumentException(),
@@ -110,11 +112,11 @@ internal class ChangesHistoryService : IChangesHistoryService
         }).ToArray();
     }
 
-    public async Task InsertChangesAsync(HistoryUnit historyUnit, CancellationToken token)
+    public async Task<long> InsertChangesAsync(HistoryUnit historyUnit, CancellationToken token)
     {
         var jsonContentChanges = JsonConvert.SerializeObject(historyUnit.Changes, JsonSerializerSettings);
 
-        await _changesHistoryService.InsertAsync(new DAL.Models.HistoryUnit
+        var id = await _changesHistoryService.InsertAsync(new DAL.Models.HistoryUnit
         {
             TargetId = historyUnit.TargetId,
             HistoryType = historyUnit.HistoryType,
@@ -124,6 +126,8 @@ internal class ChangesHistoryService : IChangesHistoryService
             ApprovedBy = historyUnit.ApprovedBy,
             ApprovedAt = historyUnit.ApprovedAt
         }, token);
+
+        return id;
     }
 
     public async Task UpdateImageAsync(long historyId, long imageId, CancellationToken token)

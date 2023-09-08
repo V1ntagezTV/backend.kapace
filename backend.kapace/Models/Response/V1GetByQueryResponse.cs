@@ -22,7 +22,7 @@ public record V1GetByQueryResponse
         public required int PlannedSeries { get; init; }
         public required int Views { get; init; }
         public required Country Country { get; init; }
-        public required DateTimeOffset ReleasedAt { get; init; }
+        public required DateTimeOffset? ReleasedAt { get; init; }
         public required DateTimeOffset CreatedAt { get; init; }
         public required DateTimeOffset LastUpdateAt { get; init; }
         public required int MinAgeLimit { get; init; }

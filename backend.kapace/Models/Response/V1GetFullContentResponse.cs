@@ -14,7 +14,7 @@ public record V1GetFullContentResponse(
     int PlannedSeries,
     int Views,
     string Country,
-    DateTimeOffset ReleasedAt,
+    DateTimeOffset? ReleasedAt,
     DateTimeOffset CreatedAt,
     DateTimeOffset LastUpdateAt,
     int MinAgeLimit,

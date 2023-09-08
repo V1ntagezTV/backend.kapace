@@ -18,7 +18,7 @@ public record GetByQueryResult
     public int PlannedSeries { get; init; }
     public int Views { get; init; }
     public Country Country { get; init; }
-    public DateTimeOffset ReleasedAt { get; init; }
+    public DateTimeOffset? ReleasedAt { get; init; }
     public DateTimeOffset CreatedAt { get; init; }
     public DateTimeOffset LastUpdateAt { get; init; }
     public int MinAgeLimit { get; init; }

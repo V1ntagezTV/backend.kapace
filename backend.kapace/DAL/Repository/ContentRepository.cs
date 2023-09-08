@@ -139,7 +139,8 @@ OFFSET @Offset";
     public async Task<long> InsertAsync(InsertContentQuery query, CancellationToken token)
     {
         const string sql = $@"
-            insert into content(title,
+            insert into content(id,
+                                title,
                                 description,
                                 type,
                                 status,
@@ -157,7 +158,8 @@ OFFSET @Offset";
                                 eng_title,
                                 channel,
                                 origin_title)
-                        values (@Title,
+                        values (@Id,
+                                @Title,
                                 @Description,
                                 @ContentType,
                                 @Status, 
@@ -174,10 +176,11 @@ OFFSET @Offset";
                                 @Duration, 
                                 @EngTitle, 
                                 @Channel,
-                                @OriginTitle) returing id;";
+                                @OriginTitle) returning id;";
 
         var parameters = new
         {
+            query.Id,
             query.Title,
             query.Description,
             query.ContentType,
@@ -190,7 +193,7 @@ OFFSET @Offset";
             query.Country,
             query.ReleasedAt,
             query.CreatedAt,
-            query.LastUpdatedAt,
+            query.LastUpdateAt,
             query.MinAge,
             query.Duration,
             query.EngTitle,

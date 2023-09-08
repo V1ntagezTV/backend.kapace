@@ -28,7 +28,7 @@ public class Content
     
     internal int Country { get; set; }
     
-    internal DateTimeOffset ReleasedAt { get; set; }
+    internal DateTimeOffset? ReleasedAt { get; set; }
     
     internal DateTimeOffset CreatedAt { get; set; }
     

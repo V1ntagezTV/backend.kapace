@@ -18,7 +18,32 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="e863d32b-f8af-451f-8084-8db13fa65ff5" name="Changes" comment="add content-images throuth the history changes" />
+    <list default="true" id="e863d32b-f8af-451f-8084-8db13fa65ff5" name="Changes" comment="add content-images throuth the history changes">
+      <change afterPath="$PROJECT_DIR$/backend.Infrastructure/Database/JsonbParameter.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.backend.kapace/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.backend.kapace/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend.Infrastructure/backend.Infrastructure.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/backend.Infrastructure/backend.Infrastructure.csproj" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend.kapace/BLL/Models/FullContent.cs" beforeDir="false" afterPath="$PROJECT_DIR$/backend.kapace/BLL/Models/FullContent.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend.kapace/BLL/Models/GetByQueryResult.cs" beforeDir="false" afterPath="$PROJECT_DIR$/backend.kapace/BLL/Models/GetByQueryResult.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend.kapace/BLL/Models/InsertContentModel.cs" beforeDir="false" afterPath="$PROJECT_DIR$/backend.kapace/BLL/Models/InsertContentModel.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend.kapace/BLL/Models/VideoService/Content.cs" beforeDir="false" afterPath="$PROJECT_DIR$/backend.kapace/BLL/Models/VideoService/Content.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend.kapace/BLL/Services/ChangesHistoryService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/backend.kapace/BLL/Services/ChangesHistoryService.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend.kapace/BLL/Services/ContentService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/backend.kapace/BLL/Services/ContentService.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend.kapace/BLL/Services/ImageService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/backend.kapace/BLL/Services/ImageService.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend.kapace/BLL/Services/Interfaces/IChangesHistoryService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/backend.kapace/BLL/Services/Interfaces/IChangesHistoryService.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend.kapace/BLL/Services/Interfaces/IImageService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/backend.kapace/BLL/Services/Interfaces/IImageService.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend.kapace/Controllers/ChangesHistoryController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/backend.kapace/Controllers/ChangesHistoryController.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend.kapace/DAL/Models/Content.cs" beforeDir="false" afterPath="$PROJECT_DIR$/backend.kapace/DAL/Models/Content.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend.kapace/DAL/Models/HistoryUnit.cs" beforeDir="false" afterPath="$PROJECT_DIR$/backend.kapace/DAL/Models/HistoryUnit.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend.kapace/DAL/Repository/ChangesHistoryRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/backend.kapace/DAL/Repository/ChangesHistoryRepository.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend.kapace/DAL/Repository/ContentRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/backend.kapace/DAL/Repository/ContentRepository.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend.kapace/DAL/Repository/InsertContentQuery.cs" beforeDir="false" afterPath="$PROJECT_DIR$/backend.kapace/DAL/Repository/InsertContentQuery.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend.kapace/DAL/Repository/Interfaces/IChangesHistoryRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/backend.kapace/DAL/Repository/Interfaces/IChangesHistoryRepository.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend.kapace/Models/Requests/InsertContentImageRequest.cs" beforeDir="false" afterPath="$PROJECT_DIR$/backend.kapace/Models/Requests/InsertContentImageRequest.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend.kapace/Models/Requests/V1UpsertRequest.cs" beforeDir="false" afterPath="$PROJECT_DIR$/backend.kapace/Models/Requests/V1UpsertRequest.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend.kapace/Models/Response/V1GetByQueryResponse.cs" beforeDir="false" afterPath="$PROJECT_DIR$/backend.kapace/Models/Response/V1GetByQueryResponse.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend.kapace/Models/Response/V1GetFullContentResponse.cs" beforeDir="false" afterPath="$PROJECT_DIR$/backend.kapace/Models/Response/V1GetFullContentResponse.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend.kapace/Models/Response/V1QueryResponse.cs" beforeDir="false" afterPath="$PROJECT_DIR$/backend.kapace/Models/Response/V1QueryResponse.cs" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -37,9 +62,10 @@
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/2fc4c8cf3df228218c71fb73de47eda7c4e6d3c0aaac3da0b2e83ffd2b84b/MarshalByRefObject.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/4eae6449caa21e90c2ff2d63846343457a0e4192fb25892da80d78feb4774f/JsonSerializer.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/79fbf5ff554b611622a4207ff363d1c026ccac52f8ef8f6318a1cc5ab7e4/ObjectResult.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/bd1d5c50194fea68ff3559c160230b0ab50f5acf4ce3061bffd6d62958e2182/ExceptionDispatchInfo.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/bd55fb26296f9ba7a688ddc8a1b7add6c71c28f1f4f0e4e4e4fad8bccf518ea6/Single.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/e74356f198b598e97eaeea83e8b7b1f2bfe27c0a39fedf86bb7dc44827fbda/ActionMethodExecutor.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock://C:/Users/insur/RiderProjects/backend-kapace/backend.Migrator/Migrations/202303280147_CreateContentTable.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/f3981d658666ec9cc1e6958fe22f8614bfe02ccb6625b056c3ece3729c9262/JsonConvert.cs" root0="SKIP_HIGHLIGHTING" />
   </component>
   <component name="MetaFilesCheckinStateConfiguration" checkMetaFiles="true" />
   <component name="ProblemsViewState">
@@ -291,7 +317,11 @@
       <workItem from="1692762935334" duration="23600000" />
       <workItem from="1692990457538" duration="1788000" />
       <workItem from="1693114297931" duration="7625000" />
-      <workItem from="1693152884679" duration="3364000" />
+      <workItem from="1693152884679" duration="6074000" />
+      <workItem from="1693579794283" duration="24513000" />
+      <workItem from="1694029145397" duration="6864000" />
+      <workItem from="1694100062990" duration="8728000" />
+      <workItem from="1694183882203" duration="682000" />
     </task>
     <task id="LOCAL-00001" summary="add changes history, insert content and approve it">
       <created>1692487739565</created>
@@ -307,7 +337,14 @@
       <option name="project" value="LOCAL" />
       <updated>1693186026988</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="add content-images throuth the history changes">
+      <created>1693186142286</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1693186142286</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -369,6 +406,97 @@
             </endOffsets>
           </properties>
           <option name="timeStamp" value="15" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/backend.kapace/Controllers/ChangesHistoryController.cs</url>
+          <line>23</line>
+          <properties documentPath="C:\Users\insur\RiderProjects\backend-kapace\backend.kapace\Controllers\ChangesHistoryController.cs" initialLine="22" containingFunctionPresentation="method 'V1CreateContentHistory'">
+            <startOffsets>
+              <option value="746" />
+            </startOffsets>
+            <endOffsets>
+              <option value="747" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="19" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/backend.kapace/BLL/Services/ChangesHistoryService.cs</url>
+          <line>115</line>
+          <properties documentPath="C:\Users\insur\RiderProjects\backend-kapace\backend.kapace\BLL\Services\ChangesHistoryService.cs" initialLine="114" containingFunctionPresentation="method 'InsertChangesAsync'">
+            <startOffsets>
+              <option value="5270" />
+            </startOffsets>
+            <endOffsets>
+              <option value="5271" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="20" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/backend.kapace/BLL/Services/ImageService.cs</url>
+          <line>37</line>
+          <properties documentPath="C:\Users\insur\RiderProjects\backend-kapace\backend.kapace\BLL\Services\ImageService.cs" initialLine="34" containingFunctionPresentation="method 'InsertImageAsync'">
+            <startOffsets>
+              <option value="1216" />
+            </startOffsets>
+            <endOffsets>
+              <option value="1300" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="22" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/backend.kapace/BLL/Services/ChangesHistoryService.cs</url>
+          <line>133</line>
+          <properties documentPath="C:\Users\insur\RiderProjects\backend-kapace\backend.kapace\BLL\Services\ChangesHistoryService.cs" initialLine="132" containingFunctionPresentation="method 'UpdateImageAsync'">
+            <startOffsets>
+              <option value="5945" />
+            </startOffsets>
+            <endOffsets>
+              <option value="5946" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="23" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/backend.kapace/DAL/Repository/ChangesHistoryRepository.cs</url>
+          <line>32</line>
+          <properties documentPath="C:\Users\insur\RiderProjects\backend-kapace\backend.kapace\DAL\Repository\ChangesHistoryRepository.cs" initialLine="32" containingFunctionPresentation="method 'QueryAsync'">
+            <startOffsets>
+              <option value="1164" />
+            </startOffsets>
+            <endOffsets>
+              <option value="1165" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="24" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/backend.kapace/BLL/Services/ChangesHistoryService.cs</url>
+          <line>39</line>
+          <properties documentPath="C:\Users\insur\RiderProjects\backend-kapace\backend.kapace\BLL\Services\ChangesHistoryService.cs" initialLine="39" containingFunctionPresentation="method 'ApproveAsync'">
+            <startOffsets>
+              <option value="1528" />
+            </startOffsets>
+            <endOffsets>
+              <option value="1559" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="25" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/backend.kapace/BLL/Services/ChangesHistoryService.cs</url>
+          <line>37</line>
+          <properties documentPath="C:\Users\insur\RiderProjects\backend-kapace\backend.kapace\BLL\Services\ChangesHistoryService.cs" initialLine="37" containingFunctionPresentation="method 'ApproveAsync'">
+            <startOffsets>
+              <option value="1415" />
+            </startOffsets>
+            <endOffsets>
+              <option value="1518" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="26" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

@@ -6,13 +6,11 @@ namespace backend.kapace.BLL.Services.Interfaces;
 
 public interface IImageService
 {
-    Task InsertImageAsync(
-        IFormFile imageFile, 
-        long contentId, 
+    Task InsertImageAsync(IFormFile imageFile,
+        long? contentId,
         long historyId,
         StaticFileTypes fileType,
-        CancellationToken token
-    );
+        CancellationToken token);
     
     Task<Image> GetAvatarByIdAsync(long imageId, long contentId, CancellationToken token);
 }

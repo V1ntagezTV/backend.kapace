@@ -279,6 +279,7 @@ internal class ContentService : IContentService
         var id = await _contentRepository.InsertAsync(
             new InsertContentQuery
             {
+                Id = model.Id,
                 ImageId = model.ImageId,
                 Title = model.Title,
                 Description = model.Description,
@@ -295,8 +296,8 @@ internal class ContentService : IContentService
                 OutSeries = 0,
                 Views = 0,
                 ReleasedAt = model.ReleasedAt,
-                CreatedAt = DateTimeOffset.Now,
-                LastUpdatedAt = DateTimeOffset.Now
+                CreatedAt = DateTimeOffset.UtcNow,
+                LastUpdateAt = DateTimeOffset.UtcNow
             }, token);
 
         return id;

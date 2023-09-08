@@ -2,6 +2,7 @@
 
 public class InsertContentQuery
 {
+    public long Id { get; init; }
     public long ImageId { get; init; }
     public string Title { get; init; }
     public string Description { get; init; }
@@ -19,5 +20,5 @@ public class InsertContentQuery
     public int Views { get; init; }
     public DateTimeOffset? ReleasedAt { get; init; }
     public DateTimeOffset CreatedAt { get; init; }
-    public DateTimeOffset LastUpdatedAt { get; init; }
+    public DateTimeOffset LastUpdateAt { get; init; }
 }

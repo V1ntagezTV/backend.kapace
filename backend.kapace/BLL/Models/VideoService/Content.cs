@@ -32,7 +32,7 @@ public record Content
     
     internal int Country { get;  private init; }
     
-    internal DateTimeOffset ReleasedAt { get;  private init; }
+    internal DateTimeOffset? ReleasedAt { get;  private init; }
     
     internal DateTimeOffset CreatedAt { get;  private init; }
     

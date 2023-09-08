@@ -2,8 +2,8 @@
 using System.Drawing.Imaging;
 using backend.kapace.BLL.Enums;
 using backend.kapace.BLL.Services.Interfaces;
+using backend.kapace.DAL.Models;
 using backend.kapace.DAL.Repository;
-using backend.kapace.DAL.Repository.Interfaces;
 using Microsoft.AspNetCore.Http;
 
 namespace backend.kapace.BLL.Services;
@@ -27,12 +27,15 @@ public class ImageService : IImageService
     
     public async Task InsertImageAsync(
         IFormFile imageFile,
-        long contentId,
+        long? contentId,
         long historyId,
         StaticFileTypes fileType,
         CancellationToken token)
     {
-        var folderPath = Path.Combine(StaticFilesPath, $"{fileType}", $"{contentId}");
+        // Если загружается картинка для только созданного контента, то айди будет HistoryId.
+        var targetContentId = contentId ?? historyId;
+        
+        var folderPath = Path.Combine(StaticFilesPath, $"{fileType}", $"{targetContentId}");
         if (imageFile.Length <= 0)
         {
             return;
@@ -47,7 +50,7 @@ public class ImageService : IImageService
         {
             var imageId = await _staticFilesRepository.InsertAsync(
                 imageFile.FileName,
-                contentId,
+                targetContentId,
                 StaticFileLinkType.Content,
                 createdAt: DateTimeOffset.UtcNow,
                 token);

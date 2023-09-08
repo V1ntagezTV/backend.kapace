@@ -14,7 +14,7 @@ public record FullContent(
     int PlannedSeries,
     int Views,
     string Country,
-    DateTimeOffset ReleasedAt,
+    DateTimeOffset? ReleasedAt,
     DateTimeOffset CreatedAt,
     DateTimeOffset LastUpdateAt,
     int MinAgeLimit,

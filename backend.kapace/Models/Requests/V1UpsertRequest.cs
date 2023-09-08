@@ -3,13 +3,12 @@ using backend.Models.Enums;
 
 namespace backend.kapace.Models.Requests;
 
-public sealed record V1CreateContentHistoryRequest(
+public record V1CreateContentHistoryRequest(
     long? ContentId,
     V1CreateContentHistoryRequest.V1ChangeableFields? ChangeableFields,
-    long CreatedBy
-)
+    long CreatedBy)
 {
-    public sealed record V1ChangeableFields(
+    public record V1ChangeableFields(
         long? ImageId,
         string? Title,
         string? EngTitle,
@@ -23,4 +22,4 @@ public sealed record V1CreateContentHistoryRequest(
         int? PlannedSeries,
         int? MinAge
     );
-};
+}
