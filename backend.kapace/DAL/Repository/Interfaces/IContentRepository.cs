@@ -21,4 +21,7 @@ public interface IContentRepository
         CancellationToken token);
 
     Task<long> InsertAsync(InsertContentQuery query, CancellationToken token);
+
+    Task UpdateAsync(ContentUpdateQuery model, CancellationToken token);
+
 }

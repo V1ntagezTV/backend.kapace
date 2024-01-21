@@ -3,19 +3,16 @@ using backend.kapace.BLL.Exceptions;
 using backend.kapace.BLL.Models;
 using backend.kapace.BLL.Services.Interfaces;
 using backend.kapace.DAL.Models;
-using backend.kapace.DAL.Repository;
 using backend.kapace.DAL.Repository.Interfaces;
 using backend.kapace.Models;
 using backend.Models.Enums;
-using Dapper;
-using Microsoft.AspNetCore.Mvc.ModelBinding.Metadata;
 using Content = backend.kapace.BLL.Models.VideoService.Content;
 using ContentQuery = backend.kapace.BLL.Models.ContentQuery;
 using Translation = backend.kapace.DAL.Models.Translation;
 
 namespace backend.kapace.BLL.Services;
 
-internal class ContentService : IContentService
+public class ContentService : IContentService
 {
     private readonly IContentRepository _contentRepository;
     private readonly IEpisodeRepository _episodeRepository;
@@ -136,16 +133,21 @@ internal class ContentService : IContentService
     }
 
     public async Task<IReadOnlyCollection<GetByQueryResult>> GetByQueryAsync(
-        string search, 
-        SearchFilters searchFilters, 
-        QueryPaging queryPaging, 
+        string search,
+        SearchFilters searchFilters,
+        QueryPaging? queryPaging,
         ContentSelectedInfo selectedInfo,
         CancellationToken token)
     {
         var contentIds = Array.Empty<long>();
+        if (searchFilters.ContentIds?.Any() == true)
+        {
+            contentIds = searchFilters.ContentIds;
+        }
+        
         var genresMapByContentIdTask = Task.FromResult(new Dictionary<long, GetByQueryResult.GetByQueryGenre[]>());
         var translatesMapByContentIdTask =
-            Task.FromResult((IReadOnlyCollection<Translation.WithTranslator>)Array.Empty<Translation.WithTranslator>());
+            Task.FromResult((IReadOnlyCollection<Translation>)Array.Empty<Translation>());
         var episodesMapByContentIdTask = Task.FromResult(Array.Empty<Episode>());
         
         Dictionary<long, GetByQueryResult.GetByQueryGenre[]> genresMapByContentId;
@@ -157,17 +159,17 @@ internal class ContentService : IContentService
                 GenreIds = searchFilters.GenreIds,
             }, token);
 
-            contentIds = genresMapByContentId.Keys.ToArray();
+            contentIds = genresMapByContentId.Keys.Intersect(contentIds).ToArray();
         }
 
         var dalQuery = new QueryContent
         {
-            Ids = contentIds,
+            Ids = contentIds.ToArray(),
             Countries = searchFilters.Countries.Select(x => (int)x).ToArray(),
             Statuses = searchFilters.ContentStatuses.Select(x => (int)x).ToArray(),
             Types = searchFilters.ContentTypes.Select(x => (int)x).ToArray(),
-            Limit = queryPaging.Limit,
-            Offset = queryPaging.Offset,
+            Limit = queryPaging?.Limit ?? 0,
+            Offset = queryPaging?.Offset ?? 0,
         };
 
         var contents = await _contentRepository.QueryAsync(dalQuery, token);
@@ -216,14 +218,14 @@ internal class ContentService : IContentService
                         Id = translate.Id,
                         EpisodeId = translate.EpisodeId,
                         ContentId = translate.ContentId,
-                        Language = (Language)translate.Language,
+                        Language = translate.Lang,
                         Link = translate.Link,
                         TranslationType = translate.TranslationType,
                         CreatedAt = translate.CreatedAt,
                         CreatedBy = translate.CreatedBy,
-                        TranslatorId = translate.TranslatorId,
-                        TranslatorName = translate.TranslatorName,
-                        TranslatorLink = translate.TranslatorLink,
+                        TranslatorId = translate.Translator.TranslatorId,
+                        TranslatorName = translate.Translator.Name,
+                        TranslatorLink = translate.Translator.TranslatorLink,
                     }).ToArray());
         
         var episodesMapByContentId = episodesMapByContentIdTask.Result
@@ -274,6 +276,14 @@ internal class ContentService : IContentService
         }).ToArray();
     }
 
+    public Task<IReadOnlyCollection<GetByQueryResult>> GetByQueryAsync(
+        SearchFilters searchFilters, 
+        ContentSelectedInfo selectedInfo, 
+        CancellationToken token)
+    {
+        return GetByQueryAsync(search: null, searchFilters, queryPaging: null, selectedInfo, token);
+    }
+
     public async Task<long> InsertAsync(InsertContentModel model, CancellationToken token)
     {
         var id = await _contentRepository.InsertAsync(
@@ -301,6 +311,24 @@ internal class ContentService : IContentService
             }, token);
 
         return id;
+    }
+
+    public async Task UpdateAsync(UpdateContentModel newContent, CancellationToken token)
+    {
+        await _contentRepository.UpdateAsync(new ContentUpdateQuery(newContent.ContentId)
+        {
+            ImageId = newContent.ImageId,
+            Title = newContent.Title,
+            EngTitle = newContent.EngTitle,
+            OriginalTitle = newContent.OriginalTitle,
+            Description = newContent.Description,
+            Country = newContent.Country,
+            ContentType = newContent.ContentType,
+            Duration = newContent.Duration,
+            ReleasedAt = newContent.ReleasedAt,
+            PlannedSeries = newContent.PlannedSeries,
+            MinAge = newContent.MinAge
+        }, token);
     }
 
     private async Task<Dictionary<long, GetByQueryResult.GetByQueryGenre[]>> GetByQueryGenresMapByContentIds(

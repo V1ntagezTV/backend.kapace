@@ -39,6 +39,9 @@ public class HistoryUnit
 
     public record JsonEpisodeChanges : JsonChanges
     {
+        public long? EpisodeId { get; init; }
+        public int? Number { get; init; }
+        public string? Image { get; init; }
         public string? Title { get; init; }
     }
 }

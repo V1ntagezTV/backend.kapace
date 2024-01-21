@@ -12,7 +12,7 @@ public class EpisodeRepository : BaseKapaceRepository, IEpisodeRepository
 
     public async Task<Episode[]> QueryAsync(QueryEpisode queryEpisode, CancellationToken token)
     {
-        var initSql = "SELECT * FROM episode ";
+        var initSql = "SELECT * FROM episode";
         var parameters = new DynamicParameters();
         var filters = new List<string>();
         
@@ -31,5 +31,25 @@ public class EpisodeRepository : BaseKapaceRepository, IEpisodeRepository
         var command = new CommandDefinition(initSql, parameters, cancellationToken: token);
         var result = await connection.QueryAsync<Episode>(command);
         return result.ToArray();
+    }
+
+    public async Task<long> InsertAsync(Episode model, CancellationToken token)
+    {
+        const string initSql =
+            @$"INSERT INTO episode(content_id, title, image, number) 
+               VALUES (@ContentId, @Title, @Image, @Number)
+               RETURNING id;";
+
+        var parameters = new
+        {
+            model.ContentId,
+            model.Title,
+            model.Image,
+            model.Number
+        };
+
+        await using var connection = CreateConnection();
+        var command = new CommandDefinition(initSql, parameters, cancellationToken: token);
+        return await connection.QuerySingleAsync<long>(command);
     }
 }

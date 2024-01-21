@@ -2,5 +2,6 @@
 
 public class QueryEpisode
 {
-    public long[] ContentIds { get; set; }
+    public long[] EpisodeIds {get; init; }
+    public long[] ContentIds { get; init; }
 }

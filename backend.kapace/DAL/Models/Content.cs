@@ -20,21 +20,21 @@ public class Content
     
     internal decimal ImportStars { get; init; }
     
-    internal int OutSeries { get; set; }
+    internal int OutSeries { get; init; }
     
-    internal int PlannedSeries { get; set; }
+    internal int PlannedSeries { get; init; }
     
-    internal int Views { get; set; }
+    internal int Views { get; init; }
     
-    internal int Country { get; set; }
+    internal int Country { get; init; }
     
-    internal DateTimeOffset? ReleasedAt { get; set; }
+    internal DateTimeOffset? ReleasedAt { get; init; }
     
-    internal DateTimeOffset CreatedAt { get; set; }
+    internal DateTimeOffset CreatedAt { get; init; }
     
-    internal DateTimeOffset LastUpdateAt { get; set; }
+    internal DateTimeOffset LastUpdateAt { get; init; }
     
-    internal int MinAgeLimit { get; set; }
+    internal int MinAgeLimit { get; init; }
     
-    internal int? Duration { get; set; }
+    internal int? Duration { get; init; }
 }

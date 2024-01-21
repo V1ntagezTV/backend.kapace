@@ -20,22 +20,24 @@ public class TranslationController : Controller {
         V1GetByEpisodeRequest request,
         CancellationToken token)
     {
-        var episode = await _translationService.GetByEpisodeAsync(request.EpisodeId, token);
+        var episodeTranslations = await _translationService.GetByEpisodeAsync(request.EpisodeId, request.TranslatorId, token);
 
         return new OkObjectResult(new V1GetByEpisodeResponse() {
-            Translations = episode.Select(x => new V1GetByEpisodeResponse.V1GetByEpisodeTranslation
+            Translations = episodeTranslations.Select(x => new V1GetByEpisodeResponse.V1GetByEpisodeTranslation
             {
-                TranslationId = x.TranslationId,
+                TranslationId = x.Id,
                 EpisodeId = x.EpisodeId,
                 Language = x.Language,
                 Link = x.Link,
                 TranslationType = x.TranslationType,
                 CreatedAt = x.CreatedAt,
                 CreatedBy = x.CreatedBy,
-                TranslatorId = x.TranslationId,
-                Translator = "Азалии переводчик",
-                TranslatorLink = "https://vk.com",
-                Quality = 720,
+                Quality = x.Quality,
+                TranslatorId = x.Translator.TranslatorId,
+                Translator = x.Translator.Name,
+                TranslatorLink = x.Translator.Link,
+                Views = x.Episode.Views,
+                Stars = x.Episode.Stars,
             }).ToArray()
         });
     }

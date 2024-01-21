@@ -52,6 +52,35 @@ public class ChangesHistoryController : Controller
         return new V1CreateContentResponse(insertedId);
     }
 
+    [HttpPost("create-episode")]
+    public async Task<ActionResult<V1CreateEpisodeHistoryResponse>> V1CreateEpisodeHistory(
+        V1CreateEpisodeHistoryRequest historyRequest,
+        CancellationToken token) 
+    {
+        var newHistoryUnit = new HistoryUnit
+        {
+            TargetId = historyRequest.ContentId,
+            HistoryType = HistoryType.Content,
+            Changes = historyRequest.ChangeableFields is not null 
+                ? new HistoryUnit.JsonEpisodeChanges()
+                    {
+                        EpisodeId = historyRequest.ChangeableFields.EpisodeId,
+                        Number = historyRequest.ChangeableFields.Number,
+                        Title = historyRequest.ChangeableFields.Title,
+                        Image = historyRequest.ChangeableFields.Image,
+                    }
+                : new HistoryUnit.JsonEpisodeChanges(),
+            CreatedBy = historyRequest.CreatedBy,
+            CreatedAt = DateTimeOffset.Now,
+            ApprovedBy = null,
+            ApprovedAt = null,
+        };
+
+        var insertedId = await _changesHistoryService.InsertChangesAsync(newHistoryUnit, token);
+
+        return new V1CreateEpisodeHistoryResponse(insertedId);
+    }
+
     [HttpPost("approve")]
     public async Task V1Approve(V1ApproveRequest request, CancellationToken token)
     {

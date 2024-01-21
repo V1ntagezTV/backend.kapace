@@ -12,11 +12,11 @@ public class GenreRepository : BaseKapaceRepository, IGenreRepository
 
     public async Task<Genre[]> GetByIds(long[] genreIds, CancellationToken token)
     {
-        var initSql = @"SELECT * FROM content WHERE id = ANY(@{nameof(query.Ids)})";
+        var initSql = $@"SELECT * FROM content WHERE id = ANY(@GenreIds)";
 
         var parameters = new
         {
-            Ids = genreIds,
+            GenreIds = genreIds,
         };
 
         await using var connection = CreateConnection();

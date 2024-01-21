@@ -12,6 +12,7 @@ public class V1GetByQueryRequest
 
     public class V1GetByQuerySearchFilters
     {
+        public long[] ContentIds { get; set; } = Array.Empty<long>();
         public Country[] Countries { get; set; } = Array.Empty<Country>();
         public ContentType[] ContentTypes { get; set; } = Array.Empty<ContentType>();
         public ContentStatus[] ContentStatuses { get; set; } = Array.Empty<ContentStatus>();

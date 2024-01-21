@@ -16,8 +16,10 @@ public class V1GetByEpisodeResponse
         public required DateTimeOffset CreatedAt { get; init; }
         public required long CreatedBy { get; init; }
         public required long? Quality { get; init; }
+        public required int Views { get; init; }
+        public required double Stars { get; init; }
         public required long? TranslatorId { get; init; }
-        public required string Translator { get; init; }
-        public required string TranslatorLink { get; init; }
+        public required string? Translator { get; init; }
+        public required string? TranslatorLink { get; init; }
     } 
 }

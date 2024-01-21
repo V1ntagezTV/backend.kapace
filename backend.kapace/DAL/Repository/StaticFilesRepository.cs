@@ -1,5 +1,6 @@
 ﻿using backend.kapace.BLL.Enums;
 using backend.kapace.DAL.Models;
+using backend.kapace.DAL.Repository.Interfaces;
 using backend.kapace.Infrastructure.Database;
 using Dapper;
 using Npgsql;

@@ -6,43 +6,26 @@ public record Content
 {
     private Content() { }
     
-    internal long Id { get; private init; }
+    public long Id { get; private init; }
+    public string Title { get; private init; }
+    public string EngTitle { get;private init; }
+    public string OriginTitle { get; private init; }
+    public string Description { get; private init; }
+    public ContentType Type { get; private init; }
+    public ContentStatus Status { get; private init; }
+    public long ImageId { get; private init; }
+    public decimal ImportStars { get; private init; }
+    public int OutSeries { get; private init; }
+    public int PlannedSeries { get; private init; }
+    public int Views { get; private init; }
+    public int Country { get; private init; }
+    public DateTimeOffset? ReleasedAt { get; private init; }
+    public DateTimeOffset CreatedAt { get; private init; }
+    public DateTimeOffset LastUpdateAt { get; private init; }
+    public int MinAgeLimit { get; private init; }
+    public int? Duration { get; private init; }
     
-    internal string Title { get;  private init; }
-
-    internal string EngTitle { get; private init; }
-
-    internal string OriginTitle { get; private init; }
-    
-    internal string Description { get;  private init; }
-    
-    internal ContentType Type { get;  private init; }
-    
-    internal ContentStatus Status { get;  private init; }
-    
-    internal long ImageId { get;  private init; }
-    
-    internal decimal ImportStars { get;  private init; }
-    
-    internal int OutSeries { get;  private init; }
-    
-    internal int PlannedSeries { get;  private init; }
-    
-    internal int Views { get;  private init; }
-    
-    internal int Country { get;  private init; }
-    
-    internal DateTimeOffset? ReleasedAt { get;  private init; }
-    
-    internal DateTimeOffset CreatedAt { get;  private init; }
-    
-    internal DateTimeOffset LastUpdateAt { get;  private init; }
-    
-    internal int MinAgeLimit { get;  private init; }
-    
-    internal int? Duration { get; private init; }
-    
-    internal static Content ToBLLContent(DAL.Models.Content content)
+    public static Content ToBLLContent(DAL.Models.Content content)
     {
         return new Content
         {

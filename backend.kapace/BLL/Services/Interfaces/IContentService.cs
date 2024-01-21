@@ -7,6 +7,7 @@ namespace backend.kapace.BLL.Services.Interfaces;
 
 public interface IContentService
 {
+    [Obsolete("Используйте GetByQueryAsync")]
     Task<Content[]> QueryAsync(ContentQuery query, CancellationToken token);
 
     Task<IReadOnlyDictionary<MainPageType, Content[]>> GetOrderByMapsAsync(
@@ -23,9 +24,30 @@ public interface IContentService
     Task<IReadOnlyCollection<GetByQueryResult>> GetByQueryAsync(
         string search, 
         SearchFilters searchFilters, 
-        QueryPaging queryPaging,
+        QueryPaging? queryPaging,
+        ContentSelectedInfo selectedInfo,
+        CancellationToken token);
+
+    Task<IReadOnlyCollection<GetByQueryResult>> GetByQueryAsync(
+        SearchFilters searchFilters,
         ContentSelectedInfo selectedInfo,
         CancellationToken token);
 
     Task<long> InsertAsync(InsertContentModel model, CancellationToken token);
+    
+    Task UpdateAsync(UpdateContentModel newContent, CancellationToken token);
 }
+
+public record UpdateContentModel(
+    long ContentId,
+    long? ImageId, 
+    string? Title, 
+    string? EngTitle, 
+    string? OriginalTitle, 
+    string? Description, 
+    int? Country,
+    int? ContentType, 
+    int? Duration, 
+    DateTimeOffset? ReleasedAt,
+    int? PlannedSeries,
+    int? MinAge);

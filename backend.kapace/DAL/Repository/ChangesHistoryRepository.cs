@@ -7,7 +7,7 @@ using Npgsql;
 
 namespace backend.kapace.DAL.Repository;
 
-internal class ChangesHistoryRepository : BaseKapaceRepository, IChangesHistoryRepository
+public class ChangesHistoryRepository : BaseKapaceRepository, IChangesHistoryRepository
 {
     public ChangesHistoryRepository(NpgsqlDataSource npgsqlDataSource) : base(npgsqlDataSource) { }
 

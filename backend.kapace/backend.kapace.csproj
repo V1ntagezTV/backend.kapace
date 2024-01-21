@@ -34,6 +34,7 @@
       <None Update="appsettings.Local.json">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>
+      <None Remove="StaticFiles\Content\**" />
     </ItemGroup>
 
     <ItemGroup>
@@ -43,6 +44,13 @@
 
     <ItemGroup>
       <Folder Include="StaticFiles" />
-      <Folder Include="StaticFiles\Content" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Compile Remove="StaticFiles\Content\**" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <EmbeddedResource Remove="StaticFiles\Content\**" />
     </ItemGroup>
 </Project>

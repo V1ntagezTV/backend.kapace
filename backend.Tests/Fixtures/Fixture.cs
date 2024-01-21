@@ -1,4 +1,5 @@
-﻿using backend.kapace.BLL.Services;
+﻿using System.Text.Json.Serialization;
+using backend.kapace.BLL.Services;
 using backend.kapace.BLL.Services.Interfaces;
 using backend.kapace.DAL;
 using backend.kapace.DAL.Experimental;
@@ -17,6 +18,8 @@ public class MainFixture
 
     public MainFixture() 
     {
+        Dapper.DefaultTypeMap.MatchNamesWithUnderscores = true;
+
         var builder = WebApplication.CreateBuilder();
         var config = builder.Configuration;
         
@@ -32,12 +35,22 @@ public class MainFixture
         services.AddScoped<IImageService, ImageService>();
         services.AddScoped<IStaticFilesRepository, StaticFilesRepository>();
         services.AddScoped<IChangesHistoryRepository, ChangesHistoryRepository>();
+        services.AddScoped<ITranslatorsRepository, TranslatorsRepository>();
         services.AddScoped<IChangesHistoryService, ChangesHistoryService>();
         services.AddScoped<BaseRepository<StarsDataColumns>, StarsRepository>();
         
         var connection = config.GetSection("SqlConnection").Value ?? throw new ArgumentException();
-        var dataSource = new NpgsqlDataSourceBuilder(connection).MapComposites(connection).Build();
+        var dataSource = new NpgsqlDataSourceBuilder(connection)
+            .MapComposites(connection)
+            .Build();
         services.AddSingleton<NpgsqlDataSource>(_ => dataSource);
+        services
+            .AddMvc()
+            .AddJsonOptions(options =>
+            {
+                options.JsonSerializerOptions.PropertyNamingPolicy = null;
+                options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+            });
         
         var app = builder.Build();
         

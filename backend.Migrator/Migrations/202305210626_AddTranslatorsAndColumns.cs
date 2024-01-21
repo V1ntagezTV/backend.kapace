@@ -8,13 +8,13 @@ public class _AddTranslatorsAndColumns: Migration {
     {
         const string sql = @"
 CREATE TABLE translator(
-    id BIGSERIAL PRIMARY KEY NOT NULL,
+    id BIGSERIAL PRIMARY KEY,
     name varchar not null,
     link varchar null
 );
 ALTER TABLE content_translation
     ADD COLUMN quality integer null,
-    ADD COLUMN translation_id integer not null default 1;
+    ADD COLUMN translator_id integer not null default 1;
 ALTER TABLE content ALTER COLUMN image DROP NOT NULL;";
         Execute.Sql(sql);
     }
@@ -25,7 +25,7 @@ ALTER TABLE content ALTER COLUMN image DROP NOT NULL;";
 DROP TABLE IF EXISTS translators;
 ALTER TABLE content_translation 
     DROP COLUMN quality,
-    DROP COLUMN translation_id;";
+    DROP COLUMN translator_id;";
         Execute.Sql(sql);
     }
 }

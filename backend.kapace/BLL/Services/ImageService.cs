@@ -1,9 +1,9 @@
 ﻿using System.Drawing;
 using System.Drawing.Imaging;
 using backend.kapace.BLL.Enums;
+using backend.kapace.BLL.Exceptions;
 using backend.kapace.BLL.Services.Interfaces;
-using backend.kapace.DAL.Models;
-using backend.kapace.DAL.Repository;
+using backend.kapace.DAL.Repository.Interfaces;
 using Microsoft.AspNetCore.Http;
 
 namespace backend.kapace.BLL.Services;
@@ -76,9 +76,16 @@ public class ImageService : IImageService
             $"{contentId}",
             $"{imageId}.png"
         );
-        
-        var image = await Task.Run(() => Image.FromFile(imagePath), token).ConfigureAwait(false);
 
-        return image;
+        try
+        {
+            var image = await Task.Run(() => Image.FromFile(imagePath), token).ConfigureAwait(false);
+            
+            return image;
+        }
+        catch (FileNotFoundException)
+        {
+            throw new ImageNotFoundException();
+        }
     }
 }

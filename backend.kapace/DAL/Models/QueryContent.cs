@@ -5,10 +5,10 @@ namespace backend.kapace.DAL.Models;
 
 public class QueryContent
 {
-    public long[] Ids { get; init; } = Array.Empty<long>();
-    public int[] Countries { get; set; }
-    public int[] Statuses { get; set; }
-    public int[] Types { get; set; }
+    public long[]? Ids { get; init; }
+    public int[]? Countries { get; init; }
+    public int[]? Statuses { get; init; }
+    public int[]? Types { get; init; }
     public long Limit { get; init; }
 
     public long Offset { get; init; }

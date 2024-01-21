@@ -1,10 +1,8 @@
-﻿using backend.kapace.BLL.Enums;
-using backend.kapace.DAL.Models;
+﻿using backend.kapace.DAL.Models;
 using backend.kapace.DAL.Repository.Interfaces;
 using backend.kapace.Infrastructure.Database;
 using backend.kapace.Models;
 using Dapper;
-using Microsoft.AspNetCore.Identity;
 using Npgsql;
 
 namespace backend.kapace.DAL.Repository;
@@ -60,8 +58,8 @@ public class ContentRepository : BaseKapaceRepository, IContentRepository
             initSql += $" OFFSET @{nameof(query.Offset)} ";
         }
 
-        await using var connection = CreateConnection();
         Console.WriteLine(initSql);
+        await using var connection = CreateConnection();
         var command = new CommandDefinition(initSql, parameters, cancellationToken: token);
         var result = await connection.QueryAsync<Content>(command);
         return result.ToArray();
@@ -176,7 +174,8 @@ OFFSET @Offset";
                                 @Duration, 
                                 @EngTitle, 
                                 @Channel,
-                                @OriginTitle) returning id;";
+                                @OriginTitle) 
+                        returning id;";
 
         var parameters = new
         {
@@ -204,5 +203,43 @@ OFFSET @Offset";
         await using var connection = CreateConnection();
         var command = new CommandDefinition(sql, parameters, cancellationToken: token);
         return await connection.QueryFirstOrDefaultAsync<long>(command);
+    }
+
+    public async Task UpdateAsync(ContentUpdateQuery model, CancellationToken token)
+    {
+        const string initSql = $@"
+            UPDATE content SET
+                image_id = @{nameof(model.ImageId)},
+                title = @{nameof(model.Title)},
+                eng_title = @{nameof(model.EngTitle)},
+                original_title = @{nameof(model.OriginalTitle)},
+                description = @{nameof(model.Description)},
+                country = @{nameof(model.Country)},
+                type = @{nameof(model.ContentType)},
+                duration = @{nameof(model.Duration)},
+                released_at = @{nameof(model.ReleasedAt)},
+                planned_series = @{nameof(model.PlannedSeries)},
+                min_age_limit = @{nameof(model.MinAge)}
+            WHERE id = @{nameof(model.ContentId)};";
+        
+        var parameters = new
+        {
+            model.ContentId,
+            model.ImageId,
+            model.Title,
+            model.EngTitle,
+            model.OriginalTitle,
+            model.Description,
+            model.Country,
+            model.ContentType,
+            model.Duration,
+            model.ReleasedAt,
+            model.PlannedSeries,
+            model.MinAge,
+        };
+        
+        await using var connection = CreateConnection();
+        var command = new CommandDefinition(initSql, parameters, cancellationToken: token);
+        await connection.QueryAsync(command);
     }
 }

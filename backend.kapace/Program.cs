@@ -2,6 +2,8 @@
 using backend.kapace.BLL.Services;
 using backend.kapace.BLL.Services.Interfaces;
 using backend.kapace.DAL;
+using backend.kapace.DAL.Experimental;
+using backend.kapace.DAL.Experimental.StarsRepository;
 using backend.kapace.DAL.Repository;
 using backend.kapace.DAL.Repository.Interfaces;
 using Microsoft.AspNetCore.Builder;
@@ -25,7 +27,9 @@ services.AddScoped<ITranslationService, TranslationService>();
 services.AddScoped<IImageService, ImageService>();
 services.AddScoped<IStaticFilesRepository, StaticFilesRepository>();
 services.AddScoped<IChangesHistoryRepository, ChangesHistoryRepository>();
+services.AddScoped<ITranslatorsRepository, TranslatorsRepository>();
 services.AddScoped<IChangesHistoryService, ChangesHistoryService>();
+services.AddScoped<BaseRepository<StarsDataColumns>, StarsRepository>();
 
 var connection = config.GetSection("SqlConnection").Value ?? throw new ArgumentException();
 var dataSource = new NpgsqlDataSourceBuilder(connection).MapComposites(connection).Build();

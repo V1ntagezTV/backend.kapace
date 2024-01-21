@@ -18,6 +18,7 @@ public class ContentController : Controller
         _contentService = contentService;
     }
 
+    [Obsolete("Используйте get-by-query")]
     [HttpPost("query")]
     public async Task<ActionResult<V1QueryResponse>> V1QueryAsync(V1QueryRequest request, CancellationToken token)
     {
@@ -123,6 +124,7 @@ public class ContentController : Controller
             request.Search,
             new SearchFilters()
             {
+                ContentIds = request.Filters.ContentIds,
                 Countries = request.Filters.Countries,
                 ContentTypes = request.Filters.ContentTypes,
                 ContentStatuses = request.Filters.ContentStatuses,

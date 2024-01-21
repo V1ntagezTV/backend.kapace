@@ -1,7 +1,7 @@
 ﻿using backend.kapace.BLL.Enums;
 using backend.kapace.DAL.Models;
 
-namespace backend.kapace.DAL.Repository;
+namespace backend.kapace.DAL.Repository.Interfaces;
 
 public interface IStaticFilesRepository
 {
