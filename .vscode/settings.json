@@ -1,5 +1,3 @@
 {
-    "files.autoSave": "onFocusChange",
-    "omnisharp.enableRoslynAnalyzers": true,
-    "omnisharp.enableEditorConfigSupport": true
+    "cmake.configureOnOpen": false
 }
