@@ -19,67 +19,19 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="e863d32b-f8af-451f-8084-8db13fa65ff5" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/backend.Tests/Helpers/RandomDataModelFactory.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend.Tests/Helpers/TestHelper.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend.Tests/ServiceTests/ContentServiceTests.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend.Tests/ServiceTests/TranslationServiceTests.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend.kapace/BLL/Exceptions/EpisodeNotFoundException.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend.kapace/BLL/Exceptions/ImageNotFoundException.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend.kapace/BLL/Exceptions/TranslatorNotFoundException.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend.kapace/BLL/Models/InsertTranslation.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend.kapace/BLL/Services/EpisodeService.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend.kapace/BLL/Services/Interfaces/IEpisodeService.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend.kapace/DAL/Experimental/BaseDataColumns.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend.kapace/DAL/Experimental/BaseQuery.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend.kapace/DAL/Experimental/BaseRepository.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend.kapace/DAL/Experimental/StarsRepository/StarsRepository.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend.kapace/DAL/Models/InsertTranslation.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend.kapace/DAL/Models/Translator.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend.kapace/DAL/Repository/Interfaces/ITranslatorsRepository.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend.kapace/DAL/Repository/TranslatorsRepository.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend.kapace/Models/Requests/V1CreateEpisodeHistoryRequest.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend.kapace/Models/Response/V1CreateEpisodeHistoryResponse.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend.kapace/appsettings.Testing.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.backend.kapace/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.backend.kapace/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.vscode/settings.json" beforeDir="false" afterPath="$PROJECT_DIR$/.vscode/settings.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend.Migrator/Migrations/202304190010_CreateTranslationContentTable.cs" beforeDir="false" afterPath="$PROJECT_DIR$/backend.Migrator/Migrations/202304190010_CreateTranslationContentTable.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend.Migrator/Migrations/202305210626_AddTranslatorsAndColumns.cs" beforeDir="false" afterPath="$PROJECT_DIR$/backend.Migrator/Migrations/202305210626_AddTranslatorsAndColumns.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend.Tests/Fixtures/Fixture.cs" beforeDir="false" afterPath="$PROJECT_DIR$/backend.Tests/Fixtures/Fixture.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend.Tests/UnitTest1.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend.Tests/backend.Tests.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/backend.Tests/backend.Tests.csproj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend.kapace/BLL/Models/SearchFilters.cs" beforeDir="false" afterPath="$PROJECT_DIR$/backend.kapace/BLL/Models/SearchFilters.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend.kapace/BLL/Models/Translation.cs" beforeDir="false" afterPath="$PROJECT_DIR$/backend.kapace/BLL/Models/EpisodeTranslation.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend.kapace/BLL/Models/VideoService/Content.cs" beforeDir="false" afterPath="$PROJECT_DIR$/backend.kapace/BLL/Models/VideoService/Content.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend.Tests/Helpers/RandomDataModelFactory.cs" beforeDir="false" afterPath="$PROJECT_DIR$/backend.Tests/Helpers/RandomDataModelFactory.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/backend.kapace/BLL/Services/ChangesHistoryService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/backend.kapace/BLL/Services/ChangesHistoryService.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/backend.kapace/BLL/Services/ContentService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/backend.kapace/BLL/Services/ContentService.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend.kapace/BLL/Services/ImageService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/backend.kapace/BLL/Services/ImageService.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend.kapace/BLL/Services/EpisodeService.cs" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/backend.kapace/BLL/Services/Interfaces/HistoryUnit.cs" beforeDir="false" afterPath="$PROJECT_DIR$/backend.kapace/BLL/Services/Interfaces/HistoryUnit.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend.kapace/BLL/Services/Interfaces/IContentService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/backend.kapace/BLL/Services/Interfaces/IContentService.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend.kapace/BLL/Services/Interfaces/ITranslationService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/backend.kapace/BLL/Services/Interfaces/ITranslationService.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend.kapace/BLL/Services/TranslationService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/backend.kapace/BLL/Services/TranslationService.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend.kapace/BLL/Services/Interfaces/IEpisodeService.cs" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/backend.kapace/Controllers/ChangesHistoryController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/backend.kapace/Controllers/ChangesHistoryController.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend.kapace/Controllers/ContentController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/backend.kapace/Controllers/ContentController.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend.kapace/Controllers/TranslationController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/backend.kapace/Controllers/TranslationController.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend.kapace/DAL/Models/Content.cs" beforeDir="false" afterPath="$PROJECT_DIR$/backend.kapace/DAL/Models/Content.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend.kapace/DAL/Models/Episode.cs" beforeDir="false" afterPath="$PROJECT_DIR$/backend.kapace/DAL/Models/Episode.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend.kapace/DAL/Models/QueryContent.cs" beforeDir="false" afterPath="$PROJECT_DIR$/backend.kapace/DAL/Models/QueryContent.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend.kapace/DAL/Models/QueryEpisode.cs" beforeDir="false" afterPath="$PROJECT_DIR$/backend.kapace/DAL/Models/QueryEpisode.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend.kapace/DAL/Models/Translation.cs" beforeDir="false" afterPath="$PROJECT_DIR$/backend.kapace/DAL/Models/Translation.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend.kapace/DAL/Repository/ChangesHistoryRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/backend.kapace/DAL/Repository/ChangesHistoryRepository.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend.kapace/DAL/Models/ContentUpdateQuery.cs" beforeDir="false" afterPath="$PROJECT_DIR$/backend.kapace/DAL/Models/ContentUpdateQuery.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend.kapace/DAL/Models/HistoryUnit.cs" beforeDir="false" afterPath="$PROJECT_DIR$/backend.kapace/DAL/Models/HistoryUnit.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/backend.kapace/DAL/Repository/ContentRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/backend.kapace/DAL/Repository/ContentRepository.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/backend.kapace/DAL/Repository/EpisodeRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/backend.kapace/DAL/Repository/EpisodeRepository.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend.kapace/DAL/Repository/GenreRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/backend.kapace/DAL/Repository/GenreRepository.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend.kapace/DAL/Repository/IStaticFilesRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/backend.kapace/DAL/Repository/Interfaces/IStaticFilesRepository.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend.kapace/DAL/Repository/InsertContentQuery.cs" beforeDir="false" afterPath="$PROJECT_DIR$/backend.kapace/DAL/Models/InsertContentQuery.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/backend.kapace/DAL/Repository/Interfaces/IEpisodeRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/backend.kapace/DAL/Repository/Interfaces/IEpisodeRepository.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend.kapace/DAL/Repository/Interfaces/ITranslationRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/backend.kapace/DAL/Repository/Interfaces/ITranslationRepository.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend.kapace/DAL/Repository/StaticFilesRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/backend.kapace/DAL/Repository/StaticFilesRepository.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend.kapace/DAL/Repository/TranslationRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/backend.kapace/DAL/Repository/TranslationRepository.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend.kapace/Models/Requests/V1GetByEpisodeRequest.cs" beforeDir="false" afterPath="$PROJECT_DIR$/backend.kapace/Models/Requests/V1GetByEpisodeRequest.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend.kapace/Models/Requests/V1GetByQueryRequest.cs" beforeDir="false" afterPath="$PROJECT_DIR$/backend.kapace/Models/Requests/V1GetByQueryRequest.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend.kapace/Models/Response/V1GetByEpisodeResponse.cs" beforeDir="false" afterPath="$PROJECT_DIR$/backend.kapace/Models/Response/V1GetByEpisodeResponse.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend.kapace/Program.cs" beforeDir="false" afterPath="$PROJECT_DIR$/backend.kapace/Program.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend.kapace/backend.kapace.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/backend.kapace/backend.kapace.csproj" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -410,6 +362,8 @@
       <workItem from="1705172056624" duration="552000" />
       <workItem from="1705301328935" duration="1585000" />
       <workItem from="1705736929037" duration="6308000" />
+      <workItem from="1705824488855" duration="11876000" />
+      <workItem from="1706197433347" duration="4469000" />
     </task>
     <task id="LOCAL-00001" summary="add changes history, insert content and approve it">
       <created>1692487739565</created>
@@ -453,7 +407,28 @@
       <option name="project" value="LOCAL" />
       <updated>1702702606754</updated>
     </task>
-    <option name="localTasksCounter" value="7" />
+    <task id="LOCAL-00007" summary="excludes">
+      <created>1705833237850</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1705833237850</updated>
+    </task>
+    <task id="LOCAL-00008" summary="remove github file">
+      <created>1705833370725</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1705833370725</updated>
+    </task>
+    <task id="LOCAL-00009" summary="big commit">
+      <created>1705835535463</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1705835535463</updated>
+    </task>
+    <option name="localTasksCounter" value="10" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -495,7 +470,10 @@
     <MESSAGE value="add images" />
     <MESSAGE value="disable console logs spam" />
     <MESSAGE value="add test project" />
-    <option name="LAST_COMMIT_MESSAGE" value="add test project" />
+    <MESSAGE value="excludes" />
+    <MESSAGE value="remove github file" />
+    <MESSAGE value="big commit" />
+    <option name="LAST_COMMIT_MESSAGE" value="big commit" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -534,13 +512,13 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
           <url>file://$PROJECT_DIR$/backend.kapace/BLL/Services/ImageService.cs</url>
-          <line>39</line>
+          <line>37</line>
           <properties documentPath="C:\Users\insur\RiderProjects\backend-kapace\backend.kapace\BLL\Services\ImageService.cs" initialLine="34" containingFunctionPresentation="method 'InsertImageAsync'">
             <startOffsets>
-              <option value="1301" />
+              <option value="1231" />
             </startOffsets>
             <endOffsets>
-              <option value="1385" />
+              <option value="1315" />
             </endOffsets>
           </properties>
           <option name="timeStamp" value="22" />

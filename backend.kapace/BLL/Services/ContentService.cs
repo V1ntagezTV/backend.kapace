@@ -320,7 +320,7 @@ public class ContentService : IContentService
             ImageId = newContent.ImageId,
             Title = newContent.Title,
             EngTitle = newContent.EngTitle,
-            OriginalTitle = newContent.OriginalTitle,
+            OriginTitle = newContent.OriginalTitle,
             Description = newContent.Description,
             Country = newContent.Country,
             ContentType = newContent.ContentType,

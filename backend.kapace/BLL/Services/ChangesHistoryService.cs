@@ -5,6 +5,7 @@ using backend.kapace.BLL.Services.Interfaces;
 using backend.kapace.DAL.Models;
 using backend.kapace.DAL.Repository.Interfaces;
 using Newtonsoft.Json;
+using static backend.kapace.BLL.Exceptions.ChangesHistoryService;
 using HistoryUnit = backend.kapace.BLL.Services.Interfaces.HistoryUnit;
 
 namespace backend.kapace.BLL.Services;
@@ -17,16 +18,16 @@ public class ChangesHistoryService : IChangesHistoryService
     
     private readonly IContentService _contentService;
     private readonly IChangesHistoryRepository _changesHistoryService;
-    private readonly IEpisodeService _episodeService;
+    private readonly IEpisodeRepository _episodeRepository;
 
     public ChangesHistoryService(
         IContentService contentService,
         IChangesHistoryRepository changesHistoryService,
-        IEpisodeService episodeService)
+        IEpisodeRepository episodeRepository)
     {
         _contentService = contentService;
         _changesHistoryService = changesHistoryService;
-        _episodeService = episodeService;
+        _episodeRepository = episodeRepository;
     }
 
     public async Task ApproveAsync(long historyId, long userId, CancellationToken token)
@@ -48,17 +49,28 @@ public class ChangesHistoryService : IChangesHistoryService
 
                 break;
             case HistoryType.Episode:
-                var episodeChanges = (HistoryUnit.JsonEpisodeChanges)changeUnit.Changes;
-                if (episodeChanges.EpisodeId is null or 0)
-                {
-                    // TODO: Не хватает ContentId
-                    // await _episodeService.InsertAsync(Episode.CreateInsertModel(episodeChanges), token);
-                }
-                else
-                {
-                    //await _episodeService.UpdateAsync(token);
-                }
+                await ApproveEpisodeAsync(changeUnit, token);
                 break;
+        }
+    }
+
+    private async Task ApproveEpisodeAsync(HistoryUnit changeUnit, CancellationToken token)
+    {
+        var changes = (HistoryUnit.JsonEpisodeChanges)changeUnit.Changes;
+        if (changes is { ContentId: { }, EpisodeId: null })
+        {
+            await _episodeRepository.InsertAsync(
+                Episode.CreateInsertModel(changes.ContentId.Value, changes.Number.Value, changes.Title, changes.Image),
+                token);
+        }
+        else
+        {
+            if (changes.ContentId is null)
+            {
+                throw new EmptyRequiredPropertiesException(nameof(changes.ContentId));
+            }
+
+            await _episodeRepository.UpdateAsync(new Episode(), token);
         }
     }
 
@@ -78,7 +90,7 @@ public class ChangesHistoryService : IChangesHistoryService
                     Status: contentChanges.Status,
                     Channel: contentChanges.Channel,
                     EngTitle: contentChanges.EngTitle,
-                    OriginTitle: contentChanges.OriginalTitle,
+                    OriginTitle: contentChanges.OriginTitle,
                     Duration: contentChanges.Duration,
                     ReleasedAt: contentChanges.ReleasedAt,
                     PlannedSeries: contentChanges.PlannedSeries,
@@ -106,7 +118,7 @@ public class ChangesHistoryService : IChangesHistoryService
                 contentChanges.ImageId ?? selectedContend.ImageId,
                 contentChanges.Title ?? selectedContend.Title,
                 contentChanges.EngTitle ?? selectedContend.EngTitle,
-                contentChanges.OriginalTitle ?? selectedContend.OriginTitle,
+                contentChanges.OriginTitle ?? selectedContend.OriginTitle,
                 contentChanges.Description ?? selectedContend.Description,
                 (int?)contentChanges.Country ?? (int)selectedContend.Country,
                 (int?)contentChanges.ContentType ?? (int)selectedContend.Type,

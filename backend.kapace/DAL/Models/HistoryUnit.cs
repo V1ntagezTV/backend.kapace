@@ -1,5 +1,4 @@
-﻿using System.Text.Json;
-using backend.kapace.BLL.Enums;
+﻿using backend.kapace.BLL.Enums;
 
 namespace backend.kapace.DAL.Models;
 

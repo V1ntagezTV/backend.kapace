@@ -11,7 +11,7 @@ public class ContentUpdateQuery
     public long? ImageId { get; set; }
     public string? Title { get; set; }
     public string? EngTitle { get; set; }
-    public string? OriginalTitle { get; set; }
+    public string? OriginTitle { get; set; }
     public string? Description { get; set; }
     public int? Country { get; set; }
     public int? ContentType { get; set; }

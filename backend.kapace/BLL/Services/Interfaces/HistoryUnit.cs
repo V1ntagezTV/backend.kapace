@@ -1,5 +1,4 @@
 ﻿using backend.kapace.BLL.Enums;
-using backend.kapace.BLL.Models;
 using backend.Models.Enums;
 
 namespace backend.kapace.BLL.Services.Interfaces;
@@ -23,7 +22,7 @@ public class HistoryUnit
         public long? ImageId { get; set; }
         public string? Title { get; init; }
         public string? EngTitle { get; init; }
-        public string? OriginalTitle { get; init; }
+        public string? OriginTitle { get; init; }
         public string? Description { get; init; }
         public string? Channel { get; init; }
         public ContentStatus? Status { get; init; }
@@ -39,6 +38,7 @@ public class HistoryUnit
 
     public record JsonEpisodeChanges : JsonChanges
     {
+        public long? ContentId { get; init; }
         public long? EpisodeId { get; init; }
         public int? Number { get; init; }
         public string? Image { get; init; }

@@ -52,4 +52,28 @@ public class EpisodeRepository : BaseKapaceRepository, IEpisodeRepository
         var command = new CommandDefinition(initSql, parameters, cancellationToken: token);
         return await connection.QuerySingleAsync<long>(command);
     }
+
+    public async Task UpdateAsync(Episode episode, CancellationToken token)
+    {
+        const string initSql = $@"
+            UPDATE episode SET
+                content_id = @{nameof(episode.ContentId)}
+                image = @{nameof(episode.Image)},
+                title = @{nameof(episode.Title)},
+                number = @{nameof(episode.Number)}
+            WHERE id = @{nameof(episode.Id)};";
+
+        var parameters = new
+        {
+            episode.ContentId,
+            episode.Id,
+            episode.Image,
+            episode.Title,
+            episode.Number
+        };
+        
+        await using var connection = CreateConnection();
+        var command = new CommandDefinition(initSql, parameters, cancellationToken: token);
+        await connection.QueryAsync(command);
+    }
 }

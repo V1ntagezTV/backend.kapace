@@ -31,7 +31,7 @@ public class ChangesHistoryController : Controller
                 ImageId = historyRequest.ChangeableFields.ImageId,
                 Title = historyRequest.ChangeableFields.Title,
                 EngTitle = historyRequest.ChangeableFields.EngTitle,
-                OriginalTitle = historyRequest.ChangeableFields.OriginalTitle,
+                OriginTitle = historyRequest.ChangeableFields.OriginalTitle,
                 Description = historyRequest.ChangeableFields.Description,
                 Country = historyRequest.ChangeableFields.Country,
                 ContentType = historyRequest.ChangeableFields.ContentType,

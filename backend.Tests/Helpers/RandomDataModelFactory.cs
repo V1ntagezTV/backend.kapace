@@ -58,4 +58,35 @@ internal class RandomDataModelFactory
                 //.RuleFor(m => m.LastUpdateAt, f => DateTimeOffset.UtcNow)
             ).Generate();
     }
+
+    public static kapace.BLL.Services.Interfaces.HistoryUnit CreateHistoryUnitWithContent(long? contentId)
+    {
+        return new Faker<kapace.BLL.Services.Interfaces.HistoryUnit>()
+            .CustomInstantiator(x => new kapace.BLL.Services.Interfaces.HistoryUnit()
+            {
+                TargetId = contentId ?? x.Random.Int(0),
+                HistoryType = HistoryType.Content,
+                Changes = new kapace.BLL.Services.Interfaces.HistoryUnit.JsonContentChanges
+                {
+                    ImageId = x.Random.Int(0),
+                    Title = x.Random.String2(10),
+                    EngTitle = x.Random.String2(10),
+                    OriginTitle = x.Random.String2(10),
+                    Description = x.Random.String2(10),
+                    Country = x.PickRandom<Country>(),
+                    ContentType = x.PickRandom<ContentType>(),
+                    Genres = "", // TODO: Должно быть массивом жанров а не строкой
+                    Duration = x.Random.Int(0, 100),
+                    ReleasedAt = DateTimeOffset.UtcNow,
+                    PlannedSeries = x.Random.Int(0, 100),
+                    MinAge = x.Random.Int(0, 100)
+                },
+                CreatedBy = 1,
+                CreatedAt = DateTimeOffset.Now,
+                ApprovedBy = null,
+                ApprovedAt = null,
+            })
+            .Generate();
+
+    }
 }
