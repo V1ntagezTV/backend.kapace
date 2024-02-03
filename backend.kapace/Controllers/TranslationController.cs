@@ -7,7 +7,8 @@ namespace backend.kapace.Controllers;
 
 [ApiController]
 [Route("v1/translations")]
-public class TranslationController : Controller {
+public class TranslationController : Controller 
+{
     private readonly ITranslationService _translationService;
 
     public TranslationController(ITranslationService translationService)
@@ -33,11 +34,11 @@ public class TranslationController : Controller {
                 CreatedAt = x.CreatedAt,
                 CreatedBy = x.CreatedBy,
                 Quality = x.Quality,
-                TranslatorId = x.Translator.TranslatorId,
-                Translator = x.Translator.Name,
-                TranslatorLink = x.Translator.Link,
-                Views = x.Episode.Views,
-                Stars = x.Episode.Stars,
+                TranslatorId = x.Translator?.TranslatorId,
+                Translator = x.Translator?.Name,
+                TranslatorLink = x.Translator?.Link,
+                Views = x.Episode?.Views ?? 0,
+                Stars = x.Episode?.Stars ?? 0,
             }).ToArray()
         });
     }
