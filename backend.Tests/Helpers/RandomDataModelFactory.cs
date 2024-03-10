@@ -3,12 +3,13 @@ using backend.kapace.BLL.Models;
 using backend.kapace.DAL.Models;
 using backend.Models.Enums;
 using Bogus;
+using HistoryUnit = backend.kapace.BLL.Services.Interfaces.HistoryUnit;
 
 namespace backend.Tests.Helpers;
 
-internal class RandomDataModelFactory 
+internal static class RandomDataModelFactory 
 {
-    public static InsertContentQuery CreateInsertContentQuery() 
+    internal static InsertContentQuery CreateInsertContentQuery() 
     {
         return new Faker<InsertContentQuery>()
             .RuleFor(m => m.Id, f => f.Random.Int(0))
@@ -33,7 +34,7 @@ internal class RandomDataModelFactory
             .Generate();
     }
 
-    public static InsertContentModel CreateBllContentQuery() 
+    internal static InsertContentModel CreateBllContentQuery() 
     {
         return new Faker<InsertContentModel>()
             .CustomInstantiator(f => new InsertContentModel(
@@ -59,34 +60,52 @@ internal class RandomDataModelFactory
             ).Generate();
     }
 
-    public static kapace.BLL.Services.Interfaces.HistoryUnit CreateHistoryUnitWithContent(long? contentId)
+    internal static HistoryUnit CreateHistoryUnitWithContent(
+        long? contentId,
+        Func<Faker, HistoryUnit.JsonChanges> actChanges)
     {
-        return new Faker<kapace.BLL.Services.Interfaces.HistoryUnit>()
-            .CustomInstantiator(x => new kapace.BLL.Services.Interfaces.HistoryUnit()
+        return new Faker<HistoryUnit>()
+            .CustomInstantiator(faker => new HistoryUnit()
             {
-                TargetId = contentId ?? x.Random.Int(0),
+                TargetId = contentId ?? faker.Random.Int(0),
                 HistoryType = HistoryType.Content,
-                Changes = new kapace.BLL.Services.Interfaces.HistoryUnit.JsonContentChanges
-                {
-                    ImageId = x.Random.Int(0),
-                    Title = x.Random.String2(10),
-                    EngTitle = x.Random.String2(10),
-                    OriginTitle = x.Random.String2(10),
-                    Description = x.Random.String2(10),
-                    Country = x.PickRandom<Country>(),
-                    ContentType = x.PickRandom<ContentType>(),
-                    Genres = "", // TODO: Должно быть массивом жанров а не строкой
-                    Duration = x.Random.Int(0, 100),
-                    ReleasedAt = DateTimeOffset.UtcNow,
-                    PlannedSeries = x.Random.Int(0, 100),
-                    MinAge = x.Random.Int(0, 100)
-                },
+                Changes = actChanges(faker),
                 CreatedBy = 1,
                 CreatedAt = DateTimeOffset.Now,
                 ApprovedBy = null,
                 ApprovedAt = null,
             })
             .Generate();
+    }
 
+    internal static HistoryUnit.JsonContentChanges CreateJsonContentChanges(Faker faker)
+    {
+        return new HistoryUnit.JsonContentChanges
+        {
+            ImageId = faker.Random.Int(0),
+            Title = faker.Random.String2(10),
+            EngTitle = faker.Random.String2(10),
+            OriginTitle = faker.Random.String2(10),
+            Description = faker.Random.String2(10),
+            Country = faker.PickRandom<Country>(),
+            ContentType = faker.PickRandom<ContentType>(),
+            Genres = "", // TODO: Должно быть массивом жанров а не строкой
+            Duration = faker.Random.Int(0, 100),
+            ReleasedAt = DateTimeOffset.UtcNow,
+            PlannedSeries = faker.Random.Int(0, 100),
+            MinAge = faker.Random.Int(0, 100)
+        };
+    }
+    
+    internal static HistoryUnit.JsonEpisodeChanges CreateJsonEpisodeChanges(Faker faker)
+    {
+        return new HistoryUnit.JsonEpisodeChanges
+        {
+            //ContentId = contentId ?? faker.Random.Long(min: 0),
+            EpisodeId = faker.Random.Long(min: 0),
+            Number = faker.Random.Int(max:10),
+            Image = faker.Random.String2(10),
+            Title = faker.Random.String2(10),
+        };
     }
 }

@@ -11,14 +11,19 @@ public class TranslationRepository : BaseKapaceRepository, ITranslationRepositor
     public TranslationRepository(NpgsqlDataSource npgsqlDataSource) : base(npgsqlDataSource) { }
 
     public async Task<IReadOnlyCollection<Translation>> QueryAsync(
-        long[]? episodeIds, 
+        long[]? contentIds,
+        long[]? episodeIds,
         long[]? translationIds,
         CancellationToken token)
     {
         var initSql = @"
-            SELECT * FROM content_translation ct
-            LEFT JOIN translator t on ct.translator_id = t.id
-            LEFT JOIN episode e on ct.episode_id = e.id
+        SELECT
+            ct.*,
+            t.name as translator_name, t.link as translator_link,
+            e.title as episode_title, e.number, e.views as episode_views, e.stars as episode_stars
+            FROM episode e
+                JOIN content_translation ct on ct.episode_id = e.id
+                JOIN translator t on ct.translator_id = t.id
             WHERE 1 = 1";
 
         var parameters = new DynamicParameters();
@@ -27,16 +32,22 @@ public class TranslationRepository : BaseKapaceRepository, ITranslationRepositor
         if (episodeIds?.Any() is true)
         {
             parameters.Add($"@EpisodeIds", episodeIds);
-            whereFilters.Add("episode_id = ANY(@EpisodeIds)");
+            whereFilters.Add("e.id = ANY(@EpisodeIds)");
         }
 
         if (translationIds?.Any() is true) 
         {
             parameters.Add($"@Translator_ids", translationIds);
-            whereFilters.Add("translator_id = ANY(@Translator_ids)");
+            whereFilters.Add("ct.translator_id = ANY(@Translator_ids)");
         }
 
-        initSql += $" AND {string.Join(" AND ", whereFilters)}";
+        if (contentIds?.Any() is true)
+        {
+            parameters.Add($"@ContentIds", contentIds);
+            whereFilters.Add("e.content_id = ANY(@ContentIds)");
+        }
+
+        initSql += $" AND {string.Join(" AND ", whereFilters)} ORDER BY e.number;";
         await using var connection = CreateConnection();
         var command = new CommandDefinition(initSql, parameters, cancellationToken: token);
         var result = await connection.QueryAsync<Translation>(command);

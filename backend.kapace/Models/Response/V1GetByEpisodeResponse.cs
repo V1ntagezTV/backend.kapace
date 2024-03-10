@@ -21,5 +21,7 @@ public class V1GetByEpisodeResponse
         public required long? TranslatorId { get; init; }
         public required string? Translator { get; init; }
         public required string? TranslatorLink { get; init; }
+        public required int Number { get; init; }
+        public required string Title { get; init; }
     } 
 }

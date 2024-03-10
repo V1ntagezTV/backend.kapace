@@ -40,7 +40,7 @@ public class TranslationServiceTests : IClassFixture<MainFixture>
         //var translationId = await translationsService.InsertAsync();
 
         // Assert
-        var episodeTranslations = await translationsService.GetByEpisodeAsync(episodeId, translatorId, token);
+        var episodeTranslations = await translationsService.GetByEpisodeAsync(contentId, episodeId, translatorId, token);
         
         episodeTranslations.Should().NotBeEmpty();
         var episodeTranslation = episodeTranslations.First();

@@ -31,7 +31,9 @@ public class ChangesHistoryServiceTests : IClassFixture<MainFixture>
     {
         // Arrange
         var contentId = _faker.Random.Number(min: 0);
-        var newHistoryUnit = RandomDataModelFactory.CreateHistoryUnitWithContent(contentId);
+        var newHistoryUnit = RandomDataModelFactory.CreateHistoryUnitWithContent(
+            contentId, 
+            RandomDataModelFactory.CreateJsonContentChanges);
 
         // Act
         var changesId = await _changesHistoryService.InsertChangesAsync(newHistoryUnit, CancellationToken.None);
@@ -70,7 +72,9 @@ public class ChangesHistoryServiceTests : IClassFixture<MainFixture>
         // Arrange
         var contentId = _faker.Random.Number(min: 0);
         var approverId = _faker.Random.Number(min: 0);
-        var newHistoryUnit = RandomDataModelFactory.CreateHistoryUnitWithContent(contentId);
+        var newHistoryUnit = RandomDataModelFactory.CreateHistoryUnitWithContent(
+            contentId, 
+            RandomDataModelFactory.CreateJsonContentChanges);
 
         // Act
         var historyId = await _changesHistoryService.InsertChangesAsync(newHistoryUnit, CancellationToken.None);
@@ -110,5 +114,16 @@ public class ChangesHistoryServiceTests : IClassFixture<MainFixture>
         content.ReleasedAt.Should().BeCloseTo(updates.ReleasedAt!.Value, TimeSpan.FromSeconds(1));
         content.PlannedSeries.Should().Be(updates.PlannedSeries);
         content.MinAgeLimit.Should().Be(updates.MinAge);
+    }
+
+    [Fact]
+    public async Task CreateEpisodeChanges_Create_ShouldPass()
+    {
+        var newHistoryUnit = RandomDataModelFactory.CreateHistoryUnitWithContent(null, RandomDataModelFactory.CreateJsonEpisodeChanges);
+    }
+
+    public async Task CreateAndApproveEpisodeChanges_ShouldPass()
+    {
+        
     }
 }

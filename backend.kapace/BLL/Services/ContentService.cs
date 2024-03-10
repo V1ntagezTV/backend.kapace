@@ -208,39 +208,48 @@ public class ContentService : IContentService
         
         await Task.WhenAll(translatesMapByContentIdTask, genresMapByContentIdTask, episodesMapByContentIdTask);
 
-        var translatesMapByContentId = translatesMapByContentIdTask.Result
-            .GroupBy(x => x.ContentId)
-            .ToDictionary(
-                group => group.Key,
-                group => group
-                    .Select(translate => new GetByQueryResult.GetByQueryTranslation
-                    {
-                        Id = translate.Id,
-                        EpisodeId = translate.EpisodeId,
-                        ContentId = translate.ContentId,
-                        Language = translate.Lang,
-                        Link = translate.Link,
-                        TranslationType = translate.TranslationType,
-                        CreatedAt = translate.CreatedAt,
-                        CreatedBy = translate.CreatedBy,
-                        TranslatorId = translate.Translator.TranslatorId,
-                        TranslatorName = translate.Translator.Name,
-                        TranslatorLink = translate.Translator.TranslatorLink,
-                    }).ToArray());
-        
-        var episodesMapByContentId = episodesMapByContentIdTask.Result
-            .GroupBy(x => x.ContentId)
-            .ToDictionary(
-                group => group.Key,
-                group => group
-                    .Select(x => new GetByQueryResult.GetByQueryEpisode
-                    {
-                        Id = x.Id,
-                        ContentId = x.ContentId,
-                        Title = x.Title,
-                        Image = x.Image,
-                        Number = x.Number
-                    }).ToArray());
+        Dictionary<long, GetByQueryResult.GetByQueryTranslation[]> translatesMapByContentId = new();
+        if (translatesMapByContentIdTask.Result.Any()) 
+        {
+            translatesMapByContentId = translatesMapByContentIdTask.Result
+                .GroupBy(x => x.ContentId)
+                .ToDictionary(
+                    group => group.Key,
+                    group => group
+                        .Select(translate => new GetByQueryResult.GetByQueryTranslation
+                        {
+                            Id = translate.Id,
+                            EpisodeId = translate.EpisodeId,
+                            ContentId = translate.ContentId,
+                            Language = translate.Lang,
+                            Link = translate.Link,
+                            TranslationType = translate.TranslationType,
+                            CreatedAt = translate.CreatedAt,
+                            CreatedBy = translate.CreatedBy,
+                            TranslatorId = translate.TranslatorId,
+                            TranslatorName = translate.TranslatorName,
+                            TranslatorLink = translate.TranslatorLink,
+                        }).ToArray());
+        }
+
+        Dictionary<long, GetByQueryResult.GetByQueryEpisode[]> episodesMapByContentId = new();
+        if (episodesMapByContentIdTask.Result.Any()) 
+        {
+            episodesMapByContentId = episodesMapByContentIdTask.Result
+                            .GroupBy(x => x.ContentId)
+                            .ToDictionary(
+                                group => group.Key,
+                                group => group
+                                    .Select(x => new GetByQueryResult.GetByQueryEpisode
+                                    {
+                                        Id = x.Id,
+                                        ContentId = x.ContentId,
+                                        Title = x.Title,
+                                        Image = x.Image,
+                                        Number = x.Number
+                                    }).ToArray());
+        }
+
 
         genresMapByContentId = genresMapByContentIdTask.Result;
 

@@ -21,7 +21,11 @@ public class TranslationController : Controller
         V1GetByEpisodeRequest request,
         CancellationToken token)
     {
-        var episodeTranslations = await _translationService.GetByEpisodeAsync(request.EpisodeId, request.TranslatorId, token);
+        var episodeTranslations = await _translationService.GetByEpisodeAsync(
+            request.ContentId,
+            request.EpisodeId, 
+            request.TranslatorId,
+            token);
 
         return new OkObjectResult(new V1GetByEpisodeResponse() {
             Translations = episodeTranslations.Select(x => new V1GetByEpisodeResponse.V1GetByEpisodeTranslation
@@ -39,6 +43,8 @@ public class TranslationController : Controller
                 TranslatorLink = x.Translator?.Link,
                 Views = x.Episode?.Views ?? 0,
                 Stars = x.Episode?.Stars ?? 0,
+                Number = x.Episode?.Number ?? 0,
+                Title = x.Episode?.Title ?? "",
             }).ToArray()
         });
     }

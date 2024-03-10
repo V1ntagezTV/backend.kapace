@@ -26,12 +26,14 @@ public class TranslationService : ITranslationService
     }
     
     public async Task<IReadOnlyCollection<EpisodeTranslation>> GetByEpisodeAsync(
-        long episodeId,
+        long contentId,
+        long? episodeId,
         long? translationId,
         CancellationToken token)
     {
         var episodes = await _translationRepository.QueryAsync(
-            new[] { episodeId },
+            new[] { contentId },
+             episodeId.HasValue ? new[] { episodeId.Value } : Array.Empty<long>(),
             translationId.HasValue ? new[] { translationId.Value } : Array.Empty<long>(),
             token);
         
@@ -44,29 +46,25 @@ public class TranslationService : ITranslationService
             ?.Select(x => new EpisodeTranslation(
                 x.Id,
                 x.EpisodeId,
-                (Language)x.Lang,
+                x.Lang,
                 x.Link,
                 x.TranslationType,
                 x.CreatedAt,
                 x.CreatedBy,
                 x.Quality,
-                x.Translator != null
+                x.TranslatorName != null
                     ? new EpisodeTranslation.WithTranslator(
-                        x.Translator.TranslatorId,
-                        x.Translator.Name,
-                        x.Translator.TranslatorLink)
+                        x.TranslatorId,
+                        x.TranslatorName,
+                        x.TranslatorLink)
                     : null,
-                x.Episode != null
-                    ? new EpisodeTranslation.WithEpisode(
-                        x.EpisodeId,
-                        x.Episode.Title,
-                        x.Episode.Number,
-                        x.Episode.Views,
-                        x.Episode.Stars)
-                    : null
-                ))
-        .ToArray()
-        ?? Array.Empty<EpisodeTranslation>();
+                new EpisodeTranslation.WithEpisode(
+                    x.EpisodeId,
+                    x.EpisodeTitle,
+                    x.Number,
+                    x.EpisodeViews,
+                    x.EpisodeStars))).ToArray() 
+               ?? Array.Empty<EpisodeTranslation>();
     }
 
     public async Task<long> InsertAsync(InsertTranslation model, CancellationToken token)

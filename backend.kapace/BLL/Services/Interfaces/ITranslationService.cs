@@ -5,7 +5,8 @@ namespace backend.kapace.BLL.Services.Interfaces;
 public interface ITranslationService
 {
     Task<IReadOnlyCollection<EpisodeTranslation>> GetByEpisodeAsync(
-        long episodeId, 
+        long contentId,
+        long? episodeId, 
         long? translatorId, 
         CancellationToken token);
 }

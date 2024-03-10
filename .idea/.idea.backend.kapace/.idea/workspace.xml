@@ -19,29 +19,25 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="e863d32b-f8af-451f-8084-8db13fa65ff5" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/backend.Migrator/Migrations/202403080220_CreateViewsAndStarsColumns.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.backend.kapace/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.backend.kapace/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/backend.Tests/Helpers/RandomDataModelFactory.cs" beforeDir="false" afterPath="$PROJECT_DIR$/backend.Tests/Helpers/RandomDataModelFactory.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend.kapace/BLL/Services/ChangesHistoryService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/backend.kapace/BLL/Services/ChangesHistoryService.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend.Tests/ServiceTests/ChangesHistoryServiceTests.cs" beforeDir="false" afterPath="$PROJECT_DIR$/backend.Tests/ServiceTests/ChangesHistoryServiceTests.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend.Tests/ServiceTests/TranslationServiceTests.cs" beforeDir="false" afterPath="$PROJECT_DIR$/backend.Tests/ServiceTests/TranslationServiceTests.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/backend.kapace/BLL/Services/ContentService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/backend.kapace/BLL/Services/ContentService.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend.kapace/BLL/Services/EpisodeService.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend.kapace/BLL/Services/Interfaces/HistoryUnit.cs" beforeDir="false" afterPath="$PROJECT_DIR$/backend.kapace/BLL/Services/Interfaces/HistoryUnit.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend.kapace/BLL/Services/Interfaces/IEpisodeService.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend.kapace/Controllers/ChangesHistoryController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/backend.kapace/Controllers/ChangesHistoryController.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend.kapace/DAL/Models/ContentUpdateQuery.cs" beforeDir="false" afterPath="$PROJECT_DIR$/backend.kapace/DAL/Models/ContentUpdateQuery.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend.kapace/DAL/Models/HistoryUnit.cs" beforeDir="false" afterPath="$PROJECT_DIR$/backend.kapace/DAL/Models/HistoryUnit.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend.kapace/DAL/Repository/ContentRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/backend.kapace/DAL/Repository/ContentRepository.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend.kapace/DAL/Repository/EpisodeRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/backend.kapace/DAL/Repository/EpisodeRepository.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend.kapace/DAL/Repository/Interfaces/IEpisodeRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/backend.kapace/DAL/Repository/Interfaces/IEpisodeRepository.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend.kapace/BLL/Services/Interfaces/ITranslationService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/backend.kapace/BLL/Services/Interfaces/ITranslationService.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend.kapace/BLL/Services/TranslationService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/backend.kapace/BLL/Services/TranslationService.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend.kapace/Controllers/TranslationController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/backend.kapace/Controllers/TranslationController.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend.kapace/DAL/Models/Translation.cs" beforeDir="false" afterPath="$PROJECT_DIR$/backend.kapace/DAL/Models/Translation.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend.kapace/DAL/Repository/Interfaces/ITranslationRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/backend.kapace/DAL/Repository/Interfaces/ITranslationRepository.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend.kapace/DAL/Repository/TranslationRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/backend.kapace/DAL/Repository/TranslationRepository.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend.kapace/Models/Requests/V1GetByEpisodeRequest.cs" beforeDir="false" afterPath="$PROJECT_DIR$/backend.kapace/Models/Requests/V1GetByEpisodeRequest.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend.kapace/Models/Response/V1GetByEpisodeResponse.cs" beforeDir="false" afterPath="$PROJECT_DIR$/backend.kapace/Models/Response/V1GetByEpisodeResponse.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
-  </component>
-  <component name="ChangesViewManager">
-    <option name="groupingKeys">
-      <option value="directory" />
-    </option>
   </component>
   <component name="HighlightingSettingsPerFile">
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/0569b0077204454f81bddfb6b9cedcdb11878/d7/15bd8890/IFormFile.cs" root0="SKIP_HIGHLIGHTING" />
@@ -363,7 +359,23 @@
       <workItem from="1705301328935" duration="1585000" />
       <workItem from="1705736929037" duration="6308000" />
       <workItem from="1705824488855" duration="11876000" />
-      <workItem from="1706197433347" duration="4469000" />
+      <workItem from="1706197433347" duration="5314000" />
+      <workItem from="1706282161752" duration="9184000" />
+      <workItem from="1706375789223" duration="1007000" />
+      <workItem from="1706631095070" duration="244000" />
+      <workItem from="1706636973824" duration="1053000" />
+      <workItem from="1706726938162" duration="784000" />
+      <workItem from="1706964654935" duration="2563000" />
+      <workItem from="1707610521305" duration="631000" />
+      <workItem from="1707759651992" duration="849000" />
+      <workItem from="1708126823723" duration="2523000" />
+      <workItem from="1709251638230" duration="2673000" />
+      <workItem from="1709324240746" duration="2202000" />
+      <workItem from="1709379627430" duration="1174000" />
+      <workItem from="1709768927982" duration="1665000" />
+      <workItem from="1709856083235" duration="2739000" />
+      <workItem from="1710032117543" duration="411000" />
+      <workItem from="1710068975318" duration="2039000" />
     </task>
     <task id="LOCAL-00001" summary="add changes history, insert content and approve it">
       <created>1692487739565</created>
@@ -428,7 +440,21 @@
       <option name="project" value="LOCAL" />
       <updated>1705835535463</updated>
     </task>
-    <option name="localTasksCounter" value="10" />
+    <task id="LOCAL-00010" summary="add episodes changes queries, content changes create/approve tests">
+      <created>1706213659561</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1706213659561</updated>
+    </task>
+    <task id="LOCAL-00011" summary="lil refactories">
+      <created>1706978401831</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1706978401831</updated>
+    </task>
+    <option name="localTasksCounter" value="12" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -473,7 +499,9 @@
     <MESSAGE value="excludes" />
     <MESSAGE value="remove github file" />
     <MESSAGE value="big commit" />
-    <option name="LAST_COMMIT_MESSAGE" value="big commit" />
+    <MESSAGE value="add episodes changes queries, content changes create/approve tests" />
+    <MESSAGE value="lil refactories" />
+    <option name="LAST_COMMIT_MESSAGE" value="lil refactories" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

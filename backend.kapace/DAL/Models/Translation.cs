@@ -14,10 +14,17 @@ public class Translation
     public required DateTimeOffset CreatedAt { get; init; }
     public required long CreatedBy { get; init; }
     public required int Quality { get; init; }
-    public required WithEpisode Episode { get; init; }
-    public required WithTranslator Translator { get; init; }
 
-    public record WithTranslator(long TranslatorId, string Name, string TranslatorLink);
-    public record WithEpisode(string Title, int Number, int Views, double Stars);
+    #region Translator
+    public required string? TranslatorName { get; init; }
+    public required string? TranslatorLink { get; init; }
+    #endregion
+
+    #region Episode 
+    public required int Number { get; init; }
+    public required string EpisodeTitle { get; init; }
+    public required int EpisodeViews { get; init; }
+    public required double EpisodeStars { get; init; }
+    #endregion
 }
 
