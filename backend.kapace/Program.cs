@@ -29,6 +29,7 @@ services.AddScoped<IStaticFilesRepository, StaticFilesRepository>();
 services.AddScoped<IChangesHistoryRepository, ChangesHistoryRepository>();
 services.AddScoped<ITranslatorsRepository, TranslatorsRepository>();
 services.AddScoped<IChangesHistoryService, ChangesHistoryService>();
+services.AddScoped<IEpisodeService, EpisodeService>();
 services.AddScoped<BaseRepository<StarsDataColumns>, StarsRepository>();
 
 var connection = config.GetSection("SqlConnection").Value ?? throw new ArgumentException();

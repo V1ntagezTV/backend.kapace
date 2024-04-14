@@ -19,20 +19,38 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="e863d32b-f8af-451f-8084-8db13fa65ff5" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/backend.Migrator/Migrations/202403080220_CreateViewsAndStarsColumns.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend.Migrator/Migrations/202404141521_AddCreationInfoToEpisode.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend.kapace/BLL/Models/Episode/Episode.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend.kapace/BLL/Models/EpisodeTranslations/EpisodeTranslation.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend.kapace/BLL/Models/EpisodeTranslations/EpisodeTranslationQuery.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend.kapace/BLL/Models/TranslatesView.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend.kapace/BLL/Services/EpisodeService.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend.kapace/BLL/Services/Interfaces/IEpisodeService.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend.kapace/Controllers/EpisodeController.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend.kapace/Controllers/EpisodeQuery.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend.kapace/DAL/Experimental/ExperimentalQueryBuilder.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend.kapace/DAL/Models/ContentTranslation/EpisodeTranslation.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend.kapace/DAL/Models/ContentTranslation/Query/Select.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend.kapace/Models/Requests/Episode/V1EpisodeQueryRequest.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend.kapace/Models/Requests/EpisodeTranslation/EpisodeTranslationQueryRequest.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.backend.kapace/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.backend.kapace/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend.Tests/Helpers/RandomDataModelFactory.cs" beforeDir="false" afterPath="$PROJECT_DIR$/backend.Tests/Helpers/RandomDataModelFactory.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend.Tests/ServiceTests/ChangesHistoryServiceTests.cs" beforeDir="false" afterPath="$PROJECT_DIR$/backend.Tests/ServiceTests/ChangesHistoryServiceTests.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/backend.Tests/ServiceTests/TranslationServiceTests.cs" beforeDir="false" afterPath="$PROJECT_DIR$/backend.Tests/ServiceTests/TranslationServiceTests.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend.kapace/BLL/Models/EpisodeTranslation.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend.kapace/BLL/Services/ChangesHistoryService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/backend.kapace/BLL/Services/ChangesHistoryService.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/backend.kapace/BLL/Services/ContentService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/backend.kapace/BLL/Services/ContentService.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/backend.kapace/BLL/Services/Interfaces/ITranslationService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/backend.kapace/BLL/Services/Interfaces/ITranslationService.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/backend.kapace/BLL/Services/TranslationService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/backend.kapace/BLL/Services/TranslationService.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/backend.kapace/Controllers/TranslationController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/backend.kapace/Controllers/TranslationController.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend.kapace/DAL/Models/Episode.cs" beforeDir="false" afterPath="$PROJECT_DIR$/backend.kapace/DAL/Models/Episode.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend.kapace/DAL/Models/QueryContent.cs" beforeDir="false" afterPath="$PROJECT_DIR$/backend.kapace/DAL/Models/QueryContent.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend.kapace/DAL/Models/QueryEpisode.cs" beforeDir="false" afterPath="$PROJECT_DIR$/backend.kapace/DAL/Models/QueryEpisode.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/backend.kapace/DAL/Models/Translation.cs" beforeDir="false" afterPath="$PROJECT_DIR$/backend.kapace/DAL/Models/Translation.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend.kapace/DAL/Repository/EpisodeRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/backend.kapace/DAL/Repository/EpisodeRepository.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/backend.kapace/DAL/Repository/Interfaces/ITranslationRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/backend.kapace/DAL/Repository/Interfaces/ITranslationRepository.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/backend.kapace/DAL/Repository/TranslationRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/backend.kapace/DAL/Repository/TranslationRepository.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/backend.kapace/Models/Requests/V1GetByEpisodeRequest.cs" beforeDir="false" afterPath="$PROJECT_DIR$/backend.kapace/Models/Requests/V1GetByEpisodeRequest.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/backend.kapace/Models/Response/V1GetByEpisodeResponse.cs" beforeDir="false" afterPath="$PROJECT_DIR$/backend.kapace/Models/Response/V1GetByEpisodeResponse.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend.kapace/Program.cs" beforeDir="false" afterPath="$PROJECT_DIR$/backend.kapace/Program.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -40,6 +58,10 @@
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="HighlightingSettingsPerFile">
+    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/0569b0077204454f81bddfb6b9cedcdb11878/d7/15bd8890/IFormFile.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/44c0db71b152418abf938b97293d7c9118878/8c/e04def16/WebApplicationBuilder.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/44c0db71b152418abf938b97293d7c9118878/cb/74eff772/ConfigureHostBuilder.cs" root0="FORCE_HIGHLIGHTING" />
@@ -48,6 +70,7 @@
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/a2747906576a46259d8a8aaa0318775f10c80/a6/564227f5/ImmutableHashSet`1.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/b616a04aee234f559f7397d94bd90dadf8a0/74/5ce75e9c/IHostBuilder.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/dd85d1af76a544e1a8083607f687e374b1d8a0/1b/a532f517/FileMode.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/dd85d1af76a544e1a8083607f687e374b1d8a0/c4/0b1d2888/Int64.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/dd85d1af76a544e1a8083607f687e374b1d8a0/da/a8f07ca8/FileStream.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/16d5123f56d0ba4dd3a469ce5c9819531fb0679a3fc4608defed55dc4a795f/DynamicParameters.ParamInfo.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/1e3ef8e0f531f5eda8476faaad7e4cc6d1b4259df0279c917a648dc6b4f62b/LogLevel.cs" root0="SKIP_HIGHLIGHTING" />
@@ -56,11 +79,14 @@
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/4eae6449caa21e90c2ff2d63846343457a0e4192fb25892da80d78feb4774f/JsonSerializer.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/621526284d3e4868b98948aff942206525763e57e194a27623b66c384466/ServiceProviderServiceExtensions.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/79fbf5ff554b611622a4207ff363d1c026ccac52f8ef8f6318a1cc5ab7e4/ObjectResult.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/7a9ad2597224d3d578188917875d83477882e03550c1d9153da781fae14e7bfc/Image.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/85448f861b1cb95910693f28a5ce3363967c79953b460b176d97298ae5ed0/Nullable.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/b1522679f4a20fb50968ccbf51269d3a82343b52b28883a59c419369126beea/DynamicParameters.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/bd1d5c50194fea68ff3559c160230b0ab50f5acf4ce3061bffd6d62958e2182/ExceptionDispatchInfo.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/bd55fb26296f9ba7a688ddc8a1b7add6c71c28f1f4f0e4e4e4fad8bccf518ea6/Single.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/e74356f198b598e97eaeea83e8b7b1f2bfe27c0a39fedf86bb7dc44827fbda/ActionMethodExecutor.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/f3981d658666ec9cc1e6958fe22f8614bfe02ccb6625b056c3ece3729c9262/JsonConvert.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/f44bd7399a5543e18e9023705c5cc16330878/_7bd20/KeyAttribute.cs" root0="SKIP_HIGHLIGHTING" />
   </component>
   <component name="MetaFilesCheckinStateConfiguration" checkMetaFiles="true" />
   <component name="ProblemsViewState">
@@ -85,7 +111,7 @@
     &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
     &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
     &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.pluginManager&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.lookFeel&quot;,
     &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   },
   &quot;keyToStringList&quot;: {
@@ -375,7 +401,22 @@
       <workItem from="1709768927982" duration="1665000" />
       <workItem from="1709856083235" duration="2739000" />
       <workItem from="1710032117543" duration="411000" />
-      <workItem from="1710068975318" duration="2039000" />
+      <workItem from="1710068975318" duration="7445000" />
+      <workItem from="1710189234310" duration="2396000" />
+      <workItem from="1710364272220" duration="594000" />
+      <workItem from="1710441959619" duration="8686000" />
+      <workItem from="1710519227608" duration="1721000" />
+      <workItem from="1710545119950" duration="5509000" />
+      <workItem from="1710577445726" duration="3624000" />
+      <workItem from="1710884760595" duration="2951000" />
+      <workItem from="1711146316634" duration="1193000" />
+      <workItem from="1711575956110" duration="3036000" />
+      <workItem from="1711807116130" duration="5100000" />
+      <workItem from="1711997154173" duration="469000" />
+      <workItem from="1712397579974" duration="596000" />
+      <workItem from="1712694308883" duration="6306000" />
+      <workItem from="1712863146295" duration="5846000" />
+      <workItem from="1712933719058" duration="30704000" />
     </task>
     <task id="LOCAL-00001" summary="add changes history, insert content and approve it">
       <created>1692487739565</created>
@@ -454,7 +495,14 @@
       <option name="project" value="LOCAL" />
       <updated>1706978401831</updated>
     </task>
-    <option name="localTasksCounter" value="12" />
+    <task id="LOCAL-00012" summary="add views and rating to episodes and queryByEpisodes">
+      <created>1710073629185</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1710073629185</updated>
+    </task>
+    <option name="localTasksCounter" value="13" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -501,7 +549,8 @@
     <MESSAGE value="big commit" />
     <MESSAGE value="add episodes changes queries, content changes create/approve tests" />
     <MESSAGE value="lil refactories" />
-    <option name="LAST_COMMIT_MESSAGE" value="lil refactories" />
+    <MESSAGE value="add views and rating to episodes and queryByEpisodes" />
+    <option name="LAST_COMMIT_MESSAGE" value="add views and rating to episodes and queryByEpisodes" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -569,6 +618,7 @@
     <pin-to-top-manager>
       <pinned-members>
         <PinnedItemInfo parentTag="Type#Microsoft.AspNetCore.Http.FormFile" memberName="ContentType" />
+        <PinnedItemInfo parentTag="Type#Dapper.DynamicParameters" memberName="outputCallbacks" />
         <PinnedItemInfo parentTag="Type#System.Threading.Tasks.Task" memberName="m_action" />
       </pinned-members>
     </pin-to-top-manager>

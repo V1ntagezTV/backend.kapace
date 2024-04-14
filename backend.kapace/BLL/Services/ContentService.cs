@@ -8,6 +8,7 @@ using backend.kapace.Models;
 using backend.Models.Enums;
 using Content = backend.kapace.BLL.Models.VideoService.Content;
 using ContentQuery = backend.kapace.BLL.Models.ContentQuery;
+using Episode = backend.kapace.BLL.Models.Episode.Episode;
 using Translation = backend.kapace.DAL.Models.Translation;
 
 namespace backend.kapace.BLL.Services;
@@ -76,8 +77,8 @@ public class ContentService : IContentService
         var content = contentQueryResult.First();
 
         var episodes = selectedInfo.HasFlag(ContentSelectedInfo.Episodes)
-            ? await _episodeRepository.QueryAsync(new QueryEpisode() { ContentIds = new[] {contentId}, }, token)
-            : Array.Empty<Episode>();
+            ? await _episodeRepository.QueryAsync(new QueryEpisode() { ContentIds = new[] { contentId }, }, token)
+            : Array.Empty<DAL.Models.Episode>();
 
         var contentGenres = selectedInfo.HasFlag(ContentSelectedInfo.ContentGenres)
             ? await _contentGenreRepository.GetByContentIdAsync(contentId, token)
@@ -148,7 +149,7 @@ public class ContentService : IContentService
         var genresMapByContentIdTask = Task.FromResult(new Dictionary<long, GetByQueryResult.GetByQueryGenre[]>());
         var translatesMapByContentIdTask =
             Task.FromResult((IReadOnlyCollection<Translation>)Array.Empty<Translation>());
-        var episodesMapByContentIdTask = Task.FromResult(Array.Empty<Episode>());
+        var episodesMapByContentIdTask = Task.FromResult(Array.Empty<DAL.Models.Episode>());
         
         Dictionary<long, GetByQueryResult.GetByQueryGenre[]> genresMapByContentId;
 
@@ -227,7 +228,7 @@ public class ContentService : IContentService
                             CreatedAt = translate.CreatedAt,
                             CreatedBy = translate.CreatedBy,
                             TranslatorId = translate.TranslatorId,
-                            TranslatorName = translate.TranslatorName,
+                            TranslatorName = translate.Name,
                             TranslatorLink = translate.TranslatorLink,
                         }).ToArray());
         }

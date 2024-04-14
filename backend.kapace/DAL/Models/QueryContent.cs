@@ -1,7 +1,4 @@
-﻿using backend.kapace.BLL.Enums;
-using backend.Models.Enums;
-
-namespace backend.kapace.DAL.Models;
+﻿namespace backend.kapace.DAL.Models;
 
 public class QueryContent
 {

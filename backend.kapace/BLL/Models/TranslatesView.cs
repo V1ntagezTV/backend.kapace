@@ -1,10 +1,10 @@
-using backend.kapace.BLL.Enums;
+﻿using backend.kapace.BLL.Enums;
 
-namespace backend.kapace.Models.Response;
+namespace backend.kapace.BLL.Models;
 
-public record V1GetByEpisodeResponse(    
-    V1GetByEpisodeResponse.Translator[] Translators,
-    V1GetByEpisodeResponse.Episode[] Episodes)
+public record TranslatesView(
+    TranslatesView.Translator[] Translators,
+    TranslatesView.Episode[] Episodes)
 {
     public record Episode(
         long Id,

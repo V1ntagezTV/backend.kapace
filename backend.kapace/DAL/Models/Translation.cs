@@ -16,7 +16,7 @@ public class Translation
     public required int Quality { get; init; }
 
     #region Translator
-    public required string? TranslatorName { get; init; }
+    public required string? Name { get; init; }
     public required string? TranslatorLink { get; init; }
     #endregion
 

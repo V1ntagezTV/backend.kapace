@@ -1,4 +1,7 @@
+using backend.kapace.DAL.Experimental;
 using backend.kapace.DAL.Models;
+using backend.kapace.DAL.Models.ContentTranslation;
+using backend.kapace.DAL.Models.ContentTranslation.Query;
 using backend.kapace.DAL.Repository.Interfaces;
 using backend.kapace.Infrastructure.Database;
 using Dapper;
@@ -54,6 +57,21 @@ public class TranslationRepository : BaseKapaceRepository, ITranslationRepositor
         return result.ToArray();
     }
 
+    public async Task<IReadOnlyCollection<EpisodeTranslation>> Select(Select model, CancellationToken token)
+    {
+        var command = new ExperimentalQueryBuilder("SELECT * FROM content_translation WHERE 1=1")
+            .WhereAny("episode_id", model.EpisodeIds)
+            .WhereAny("id", model.EpisodeTranslationIds)
+            .WhereAny("content_id", model.ContentIds)
+            .WhereAny("translator_id", model.TranslatorIds)
+            .AddPaging(model.Limit, model.Offset)
+            .Build(token);
+
+        await using var connection = CreateConnection();
+        var result = await connection.QueryAsync<EpisodeTranslation>(command);
+        return result.ToArray();
+    }
+    
     public async Task<IReadOnlyCollection<Translation>> GetByContentsAsync(long[] contentIds, CancellationToken token)
     {
         const string initSql = @"

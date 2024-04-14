@@ -1,4 +1,5 @@
-﻿using backend.kapace.DAL.Models;
+﻿using backend.kapace.DAL.Experimental;
+using backend.kapace.DAL.Models;
 using backend.kapace.DAL.Repository.Interfaces;
 using backend.kapace.Infrastructure.Database;
 using Dapper;
@@ -12,23 +13,13 @@ public class EpisodeRepository : BaseKapaceRepository, IEpisodeRepository
 
     public async Task<Episode[]> QueryAsync(QueryEpisode queryEpisode, CancellationToken token)
     {
-        var initSql = "SELECT * FROM episode";
-        var parameters = new DynamicParameters();
-        var filters = new List<string>();
-        
-        if (queryEpisode.ContentIds.Any())
-        {
-            filters.Add($"content_id = ANY(@{nameof(queryEpisode.ContentIds)})");
-            parameters.Add(nameof(queryEpisode.ContentIds), queryEpisode.ContentIds);
-        }
-        
-        if (filters.Any())
-        {
-            initSql += $" WHERE {string.Join(" AND ", filters)}";
-        }
+        var command = new ExperimentalQueryBuilder("SELECT * FROM episode WHERE 1=1")
+            .WhereAny("episode_id", queryEpisode.EpisodeIds)
+            .WhereAny("content_id", queryEpisode.ContentIds)
+            .AddPaging(queryEpisode.Limit, queryEpisode.Offset)
+            .Build(token);
         
         await using var connection = CreateConnection();
-        var command = new CommandDefinition(initSql, parameters, cancellationToken: token);
         var result = await connection.QueryAsync<Episode>(command);
         return result.ToArray();
     }

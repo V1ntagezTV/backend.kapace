@@ -6,6 +6,7 @@ using backend.kapace.DAL.Models;
 using backend.kapace.DAL.Repository.Interfaces;
 using Newtonsoft.Json;
 using static backend.kapace.BLL.Exceptions.ChangesHistoryService;
+using Episode = backend.kapace.BLL.Models.Episode.Episode;
 using HistoryUnit = backend.kapace.BLL.Services.Interfaces.HistoryUnit;
 
 namespace backend.kapace.BLL.Services;
@@ -57,10 +58,15 @@ public class ChangesHistoryService : IChangesHistoryService
     private async Task ApproveEpisodeAsync(HistoryUnit changeUnit, CancellationToken token)
     {
         var changes = (HistoryUnit.JsonEpisodeChanges)changeUnit.Changes;
-        if (changes is { ContentId: { }, EpisodeId: null })
+        if (changes is { ContentId: { }, EpisodeId: null, Number: { } })
         {
             await _episodeRepository.InsertAsync(
-                Episode.CreateInsertModel(changes.ContentId.Value, changes.Number.Value, changes.Title, changes.Image),
+                DAL.Models.Episode.CreateInsertModel(
+                    changes.ContentId.Value,
+                    changes.Number.Value,
+                    changes.Title,
+                    changes.Image,
+                    changeUnit.CreatedBy),
                 token);
         }
         else
@@ -70,7 +76,7 @@ public class ChangesHistoryService : IChangesHistoryService
                 throw new EmptyRequiredPropertiesException(nameof(changes.ContentId));
             }
 
-            await _episodeRepository.UpdateAsync(new Episode(), token);
+            await _episodeRepository.UpdateAsync(new DAL.Models.Episode(), token);
         }
     }
 
@@ -82,19 +88,19 @@ public class ChangesHistoryService : IChangesHistoryService
             // Для создания контента используется идентификатор из changes_history записи
             await _contentService.InsertAsync(new InsertContentModel(
                 Id: changeUnit.Id,
-                    ImageId: contentChanges.ImageId ?? throw new ArgumentException(),
-                    Title: contentChanges.Title ?? throw new ArgumentException(),
-                    Description: contentChanges.Description ?? throw new ArgumentException(),
-                    ContentType: contentChanges.ContentType ?? throw new ArgumentException(),
-                    Country: contentChanges.Country ?? throw new ArgumentException(),
-                    Status: contentChanges.Status,
-                    Channel: contentChanges.Channel,
-                    EngTitle: contentChanges.EngTitle,
-                    OriginTitle: contentChanges.OriginTitle,
-                    Duration: contentChanges.Duration,
-                    ReleasedAt: contentChanges.ReleasedAt,
-                    PlannedSeries: contentChanges.PlannedSeries,
-                    MinAge: contentChanges.MinAge
+                ImageId: contentChanges.ImageId ?? throw new ArgumentException(),
+                Title: contentChanges.Title ?? throw new ArgumentException(),
+                Description: contentChanges.Description ?? throw new ArgumentException(),
+                ContentType: contentChanges.ContentType ?? throw new ArgumentException(),
+                Country: contentChanges.Country ?? throw new ArgumentException(),
+                Status: contentChanges.Status,
+                Channel: contentChanges.Channel,
+                EngTitle: contentChanges.EngTitle,
+                OriginTitle: contentChanges.OriginTitle,
+                Duration: contentChanges.Duration,
+                ReleasedAt: contentChanges.ReleasedAt,
+                PlannedSeries: contentChanges.PlannedSeries,
+                MinAge: contentChanges.MinAge
             ), token);
         }
         else

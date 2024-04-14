@@ -1,8 +1,12 @@
 using backend.kapace.BLL.Enums;
 using backend.kapace.BLL.Exceptions;
 using backend.kapace.BLL.Models;
+using backend.kapace.BLL.Models.EpisodeTranslations;
 using backend.kapace.BLL.Services.Interfaces;
+using backend.kapace.DAL.Models;
+using backend.kapace.DAL.Models.ContentTranslation.Query;
 using backend.kapace.DAL.Repository.Interfaces;
+using InsertTranslation = backend.kapace.BLL.Models.InsertTranslation;
 
 namespace backend.kapace.BLL.Services;
 
@@ -25,46 +29,100 @@ public class TranslationService : ITranslationService
         _translatorsRepository = translatorsRepository;
     }
     
-    public async Task<IReadOnlyCollection<EpisodeTranslation>> GetByEpisodeAsync(
+    public async Task<TranslatesView> GetByEpisodeAsync(
         long contentId,
         long? episodeId,
         long? translationId,
         CancellationToken token)
     {
-        var episodes = await _translationRepository.QueryAsync(
+        var episodeTranslations = await _translationRepository.QueryAsync(
             new[] { contentId },
              episodeId.HasValue ? new[] { episodeId.Value } : Array.Empty<long>(),
             translationId.HasValue ? new[] { translationId.Value } : Array.Empty<long>(),
             token);
         
-        if (!episodes.Any())
+        if (!episodeTranslations.Any())
         {
-            return Array.Empty<EpisodeTranslation>();
+            return new TranslatesView(
+                Array.Empty<TranslatesView.Translator>(),
+                Array.Empty<TranslatesView.Episode>()
+            );
         }
 
-        return episodes
-            ?.Select(x => new EpisodeTranslation(
-                x.Id,
-                x.EpisodeId,
-                x.Lang,
-                x.Link,
-                x.TranslationType,
-                x.CreatedAt,
-                x.CreatedBy,
-                x.Quality,
-                x.TranslatorName != null
-                    ? new EpisodeTranslation.WithTranslator(
-                        x.TranslatorId,
-                        x.TranslatorName,
-                        x.TranslatorLink)
-                    : null,
-                new EpisodeTranslation.WithEpisode(
+        var translators = new Dictionary<long, TranslatesView.Translator>();
+        var translationsByEpisodeNumber = new Dictionary<long, List<Translation>>();
+        foreach (var translation in episodeTranslations)
+        {
+            translators.TryAdd(
+                translation.TranslatorId,
+                new TranslatesView.Translator(
+                    translation.TranslatorId, 
+                    translation.Name)
+                );
+
+            if (!translationsByEpisodeNumber.TryAdd(translation.Number, new() {translation}))
+            {
+                translationsByEpisodeNumber[translation.Number].Add(translation);
+            }
+        }
+        
+        var episodesByNumber = new List<TranslatesView.Episode>();
+        foreach (var (_, translations) in translationsByEpisodeNumber)
+        {
+            var episodeTranslation = translations
+                .Select(x =>
+                    new TranslatesView.EpisodeTranslation(
+                        x.Id,
+                        x.EpisodeId,
+                        x.Lang,
+                        x.Link,
+                        x.TranslationType,
+                        x.CreatedAt,
+                        x.CreatedBy,
+                        x.Quality))
+                .ToArray();
+
+            var episodeInfoSource = translations.First();
+            var episode = new TranslatesView.Episode(
+                episodeInfoSource.EpisodeId,
+                episodeInfoSource.EpisodeTitle,
+                episodeInfoSource.Number,
+                episodeInfoSource.EpisodeViews,
+                episodeInfoSource.EpisodeStars,
+                episodeTranslation);
+
+            episodesByNumber.Add(episode);
+        }
+
+        return new TranslatesView(translators.Values.ToArray(), episodesByNumber.ToArray());
+    }
+
+    public async Task<EpisodeTranslation[]> QueryAsync(EpisodeTranslationQuery request, CancellationToken token)
+    {
+        var query = await _translationRepository.Select(new Select
+        {
+            EpisodeTranslationIds = request.EpisodeTranslationIds,
+            TranslatorIds = request.TranslatorIds,
+            ContentIds = request.ContentIds,
+            EpisodeIds = request.EpisodeIds,
+            Limit = request.Limit,
+            Offset = request.Offset
+        }, token);
+
+        return query
+            .Select(x =>
+                new EpisodeTranslation(
+                    x.Id,
+                    x.ContentId,
                     x.EpisodeId,
-                    x.EpisodeTitle,
-                    x.Number,
-                    x.EpisodeViews,
-                    x.EpisodeStars))).ToArray() 
-               ?? Array.Empty<EpisodeTranslation>();
+                    x.Link,
+                    (TranslationType)x.TranslationType,
+                    x.CreatedAt,
+                    x.CreatedBy,
+                    x.Quality,
+                    x.TranslatorId,
+                    (Language)x.Lang))
+            .ToArray();
     }
 
     public async Task<long> InsertAsync(InsertTranslation model, CancellationToken token)
