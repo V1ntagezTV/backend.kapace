@@ -9,7 +9,7 @@ public class AddCreationInfoToEpisode : Migration
     {
         const string initSql = @"
             ALTER TABLE episode
-            ADD COLUMN IF NOT EXISTS created_at TIMESTAMP WITH TIME ZONE NOT NULL,
+            ADD COLUMN IF NOT EXISTS created_at TIMESTAMP WITH TIME ZONE,
             ADD COLUMN IF NOT EXISTS created_by INTEGER NOT NULL DEFAULT 0;";
         Execute.Sql(initSql);
     }
