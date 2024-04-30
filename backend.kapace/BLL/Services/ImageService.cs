@@ -1,6 +1,4 @@
-﻿using System.Drawing;
-using System.Drawing.Imaging;
-using backend.kapace.BLL.Enums;
+﻿using backend.kapace.BLL.Enums;
 using backend.kapace.BLL.Exceptions;
 using backend.kapace.BLL.Services.Interfaces;
 using backend.kapace.DAL.Repository.Interfaces;
@@ -57,10 +55,9 @@ public class ImageService : IImageService
 
             await _changesHistoryService.UpdateImageAsync(historyId, imageId, token);
 
-            using var img = Image.FromStream(imageFile.OpenReadStream());
             var imagePath = Path.Combine(folderPath, imageId + ".png");
             await using Stream fileStream = new FileStream(imagePath, FileMode.Create);
-            img.Save(fileStream, ImageFormat.Png);
+            await imageFile.CopyToAsync(fileStream, token);
         }
         else
         {
@@ -68,7 +65,7 @@ public class ImageService : IImageService
         }
     }
 
-    public async Task<Image> GetAvatarByIdAsync(long imageId, long contentId, CancellationToken token)
+    public async Task<FileStream> GetAvatarByIdAsync(long imageId, long contentId, CancellationToken token)
     { 
         var imagePath = Path.Combine(
             StaticFilesPath,
@@ -76,12 +73,13 @@ public class ImageService : IImageService
             $"{contentId}",
             $"{imageId}.png"
         );
+        
+        if (!File.Exists(imagePath))
+            throw new Exception("The requested image does not exist.");
 
         try
         {
-            var image = await Task.Run(() => Image.FromFile(imagePath), token).ConfigureAwait(false);
-            
-            return image;
+            return File.OpenRead(imagePath);
         }
         catch (FileNotFoundException)
         {

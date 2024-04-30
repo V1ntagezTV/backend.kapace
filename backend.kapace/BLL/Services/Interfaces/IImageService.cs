@@ -1,4 +1,3 @@
-using System.Drawing;
 using backend.kapace.BLL.Enums;
 using Microsoft.AspNetCore.Http;
 
@@ -12,5 +11,5 @@ public interface IImageService
         StaticFileTypes fileType,
         CancellationToken token);
     
-    Task<Image> GetAvatarByIdAsync(long imageId, long contentId, CancellationToken token);
+    Task<FileStream> GetAvatarByIdAsync(long imageId, long contentId, CancellationToken token);
 }

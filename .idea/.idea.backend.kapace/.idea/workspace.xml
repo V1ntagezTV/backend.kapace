@@ -10,6 +10,7 @@
     <projectFile profileName="backend.Migrator">backend.Migrator/backend.Migrator.csproj</projectFile>
     <projectFile profileName="http">backend.Migrator/backend.Migrator.csproj</projectFile>
     <projectFile profileName="https">backend.Migrator/backend.Migrator.csproj</projectFile>
+    <projectFile profileName="local">backend.Migrator/backend.Migrator.csproj</projectFile>
     <projectFile profileName="a">backend.kapace/backend.kapace.csproj</projectFile>
     <projectFile profileName="backend.kapace">backend.kapace/backend.kapace.csproj</projectFile>
     <projectFile profileName="local">backend.kapace/backend.kapace.csproj</projectFile>
@@ -19,49 +20,36 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="e863d32b-f8af-451f-8084-8db13fa65ff5" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/backend.Migrator/Migrations/202404141521_AddCreationInfoToEpisode.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend.kapace/BLL/Models/Episode/Episode.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend.kapace/BLL/Models/EpisodeTranslations/EpisodeTranslation.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend.kapace/BLL/Models/EpisodeTranslations/EpisodeTranslationQuery.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend.kapace/BLL/Models/TranslatesView.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend.kapace/BLL/Services/EpisodeService.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend.kapace/BLL/Services/Interfaces/IEpisodeService.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend.kapace/Controllers/EpisodeController.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend.kapace/Controllers/EpisodeQuery.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend.kapace/DAL/Experimental/ExperimentalQueryBuilder.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend.kapace/DAL/Models/ContentTranslation/EpisodeTranslation.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend.kapace/DAL/Models/ContentTranslation/Query/Select.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend.kapace/Models/Requests/Episode/V1EpisodeQueryRequest.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend.kapace/Models/Requests/EpisodeTranslation/EpisodeTranslationQueryRequest.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend.Migrator/appsettings.Local.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend.Migrator/appsettings.Production.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.backend.kapace/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.backend.kapace/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend.Tests/ServiceTests/TranslationServiceTests.cs" beforeDir="false" afterPath="$PROJECT_DIR$/backend.Tests/ServiceTests/TranslationServiceTests.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend.kapace/BLL/Models/EpisodeTranslation.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend.kapace/BLL/Services/ChangesHistoryService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/backend.kapace/BLL/Services/ChangesHistoryService.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend.kapace/BLL/Services/ContentService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/backend.kapace/BLL/Services/ContentService.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend.kapace/BLL/Services/Interfaces/ITranslationService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/backend.kapace/BLL/Services/Interfaces/ITranslationService.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend.kapace/BLL/Services/TranslationService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/backend.kapace/BLL/Services/TranslationService.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend.kapace/Controllers/TranslationController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/backend.kapace/Controllers/TranslationController.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend.kapace/DAL/Models/Episode.cs" beforeDir="false" afterPath="$PROJECT_DIR$/backend.kapace/DAL/Models/Episode.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend.kapace/DAL/Models/QueryContent.cs" beforeDir="false" afterPath="$PROJECT_DIR$/backend.kapace/DAL/Models/QueryContent.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend.kapace/DAL/Models/QueryEpisode.cs" beforeDir="false" afterPath="$PROJECT_DIR$/backend.kapace/DAL/Models/QueryEpisode.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend.kapace/DAL/Models/Translation.cs" beforeDir="false" afterPath="$PROJECT_DIR$/backend.kapace/DAL/Models/Translation.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend.kapace/DAL/Repository/EpisodeRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/backend.kapace/DAL/Repository/EpisodeRepository.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend.kapace/DAL/Repository/Interfaces/ITranslationRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/backend.kapace/DAL/Repository/Interfaces/ITranslationRepository.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend.kapace/DAL/Repository/TranslationRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/backend.kapace/DAL/Repository/TranslationRepository.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend.kapace/Models/Requests/V1GetByEpisodeRequest.cs" beforeDir="false" afterPath="$PROJECT_DIR$/backend.kapace/Models/Requests/V1GetByEpisodeRequest.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend.kapace/Models/Response/V1GetByEpisodeResponse.cs" beforeDir="false" afterPath="$PROJECT_DIR$/backend.kapace/Models/Response/V1GetByEpisodeResponse.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Dockerfile" beforeDir="false" afterPath="$PROJECT_DIR$/Dockerfile" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend.Migrator/Properties/launchSettings.json" beforeDir="false" afterPath="$PROJECT_DIR$/backend.Migrator/Properties/launchSettings.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend.Migrator/appsettings.json" beforeDir="false" afterPath="$PROJECT_DIR$/backend.Migrator/appsettings.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend.Migrator/backend.Migrator.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/backend.Migrator/backend.Migrator.csproj" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend.kapace/BLL/Services/ImageService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/backend.kapace/BLL/Services/ImageService.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend.kapace/BLL/Services/Interfaces/IImageService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/backend.kapace/BLL/Services/Interfaces/IImageService.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend.kapace/Controllers/ImagesController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/backend.kapace/Controllers/ImagesController.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/backend.kapace/Program.cs" beforeDir="false" afterPath="$PROJECT_DIR$/backend.kapace/Program.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend.kapace/Properties/launchSettings.json" beforeDir="false" afterPath="$PROJECT_DIR$/backend.kapace/Properties/launchSettings.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend.kapace/appsettings.Local.json" beforeDir="false" afterPath="$PROJECT_DIR$/backend.kapace/appsettings.Local.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend.kapace/appsettings.Testing.json" beforeDir="false" afterPath="$PROJECT_DIR$/backend.kapace/appsettings.Testing.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend.kapace/appsettings.json" beforeDir="false" afterPath="$PROJECT_DIR$/backend.kapace/appsettings.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docker-compose.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/docker-compose.yaml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="JSON File" />
+      </list>
+    </option>
+  </component>
   <component name="HighlightingSettingsPerFile">
-    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/0569b0077204454f81bddfb6b9cedcdb11878/d7/15bd8890/IFormFile.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/44c0db71b152418abf938b97293d7c9118878/8c/e04def16/WebApplicationBuilder.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/44c0db71b152418abf938b97293d7c9118878/cb/74eff772/ConfigureHostBuilder.cs" root0="FORCE_HIGHLIGHTING" />
@@ -90,7 +78,7 @@
   </component>
   <component name="MetaFilesCheckinStateConfiguration" checkMetaFiles="true" />
   <component name="ProblemsViewState">
-    <option name="selectedTabId" value="Toolset" />
+    <option name="selectedTabId" value="CurrentFile" />
   </component>
   <component name="ProjectId" id="2MQu3xXRWsI8gTITTODN3eyCkrx" />
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
@@ -122,21 +110,19 @@
     ]
   }
 }</component>
-  <component name="RunManager" selected=".NET Project.backend-kapace">
-    <configuration name="backend-kapace" type="DotNetProject" factoryName=".NET Project">
-      <option name="EXE_PATH" value="$PROJECT_DIR$/backend.kapace/bin/Debug/net7.0/backend.kapace.exe" />
+  <component name="RunManager" selected=".NET Launch Settings Profile.backend.kapace: local">
+    <configuration name="backend.Migrator.Program.Main" type="DotNetStaticMethod" factoryName=".NET Static Method" temporary="true">
+      <option name="EXE_PATH" value="C:\Users\insur\AppData\Local\Programs\Rider\lib\ReSharperHost\JetLauncherILc.exe" />
       <option name="PROGRAM_PARAMETERS" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/backend.kapace/bin/Debug/net7.0" />
+      <option name="WORKING_DIRECTORY" value="" />
       <option name="PASS_PARENT_ENVS" value="1" />
       <option name="USE_EXTERNAL_CONSOLE" value="0" />
       <option name="USE_MONO" value="0" />
       <option name="RUNTIME_ARGUMENTS" value="" />
-      <option name="PROJECT_PATH" value="$PROJECT_DIR$/backend.kapace/backend.kapace.csproj" />
-      <option name="PROJECT_EXE_PATH_TRACKING" value="1" />
-      <option name="PROJECT_ARGUMENTS_TRACKING" value="1" />
-      <option name="PROJECT_WORKING_DIRECTORY_TRACKING" value="1" />
-      <option name="PROJECT_KIND" value="DotNetCore" />
+      <option name="PROJECT_PATH" value="$PROJECT_DIR$/backend.Migrator/backend.Migrator.csproj" />
       <option name="PROJECT_TFM" value="net7.0" />
+      <option name="CLASS_NAME" value="backend.Migrator.Program" />
+      <option name="METHOD_NAME" value="Main" />
       <method v="2">
         <option name="Build" />
       </method>
@@ -156,7 +142,22 @@
         <option name="Build" />
       </method>
     </configuration>
-    <configuration name="backend.kapace" type="LaunchSettings" factoryName=".NET Launch Settings Profile">
+    <configuration name="backend.Migrator: local" type="LaunchSettings" factoryName=".NET Launch Settings Profile">
+      <option name="LAUNCH_PROFILE_PROJECT_FILE_PATH" value="$PROJECT_DIR$/backend.Migrator/backend.Migrator.csproj" />
+      <option name="LAUNCH_PROFILE_TFM" value="net7.0" />
+      <option name="LAUNCH_PROFILE_NAME" value="local" />
+      <option name="USE_EXTERNAL_CONSOLE" value="0" />
+      <option name="USE_MONO" value="0" />
+      <option name="RUNTIME_ARGUMENTS" value="" />
+      <option name="GENERATE_APPLICATIONHOST_CONFIG" value="1" />
+      <option name="SHOW_IIS_EXPRESS_OUTPUT" value="0" />
+      <option name="SEND_DEBUG_REQUEST" value="1" />
+      <option name="ADDITIONAL_IIS_EXPRESS_ARGUMENTS" value="" />
+      <method v="2">
+        <option name="Build" />
+      </method>
+    </configuration>
+    <configuration name="backend.kapace" type="LaunchSettings" factoryName=".NET Launch Settings Profile" temporary="true">
       <option name="LAUNCH_PROFILE_PROJECT_FILE_PATH" value="$PROJECT_DIR$/backend.kapace/backend.kapace.csproj" />
       <option name="LAUNCH_PROFILE_TFM" value="net7.0" />
       <option name="LAUNCH_PROFILE_NAME" value="backend.kapace" />
@@ -193,31 +194,24 @@
       <EXTENSION ID="com.jetbrains.rider.docker.debug" isFastModeEnabled="true" isPublishEnabled="true" />
       <method v="2" />
     </configuration>
-    <configuration name="docker-compose.yaml.backend-kapace-db: Compose Deployment" type="docker-deploy" factoryName="docker-compose.yml" temporary="true" server-name="Docker">
-      <deployment type="docker-compose.yml">
-        <settings>
-          <option name="envFilePath" value="" />
-          <option name="services">
-            <list>
-              <option value="backend-kapace-db" />
-            </list>
-          </option>
-          <option name="sourceFilePath" value="docker-compose.yaml" />
-        </settings>
+    <configuration default="true" type="docker-deploy" factoryName="dockerfile" temporary="true">
+      <deployment type="dockerfile">
+        <settings />
       </deployment>
       <EXTENSION ID="com.jetbrains.rider.docker.debug" isFastModeEnabled="true" isPublishEnabled="true" />
       <method v="2" />
     </configuration>
     <list>
-      <item itemvalue=".NET Launch Settings Profile.backend.kapace" />
+      <item itemvalue=".NET Launch Settings Profile.backend.Migrator: local" />
       <item itemvalue=".NET Launch Settings Profile.backend.kapace: local" />
       <item itemvalue=".NET Launch Settings Profile.backend.Migrator" />
-      <item itemvalue=".NET Project.backend-kapace" />
-      <item itemvalue="Docker.docker-compose.yaml.backend-kapace-db: Compose Deployment" />
+      <item itemvalue=".NET Launch Settings Profile.backend.kapace" />
+      <item itemvalue=".NET Static Method.backend.Migrator.Program.Main" />
     </list>
     <recent_temporary>
       <list>
-        <item itemvalue="Docker.docker-compose.yaml.backend-kapace-db: Compose Deployment" />
+        <item itemvalue=".NET Static Method.backend.Migrator.Program.Main" />
+        <item itemvalue=".NET Launch Settings Profile.backend.kapace" />
       </list>
     </recent_temporary>
   </component>
@@ -416,7 +410,16 @@
       <workItem from="1712397579974" duration="596000" />
       <workItem from="1712694308883" duration="6306000" />
       <workItem from="1712863146295" duration="5846000" />
-      <workItem from="1712933719058" duration="30704000" />
+      <workItem from="1712933719058" duration="32080000" />
+      <workItem from="1713374365725" duration="1202000" />
+      <workItem from="1713814883169" duration="1802000" />
+      <workItem from="1714223877620" duration="3676000" />
+      <workItem from="1714229526718" duration="5320000" />
+      <workItem from="1714250111372" duration="8081000" />
+      <workItem from="1714263144288" duration="543000" />
+      <workItem from="1714298451456" duration="3250000" />
+      <workItem from="1714317032995" duration="4930000" />
+      <workItem from="1714490368547" duration="1928000" />
     </task>
     <task id="LOCAL-00001" summary="add changes history, insert content and approve it">
       <created>1692487739565</created>
@@ -502,7 +505,21 @@
       <option name="project" value="LOCAL" />
       <updated>1710073629185</updated>
     </task>
-    <option name="localTasksCounter" value="13" />
+    <task id="LOCAL-00013" summary="1. add episode query&#10;2. add episode-translation QueryContent.cs&#10;3. add episode create user info">
+      <created>1713097746479</created>
+      <option name="number" value="00013" />
+      <option name="presentableId" value="LOCAL-00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1713097746479</updated>
+    </task>
+    <task id="LOCAL-00014" summary="fix created_at episode migration">
+      <created>1713097863333</created>
+      <option name="number" value="00014" />
+      <option name="presentableId" value="LOCAL-00014" />
+      <option name="project" value="LOCAL" />
+      <updated>1713097863333</updated>
+    </task>
+    <option name="localTasksCounter" value="15" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -550,7 +567,9 @@
     <MESSAGE value="add episodes changes queries, content changes create/approve tests" />
     <MESSAGE value="lil refactories" />
     <MESSAGE value="add views and rating to episodes and queryByEpisodes" />
-    <option name="LAST_COMMIT_MESSAGE" value="add views and rating to episodes and queryByEpisodes" />
+    <MESSAGE value="1. add episode query&#10;2. add episode-translation QueryContent.cs&#10;3. add episode create user info" />
+    <MESSAGE value="fix created_at episode migration" />
+    <option name="LAST_COMMIT_MESSAGE" value="fix created_at episode migration" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -589,13 +608,13 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
           <url>file://$PROJECT_DIR$/backend.kapace/BLL/Services/ImageService.cs</url>
-          <line>37</line>
+          <line>35</line>
           <properties documentPath="C:\Users\insur\RiderProjects\backend-kapace\backend.kapace\BLL\Services\ImageService.cs" initialLine="34" containingFunctionPresentation="method 'InsertImageAsync'">
             <startOffsets>
-              <option value="1231" />
+              <option value="1179" />
             </startOffsets>
             <endOffsets>
-              <option value="1315" />
+              <option value="1263" />
             </endOffsets>
           </properties>
           <option name="timeStamp" value="22" />
@@ -613,6 +632,45 @@
           </properties>
           <option name="timeStamp" value="24" />
         </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/backend.Migrator/Migrations/202304190010_CreateTranslationContentTable.cs</url>
+          <line>21</line>
+          <properties documentPath="C:\Users\insur\RiderProjects\backend-kapace\backend.Migrator\Migrations\202304190010_CreateTranslationContentTable.cs" initialLine="21" containingFunctionPresentation="method 'Up'">
+            <startOffsets>
+              <option value="603" />
+            </startOffsets>
+            <endOffsets>
+              <option value="604" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="25" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/backend.Migrator/Program.cs</url>
+          <line>11</line>
+          <properties documentPath="C:\Users\insur\RiderProjects\backend-kapace\backend.Migrator\Program.cs" initialLine="11" containingFunctionPresentation="method 'Main'">
+            <startOffsets>
+              <option value="242" />
+            </startOffsets>
+            <endOffsets>
+              <option value="281" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="26" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/backend.Migrator/Program.cs</url>
+          <line>14</line>
+          <properties documentPath="C:\Users\insur\RiderProjects\backend-kapace\backend.Migrator\Program.cs" initialLine="14" containingFunctionPresentation="lambda expression inside method 'Main'">
+            <startOffsets>
+              <option value="362" />
+            </startOffsets>
+            <endOffsets>
+              <option value="539" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="27" />
+        </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
     <pin-to-top-manager>
@@ -620,6 +678,7 @@
         <PinnedItemInfo parentTag="Type#Microsoft.AspNetCore.Http.FormFile" memberName="ContentType" />
         <PinnedItemInfo parentTag="Type#Dapper.DynamicParameters" memberName="outputCallbacks" />
         <PinnedItemInfo parentTag="Type#System.Threading.Tasks.Task" memberName="m_action" />
+        <PinnedItemInfo parentTag="Type#Microsoft.Extensions.Hosting.HostBuilder" memberName="Properties" />
       </pinned-members>
     </pin-to-top-manager>
   </component>

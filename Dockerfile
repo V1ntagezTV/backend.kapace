@@ -8,14 +8,15 @@ FROM mcr.microsoft.com/dotnet/sdk:7.0 AS build
 WORKDIR /src
 COPY . .
 RUN dotnet restore "backend.kapace/backend.kapace.csproj"
-COPY . .
-WORKDIR "/src/backend-kapace"
-RUN dotnet build "backend.kapace.csproj" -c Release -o /app/build
+RUN dotnet build "backend.kapace/backend.kapace.csproj" -c Release -o /app/build
 
 FROM build AS publish
-RUN dotnet publish "backend.kapace.csproj" -c Release -o /app/publish
+RUN dotnet publish "backend.kapace/backend.kapace.csproj" -c Release -o /app/publish
 
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
-ENTRYPOINT ["dotnet", "backend-kapace.dll"]
+
+RUN apt-get update && apt-get install -y libgdiplus
+
+ENTRYPOINT ["dotnet", "backend.kapace.dll"]

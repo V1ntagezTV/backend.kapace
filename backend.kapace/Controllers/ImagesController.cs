@@ -1,6 +1,4 @@
-﻿using System.Drawing;
-using System.Drawing.Imaging;
-using backend.kapace.BLL.Enums;
+﻿using backend.kapace.BLL.Enums;
 using backend.kapace.BLL.Services.Interfaces;
 using backend.kapace.Models.Requests;
 using Microsoft.AspNetCore.Mvc;
@@ -44,14 +42,6 @@ public class ImagesController : Controller
     {
         var image = await _imageService.GetAvatarByIdAsync(request.ImageId, request.ContentId, token);
 
-        return ImageResult(image);
-    }
-
-    private FileContentResult ImageResult(Image image)
-    {
-        using var ms = new MemoryStream();
-        image.Save(ms, ImageFormat.Png);
-        var file = File(ms.ToArray(), PngContentType);
-        return file;
+        return File(image, PngContentType);
     }
 }
