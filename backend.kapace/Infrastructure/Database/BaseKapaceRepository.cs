@@ -12,4 +12,11 @@ public class BaseKapaceRepository
     }
 
     protected NpgsqlConnection CreateConnection() => _npgsqlDataSource.CreateConnection();
+
+    public async Task<NpgsqlTransaction> BeginTransaction(CancellationToken token) 
+    {
+        using var conn = CreateConnection();
+        await conn.OpenAsync(token);
+        return await conn.BeginTransactionAsync(System.Data.IsolationLevel.ReadCommitted, token);
+    }
 }

@@ -8,7 +8,6 @@ using backend.kapace.Models;
 using backend.Models.Enums;
 using Content = backend.kapace.BLL.Models.VideoService.Content;
 using ContentQuery = backend.kapace.BLL.Models.ContentQuery;
-using Episode = backend.kapace.BLL.Models.Episode.Episode;
 using Translation = backend.kapace.DAL.Models.Translation;
 
 namespace backend.kapace.BLL.Services;
@@ -339,6 +338,30 @@ public class ContentService : IContentService
             PlannedSeries = newContent.PlannedSeries,
             MinAge = newContent.MinAge
         }, token);
+    }
+    
+    public async Task<SearchContentUnit[]> SearchBy(string? search, CancellationToken token)
+    {
+        if (string.IsNullOrEmpty(search))
+        {
+            return Array.Empty<SearchContentUnit>();
+        }
+        
+        var result = new List<SearchContentUnit>();
+        if (long.TryParse(search, out var contentId))
+        {
+            var queryResponse = await _contentRepository.QueryAsync(new QueryContent
+            {
+                Ids = new[] { contentId }
+            }, token);
+
+            result.AddRange(queryResponse.Select(x => new SearchContentUnit(x.Id, x.Title, x.ImageId)).ToArray());
+        }
+
+        var searchByText = await _contentRepository.SearchByText(search, token);
+        result.AddRange(searchByText.Select(x => new SearchContentUnit(x.Id, x.Title, x.ImageId)).ToArray());
+
+        return result.ToArray();
     }
 
     private async Task<Dictionary<long, GetByQueryResult.GetByQueryGenre[]>> GetByQueryGenresMapByContentIds(

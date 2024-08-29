@@ -1,14 +1,22 @@
+using System.ComponentModel.DataAnnotations;
+using backend.kapace.BLL.Enums;
+
 namespace backend.kapace.Models.Requests;
 
 public record V1CreateEpisodeHistoryRequest(
-    long ContentId,
-    V1CreateEpisodeHistoryRequest.ChangeableEpisodeFields ChangeableFields,
+    [Required]long ContentId,
+    [Required]V1CreateEpisodeHistoryRequest.ChangeableEpisodeFields ChangeableFields,
     long CreatedBy)
 {
     public record ChangeableEpisodeFields(
+        [Required]int Number,
+        [Required]string VideoScript,
+        [Required]Language Language,
+        [Required]TranslationType TranslationType,
         long? EpisodeId,
-        int? Number,
+        long? TranslatorId,
         string? Title,
-        string? Image
+        string? Image,
+        int? Quality
     );
 }

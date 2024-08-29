@@ -10,5 +10,10 @@ public partial class ChangesHistoryService
         {
             PropertyName = propertyName;
         }
+
+        public EmptyRequiredPropertiesException() 
+        {
+            PropertyName = ""; 
+        }
     }
 }

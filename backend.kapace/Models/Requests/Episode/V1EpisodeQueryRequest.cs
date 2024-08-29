@@ -1,4 +1,4 @@
-﻿namespace backend.kapace.Controllers;
+﻿namespace backend.kapace.Models.Requests.Episode;
 
 public record V1EpisodeQueryRequest(
     long[]? EpisodeIds,

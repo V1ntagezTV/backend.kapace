@@ -40,8 +40,11 @@ public class ChangesHistoryServiceTests : IClassFixture<MainFixture>
         
         // Assert
         var query = (await _changesHistoryService
-            .QueryAsync(new[] { changesId }, CancellationToken.None))
-                .Single();
+                .QueryAsync(new ChangesHistoryQueryModel()
+                {
+                    Ids = new[] { changesId }
+                }, CancellationToken.None))
+            .Single();
 
         query.Id.Should().Be(changesId);
         query.HistoryType.Should().Be(HistoryType.Content);
@@ -82,7 +85,10 @@ public class ChangesHistoryServiceTests : IClassFixture<MainFixture>
 
         // Assert
         var query = (await _changesHistoryService
-                .QueryAsync(new[] { historyId }, CancellationToken.None))
+                .QueryAsync(new ChangesHistoryQueryModel()
+                {
+                    Ids = new[] { historyId }
+                }, CancellationToken.None))
             .Single();
         var content = (await _contentService
                 .GetByQueryAsync(

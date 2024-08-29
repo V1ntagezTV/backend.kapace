@@ -26,7 +26,7 @@ public class TranslationRepository : BaseKapaceRepository, ITranslationRepositor
             e.title as episode_title, e.number, e.views as episode_views, e.stars as episode_stars
             FROM episode e
                 JOIN content_translation ct on ct.episode_id = e.id
-                JOIN translator t on ct.translator_id = t.id
+                LEFT JOIN translator t on ct.translator_id = t.id
             WHERE 1 = 1";
 
         var parameters = new DynamicParameters();
@@ -96,7 +96,7 @@ public class TranslationRepository : BaseKapaceRepository, ITranslationRepositor
                 content_id,
                 translator_id, 
                 episode_id,
-                lang, 
+                language, 
                 link,
                 translation_type,
                 created_at,

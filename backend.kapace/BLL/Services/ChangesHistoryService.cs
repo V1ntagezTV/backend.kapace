@@ -1,4 +1,5 @@
-﻿using backend.kapace.BLL.Enums;
+﻿using System.Runtime.CompilerServices;
+using backend.kapace.BLL.Enums;
 using backend.kapace.BLL.Exceptions;
 using backend.kapace.BLL.Models;
 using backend.kapace.BLL.Services.Interfaces;
@@ -6,42 +7,57 @@ using backend.kapace.DAL.Models;
 using backend.kapace.DAL.Repository.Interfaces;
 using Newtonsoft.Json;
 using static backend.kapace.BLL.Exceptions.ChangesHistoryService;
-using Episode = backend.kapace.BLL.Models.Episode.Episode;
 using HistoryUnit = backend.kapace.BLL.Services.Interfaces.HistoryUnit;
 
 namespace backend.kapace.BLL.Services;
 
 public class ChangesHistoryService : IChangesHistoryService
 {
-    private static readonly JsonSerializerSettings JsonSerializerSettings = new() {
+    private static readonly JsonSerializerSettings JsonSerializerSettings = new()
+    {
         NullValueHandling = NullValueHandling.Ignore
     };
-    
+
     private readonly IContentService _contentService;
-    private readonly IChangesHistoryRepository _changesHistoryService;
+    private readonly IContentRepository _contentRepository;
+    private readonly IChangesHistoryRepository _changesHistoryRepository;
     private readonly IEpisodeRepository _episodeRepository;
+    private readonly ITranslationRepository _translationRepository;
 
     public ChangesHistoryService(
+        ITranslationRepository translationRepository,
+        IContentRepository contentRepository,
         IContentService contentService,
-        IChangesHistoryRepository changesHistoryService,
+        IChangesHistoryRepository changesHistoryRepository,
         IEpisodeRepository episodeRepository)
     {
+        _translationRepository = translationRepository;
+        _contentRepository = contentRepository;
         _contentService = contentService;
-        _changesHistoryService = changesHistoryService;
+        _changesHistoryRepository = changesHistoryRepository;
         _episodeRepository = episodeRepository;
     }
 
     public async Task ApproveAsync(long historyId, long userId, CancellationToken token)
     {
-        var changeHistoryUnits = await QueryAsync(new[] { historyId }, token);
+        var changeHistoryUnits = await QueryAsync(new ChangesHistoryQueryModel()
+        {
+            Ids = new[] { historyId }
+        }, token: token);
         var changeUnit = changeHistoryUnits.FirstOrDefault();
+
+        if (changeUnit is { ApprovedAt: not null, ApprovedBy: not null })
+        {
+            throw new ChangesAlreadyApprovedException(approvedBy: changeUnit.ApprovedBy.Value);
+        }
 
         if (changeUnit is null)
             throw new NullReferenceException(nameof(changeUnit));
         if (false) //TODO: changeUnit.CreatedBy == userId)
             throw new ArgumentException($"User - {userId} can't self-approve changes - {historyId}.");
 
-        await _changesHistoryService.ApproveAsync(historyId, userId, approvedAt: DateTimeOffset.UtcNow, token);
+        await using var transaction = await _changesHistoryRepository.BeginTransaction(token);
+        await _changesHistoryRepository.ApproveAsync(historyId, userId, approvedAt: DateTimeOffset.UtcNow, token);
 
         switch (changeUnit.HistoryType)
         {
@@ -53,31 +69,83 @@ public class ChangesHistoryService : IChangesHistoryService
                 await ApproveEpisodeAsync(changeUnit, token);
                 break;
         }
+
+        await transaction.CommitAsync(token);
     }
 
     private async Task ApproveEpisodeAsync(HistoryUnit changeUnit, CancellationToken token)
     {
         var changes = (HistoryUnit.JsonEpisodeChanges)changeUnit.Changes;
-        if (changes is { ContentId: { }, EpisodeId: null, Number: { } })
+        if (changes.ContentId is null)
         {
-            await _episodeRepository.InsertAsync(
-                DAL.Models.Episode.CreateInsertModel(
-                    changes.ContentId.Value,
-                    changes.Number.Value,
-                    changes.Title,
-                    changes.Image,
-                    changeUnit.CreatedBy),
-                token);
+            throw new EmptyRequiredPropertiesException(nameof(changes.ContentId));
+        }
+
+        var episodeId = changes.EpisodeId;
+        if (changes.EpisodeId is null)
+        {
+            var episodeQuery = new QueryEpisode() { 
+                Numbers = new long[] { changes.Number},
+                ContentIds = new long[] { changes.ContentId.Value },
+            };
+
+            var episodes = await _episodeRepository.QueryAsync(episodeQuery, token);
+            if (episodes.Any()) {
+                episodeId = episodes.Single().Id;
+            } else {
+                episodeId = await _episodeRepository.InsertAsync(
+                    Episode.CreateInsertModel(
+                        changes.ContentId.Value,
+                        changes.Number,
+                        changes.Title,
+                        changes.Image,
+                        changeUnit.CreatedBy),
+                    token);
+            }
         }
         else
         {
-            if (changes.ContentId is null)
-            {
-                throw new EmptyRequiredPropertiesException(nameof(changes.ContentId));
-            }
+            var episodeQuery = new QueryEpisode() { 
+                EpisodeIds = new long[] { changes.EpisodeId.Value },
+                ContentIds = new long[] { changes.ContentId.Value },
+            };
 
-            await _episodeRepository.UpdateAsync(new DAL.Models.Episode(), token);
+            var episodes = await _episodeRepository.QueryAsync(episodeQuery, token);
+            if (!episodes.Any()) {
+                throw new EpisodeNotFoundException(changes.EpisodeId.Value);
+            }
+            var episode = episodes.Single();
+
+            var updateEpisode = new Episode()
+            {
+                Id = episode.Id,
+                ContentId = episode.ContentId,
+                Number = changes.Number,
+                Title = changes.Title ?? episode.Title,
+                Image = changes.Image ?? episode.Image,
+            };
+            await _episodeRepository.UpdateAsync(updateEpisode, token);
         }
+
+        if (changes.ContentId is null ||
+            changes.TranslatorId is null ||
+            changes.VideoScript is null)
+        {
+            throw new EmptyRequiredPropertiesException();
+        }
+
+        var translate = new DAL.Models.InsertTranslation(
+            ContentId: changes.ContentId.Value,
+            EpisodeId: episodeId.Value,
+            TranslatorId: changes.TranslatorId ?? 0,
+            Link: changes.VideoScript,
+            CreatedAt: changeUnit.CreatedAt,
+            CreatedBy: changeUnit.CreatedBy,
+            Lang: changes.Language ?? Language.Unspecified,
+            TranslationType: changes.TranslationType ?? TranslationType.Unspecified,
+            Quality: changes.Quality ?? 0);
+
+        await _translationRepository.InsertAsync(translate, token);
     }
 
     private async Task ApproveContentAsync(HistoryUnit changeUnit, CancellationToken token)
@@ -133,43 +201,139 @@ public class ChangesHistoryService : IChangesHistoryService
                 contentChanges.PlannedSeries ?? selectedContend.PlannedSeries,
                 contentChanges.MinAge ?? selectedContend.MinAgeLimit
             ), token);
-            
+
             if (contentChanges.Genres is not null)
             {
                 //TODO: Create Genres
             }
         }
-    } 
+    }
 
-    public async Task<HistoryUnit[]> QueryAsync(long[] ids, CancellationToken token)
+    public async Task<HistoryUnit[]> QueryAsync(ChangesHistoryQueryModel query, CancellationToken token)
     {
-        var changes = await _changesHistoryService.QueryAsync(new ChangesHistoryQuery()
+        var changes = await _changesHistoryRepository.QueryAsync(new ChangesHistoryQuery
         {
-            Ids = ids,
+            Ids = query.Ids,
+            TargetIds = query.TargetIds,
+            HistoryTypes = query.HistoryTypes,
+            CreatedByIds = query.CreatedByIds,
+            Limit = query.Limit,
+            Offset = query.Offset,
         }, token);
 
-        return changes.Select(x => new HistoryUnit
+        return changes.Select(x =>
         {
-            Id = x.Id,
-            TargetId = x.TargetId,
-            HistoryType = x.HistoryType,
-            Changes = x.HistoryType == HistoryType.Content 
-                ? JsonConvert.DeserializeObject<HistoryUnit.JsonContentChanges>(x.Text) 
-                ?? new HistoryUnit.JsonChanges()
-                : JsonConvert.DeserializeObject<HistoryUnit.JsonEpisodeChanges>(x.Text) 
-                ?? new HistoryUnit.JsonChanges(),
-            CreatedBy = x.CreatedBy,
-            CreatedAt = x.CreatedAt,
-            ApprovedBy = x.ApprovedBy,
-            ApprovedAt = x.ApprovedAt
+            HistoryUnit.JsonChanges change;
+            if (x.HistoryType == HistoryType.Content)
+            {
+                change = JsonConvert.DeserializeObject<HistoryUnit.JsonContentChanges>(x.Text) ??
+                          new HistoryUnit.JsonChanges();
+            }
+            else
+            {
+                change = JsonConvert.DeserializeObject<HistoryUnit.JsonEpisodeChanges>(x.Text) ??
+                          new HistoryUnit.JsonChanges();
+            }
+
+            return new HistoryUnit
+            {
+                Id = x.Id,
+                TargetId = x.TargetId,
+                HistoryType = x.HistoryType,
+                Changes = change,
+                CreatedBy = x.CreatedBy,
+                CreatedAt = x.CreatedAt,
+                ApprovedBy = x.ApprovedBy,
+                ApprovedAt = x.ApprovedAt
+            };
         }).ToArray();
+    }
+
+    public async Task<HistoryListUnit[]> GetList(ChangesHistoryQueryModel query, CancellationToken token)
+    {
+        var changes = await _changesHistoryRepository.QueryAsync(new ChangesHistoryQuery
+        {
+            Ids = query.Ids,
+            TargetIds = query.TargetIds,
+            HistoryTypes = query.HistoryTypes,
+            CreatedByIds = query.CreatedByIds,
+            Limit = query.Limit,
+            Offset = query.Offset,
+        }, token);
+
+        var episodeIds = changes
+            .Where(x => x is { HistoryType: HistoryType.Episode, TargetId: > 0 })
+            .Select(x => x.TargetId!.Value)
+            .ToArray();
+        var episodes = Array.Empty<Episode>();
+        if (episodeIds.Any())
+        {
+            episodes = await _episodeRepository.QueryAsync(new QueryEpisode()
+            {
+                EpisodeIds = episodeIds,
+            }, token);
+        }
+
+        var contentIds = changes
+            .Where(x => x.HistoryType == HistoryType.Content && x.TargetId != 0)
+            .Select(x => x.TargetId!.Value)
+            .ToArray();
+        var contents = Array.Empty<Content>();
+        if (contentIds.Any())
+        {
+            contents = await _contentRepository.QueryAsync(new QueryContent()
+            {
+                Ids = contentIds
+            }, token);
+        }
+
+        return changes
+            .Select(x =>
+            {
+                string? title;
+                if (x.HistoryType is HistoryType.Episode && x.TargetId > 0)
+                {
+                    title = episodes.FirstOrDefault(e => e.Id == x.TargetId.Value)?.Title;
+                }
+                else if (x.HistoryType is HistoryType.Content && x.TargetId > 0)
+                {
+                    title = episodes.FirstOrDefault(e => e.Id == x.TargetId.Value)?.Title;
+                }
+                else
+                {
+                    if (x.HistoryType == HistoryType.Content)
+                    {
+                        var changes = JsonConvert.DeserializeObject<HistoryUnit.JsonContentChanges>(x.Text) ??
+                                      new HistoryUnit.JsonContentChanges();
+                        title = changes.Title;
+                    }
+                    else
+                    {
+                        var changes = JsonConvert.DeserializeObject<HistoryUnit.JsonEpisodeChanges>(x.Text) ??
+                                      new HistoryUnit.JsonEpisodeChanges();
+                        title = changes.Title;
+                    }
+                }
+
+                return new HistoryListUnit(
+                    x.Id,
+                    x.TargetId,
+                    title,
+                    x.HistoryType,
+                    x.Text,
+                    x.CreatedBy,
+                    x.CreatedAt,
+                    x.ApprovedBy,
+                    x.ApprovedAt);
+            })
+            .ToArray();
     }
 
     public async Task<long> InsertChangesAsync(HistoryUnit historyUnit, CancellationToken token)
     {
         var jsonContentChanges = JsonConvert.SerializeObject(historyUnit.Changes, JsonSerializerSettings);
 
-        var id = await _changesHistoryService.InsertAsync(new DAL.Models.HistoryUnit
+        var id = await _changesHistoryRepository.InsertAsync(new DAL.Models.HistoryUnit
         {
             TargetId = historyUnit.TargetId,
             HistoryType = historyUnit.HistoryType,
@@ -185,7 +349,7 @@ public class ChangesHistoryService : IChangesHistoryService
 
     public async Task UpdateImageAsync(long historyId, long imageId, CancellationToken token)
     {
-        var histories = await _changesHistoryService.QueryAsync(
+        var histories = await _changesHistoryRepository.QueryAsync(
             new ChangesHistoryQuery
             {
                 Ids = new[] { historyId },
@@ -204,8 +368,8 @@ public class ChangesHistoryService : IChangesHistoryService
         );
 
         changes.ImageId = imageId;
-        
+
         var jsonContentChanges = JsonConvert.SerializeObject(changes, JsonSerializerSettings);
-        await _changesHistoryService.UpdateTextAsync(historyId, jsonContentChanges, token);
+        await _changesHistoryRepository.UpdateTextAsync(historyId, jsonContentChanges, token);
     }
 }

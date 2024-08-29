@@ -9,6 +9,8 @@ namespace backend.kapace.DAL.Repository;
 
 public class ContentRepository : BaseKapaceRepository, IContentRepository
 {
+    private const int BaseLongTimeoutSeconds = 10;
+
     public ContentRepository(NpgsqlDataSource dataSource) : base(dataSource) { }
 
     public async Task<Content[]> QueryAsync(QueryContent query, CancellationToken token)
@@ -17,7 +19,7 @@ public class ContentRepository : BaseKapaceRepository, IContentRepository
         var parameters = new DynamicParameters();
         var filters = new List<string>();
         
-        if (query.Ids.Any())
+        if (query.Ids is {Length: > 0})
         {
             parameters.Add(nameof(query.Ids), query.Ids);
             filters.Add($"id = ANY(@{nameof(query.Ids)})");
@@ -241,5 +243,24 @@ OFFSET @Offset";
         await using var connection = CreateConnection();
         var command = new CommandDefinition(initSql, parameters, cancellationToken: token);
         await connection.QueryAsync(command);
+    }
+
+    public async Task<IReadOnlyCollection<Content>> SearchByText(string? search, CancellationToken token)
+    {
+        const string initSql = @$"SELECT * FROM content WHERE title LIKE CONCAT('%',@Search,'%');";
+
+        var parameters = new
+        {
+            Search = search
+        };
+        
+        await using var connection = CreateConnection();
+        var command = new CommandDefinition(
+            initSql,
+            parameters,
+            commandTimeout: BaseLongTimeoutSeconds,
+            cancellationToken: token);
+        var result = await connection.QueryAsync<Content>(command);
+        return result.ToArray();
     }
 }

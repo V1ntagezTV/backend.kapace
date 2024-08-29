@@ -1,4 +1,5 @@
 using backend.kapace.DAL.Models;
+using backend.kapace.DAL.Models.Query;
 using backend.kapace.DAL.Repository.Interfaces;
 using backend.kapace.Infrastructure.Database;
 using Dapper;
@@ -12,17 +13,7 @@ public class TranslatorsRepository : BaseKapaceRepository, ITranslatorsRepositor
 
     public async Task<IReadOnlyCollection<Translator>> QueryAsync(long[] ids, CancellationToken token)
     {
-        const string initSql = @"SELECT * FROM translator WHERE id = ANY(@Ids);";
-
-        var parameters = new {
-            Ids = ids
-        };
-
-        await using var connection = CreateConnection();
-        var command = new CommandDefinition(initSql, parameters, cancellationToken: token);
-        var translators = await connection.QueryAsync<Translator>(command);
-
-        return translators.ToArray();
+        return await QueryAsync(new TranslatorQuery(ids, null, null, null), token);
     }
 
     public async Task<long> InsertAsync(Translator translator, CancellationToken token)
@@ -49,5 +40,48 @@ public class TranslatorsRepository : BaseKapaceRepository, ITranslatorsRepositor
         var id = await connection.QueryFirstAsync<long>(command);
 
         return id;
+    }
+
+    public async Task<IReadOnlyCollection<Translator>> QueryAsync(TranslatorQuery query, CancellationToken token)
+    {
+        var initSql = @"
+            SELECT * FROM translator 
+            WHERE 1 = 1";
+
+        var parameters = new DynamicParameters();
+        var filters = new List<string>();
+
+        if (query.TranslatorIds?.Any() is true) {
+            parameters.Add($"@{nameof(query.TranslatorIds)}", query.TranslatorIds);
+            filters.Add("id = ANY(@Ids)");
+        }
+
+        if (!string.IsNullOrEmpty(query.Search)) {
+            parameters.Add($"@{nameof(query.Search)}", query.Search);
+            filters.Add("name LIKE CONCAT('%',@Search,'%')");
+        }
+
+        if (filters.Any())
+        {
+            initSql += " AND " + string.Join(" AND ", filters);
+        }
+
+        if (query.Limit > 0) {
+            var fieldName = $"@{nameof(query.Limit)}";
+            parameters.Add(fieldName, query.Limit);
+            initSql += $" LIMIT {fieldName}";
+        }
+
+        if (query.Offset > 0) {
+            var fieldName = $"@{nameof(query.Offset)}";
+            parameters.Add(fieldName, query.Offset);
+            initSql += $" OFFSET {fieldName}";
+        }
+
+        await using var connection = CreateConnection();
+        var command = new CommandDefinition(initSql, parameters, cancellationToken: token);
+        var translators = await connection.QueryAsync<Translator>(command);
+
+        return translators.ToArray();
     }
 }

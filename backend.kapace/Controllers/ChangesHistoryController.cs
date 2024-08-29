@@ -1,8 +1,10 @@
 ﻿using backend.kapace.BLL.Enums;
+using backend.kapace.BLL.Models;
 using backend.kapace.BLL.Services.Interfaces;
 using backend.kapace.Models.Requests;
 using backend.kapace.Models.Response;
 using Microsoft.AspNetCore.Mvc;
+using HistoryUnit = backend.kapace.BLL.Services.Interfaces.HistoryUnit;
 
 namespace backend.kapace.Controllers;
 
@@ -60,14 +62,20 @@ public class ChangesHistoryController : Controller
         var newHistoryUnit = new HistoryUnit
         {
             TargetId = historyRequest.ContentId,
-            HistoryType = HistoryType.Content,
+            HistoryType = HistoryType.Episode,
             Changes = historyRequest.ChangeableFields is not null 
                 ? new HistoryUnit.JsonEpisodeChanges()
                     {
+                        ContentId = historyRequest.ContentId,
                         EpisodeId = historyRequest.ChangeableFields.EpisodeId,
+                        TranslatorId = historyRequest.ChangeableFields.TranslatorId,
                         Number = historyRequest.ChangeableFields.Number,
                         Title = historyRequest.ChangeableFields.Title,
                         Image = historyRequest.ChangeableFields.Image,
+                        VideoScript = historyRequest.ChangeableFields.VideoScript,
+                        TranslationType = historyRequest.ChangeableFields.TranslationType,
+                        Language = historyRequest.ChangeableFields.Language,
+                        Quality = historyRequest.ChangeableFields.Quality,
                     }
                 : new HistoryUnit.JsonEpisodeChanges(),
             CreatedBy = historyRequest.CreatedBy,
@@ -85,5 +93,39 @@ public class ChangesHistoryController : Controller
     public async Task V1Approve(V1ApproveRequest request, CancellationToken token)
     {
         await _changesHistoryService.ApproveAsync(request.HistoryId, request.UserId, token);
+    }
+
+    [HttpPost("get-list")]
+    public async Task<ActionResult> V1GetChanges(V1GetChangesRequest request, CancellationToken token)
+    {
+        var query = new ChangesHistoryQueryModel
+        {
+            Ids = request.Ids,
+            TargetIds = request.TargetIds,
+            CreatedByIds = request.CreatedByIds,
+            HistoryTypes = request.HistoryTypes,
+            Limit = request.Limit,
+            Offset = request.Offset
+        };
+
+        var result = await _changesHistoryService.GetList(query, token);
+
+        return Ok(new
+        {
+            Changes = result
+                .Select(x => new
+                {
+                    HistoryId = x.HistoryId,
+                    TargetId = x.TargetId,
+                    Title = x.Title,
+                    HistoryType = x.HistoryType,
+                    Text = x.Text,
+                    CreatedBy = x.CreatedBy,
+                    CreatedAt = x.CreatedAt,
+                    ApprovedBy = x.ApprovedBy,
+                    ApprovedAt = x.ApprovedAt,
+                })
+                .ToArray()
+        });
     }
 }

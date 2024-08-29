@@ -11,12 +11,13 @@ public class EpisodeRepository : BaseKapaceRepository, IEpisodeRepository
 {
     public EpisodeRepository(NpgsqlDataSource dataSource) : base(dataSource) { }
 
-    public async Task<Episode[]> QueryAsync(QueryEpisode queryEpisode, CancellationToken token)
+    public async Task<Episode[]> QueryAsync(QueryEpisode query, CancellationToken token)
     {
         var command = new ExperimentalQueryBuilder("SELECT * FROM episode WHERE 1=1")
-            .WhereAny("episode_id", queryEpisode.EpisodeIds)
-            .WhereAny("content_id", queryEpisode.ContentIds)
-            .AddPaging(queryEpisode.Limit, queryEpisode.Offset)
+            .WhereAny("id", query.EpisodeIds)
+            .WhereAny("content_id", query.ContentIds)
+            .WhereAny("number", query.Numbers)
+            .AddPaging(query.Limit, query.Offset)
             .Build(token);
         
         await using var connection = CreateConnection();

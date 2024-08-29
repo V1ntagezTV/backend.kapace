@@ -189,4 +189,14 @@ public class ContentController : Controller
             }).ToArray()
         });
     }
+
+    [HttpPost("search-by")]
+    public async Task<ActionResult<V1RequestGetSearchByResponse>> GetSearchBy(V1RequestGetSearchByRequest request, CancellationToken token)
+    {
+        var response = await _contentService.SearchBy(request.Search, token);
+
+        return Ok(new V1RequestGetSearchByResponse(
+            response.Select(x => new SearchContentUnit(x.ContentId, x.Title, x.ImageId)).ToArray())
+        );
+    }
 }

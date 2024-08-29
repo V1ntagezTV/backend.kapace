@@ -1,4 +1,5 @@
-﻿using backend.kapace.BLL.Enums;
+﻿using System.Drawing.Drawing2D;
+using backend.kapace.BLL.Enums;
 using backend.Models.Enums;
 
 namespace backend.kapace.BLL.Services.Interfaces;
@@ -33,15 +34,23 @@ public class HistoryUnit
         public DateTimeOffset? ReleasedAt { get; init; }
         public int? PlannedSeries { get; init; }
         public int? MinAge { get; init; }
-
     }
 
     public record JsonEpisodeChanges : JsonChanges
     {
         public long? ContentId { get; init; }
         public long? EpisodeId { get; init; }
-        public int? Number { get; init; }
+        public long? TranslatorId { get; init; }
+
+        // Episode fields
+        public int Number { get; init; }
         public string? Image { get; init; }
         public string? Title { get; init; }
+
+        // Translation fields
+        public TranslationType? TranslationType { get; init; }
+        public string? VideoScript { get; set; }
+        public Language? Language { get; init; }
+        public int? Quality { get; init; }
     }
 }

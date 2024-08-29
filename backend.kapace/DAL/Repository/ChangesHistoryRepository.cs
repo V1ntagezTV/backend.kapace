@@ -9,6 +9,8 @@ namespace backend.kapace.DAL.Repository;
 
 public class ChangesHistoryRepository : BaseKapaceRepository, IChangesHistoryRepository
 {
+    public static readonly TimeSpan ConnectionTimeout = TimeSpan.FromSeconds(5);
+
     public ChangesHistoryRepository(NpgsqlDataSource npgsqlDataSource) : base(npgsqlDataSource) { }
 
     public async Task ApproveAsync(long id, long userId, DateTimeOffset approvedAt, CancellationToken token)
@@ -31,7 +33,7 @@ public class ChangesHistoryRepository : BaseKapaceRepository, IChangesHistoryRep
         ChangesHistoryQuery query,
         CancellationToken token)
     {
-        var sql = "select * from changes_history where ";
+        var sql = "select * from changes_history where 1=1";
         var parameters = new DynamicParameters();
         var filters = new List<string>();
 
@@ -54,9 +56,27 @@ public class ChangesHistoryRepository : BaseKapaceRepository, IChangesHistoryRep
             filters.Add("target_id = ANY(@TargetIds)");
         }
 
+        if (query.CreatedByIds is { Length: > 0 })
+        {
+            parameters.Add("@CreatedByIds", query.CreatedByIds);
+            filters.Add("created_by = ANY(@CreatedByIds)");
+        }
+
         if (filters.Any())
         {
-            sql += string.Join(" AND ", filters);
+            sql += " AND " + string.Join(" AND ", filters);
+        }
+        
+        if (query.Limit > 0)
+        {
+            sql += " LIMIT @Limit ";
+            parameters.Add("@Limit", query.Limit);
+        }
+
+        if (query.Offset > 0)
+        {
+            sql += " OFFSET @Offset ";
+            parameters.Add("@Offset", query.Offset);
         }
 
         await using var connection = CreateConnection();

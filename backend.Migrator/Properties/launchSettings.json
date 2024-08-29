@@ -4,7 +4,7 @@
     "backend.Migrator": {
       "commandName": "Project",
       "environmentVariables": {
-        
+        "ASPNETCORE_ENVIRONMENT": "Local"
       }
     }
   }

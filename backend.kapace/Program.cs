@@ -31,11 +31,13 @@ services.AddScoped<ITranslatorsRepository, TranslatorsRepository>();
 services.AddScoped<IChangesHistoryService, ChangesHistoryService>();
 services.AddScoped<IEpisodeService, EpisodeService>();
 services.AddScoped<BaseRepository<StarsDataColumns>, StarsRepository>();
+services.AddScoped<ITranslatorService, TranslatorService>();
 
 var connection = config.GetSection("SqlConnection").Value ?? throw new ArgumentException();
+Console.WriteLine("CONNECTION:\n" + connection);
 var dataSource = new NpgsqlDataSourceBuilder(connection).MapComposites(connection).Build();
 
-backend.Migrator.Program.Main();
+//backend.Migrator.Program.Main();
 
 services.AddSingleton<NpgsqlDataSource>(_ => dataSource);
 services

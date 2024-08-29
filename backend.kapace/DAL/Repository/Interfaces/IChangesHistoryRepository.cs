@@ -1,4 +1,5 @@
 ﻿using backend.kapace.DAL.Models;
+using Npgsql;
 
 namespace backend.kapace.DAL.Repository.Interfaces;
 
@@ -8,4 +9,5 @@ public interface IChangesHistoryRepository
     Task<long> InsertAsync(HistoryUnit historyUnit, CancellationToken token);
     Task<IReadOnlyCollection<HistoryUnit>> QueryAsync(ChangesHistoryQuery query, CancellationToken token);
     Task UpdateTextAsync(long historyId, string text, CancellationToken token);
+    Task<NpgsqlTransaction> BeginTransaction(CancellationToken token);
 }

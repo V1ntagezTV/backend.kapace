@@ -36,18 +36,6 @@ public interface IContentService
     Task<long> InsertAsync(InsertContentModel model, CancellationToken token);
     
     Task UpdateAsync(UpdateContentModel newContent, CancellationToken token);
+    
+    Task<SearchContentUnit[]> SearchBy(string? search, CancellationToken token);
 }
-
-public record UpdateContentModel(
-    long ContentId,
-    long? ImageId, 
-    string? Title, 
-    string? EngTitle, 
-    string? OriginalTitle, 
-    string? Description, 
-    int? Country,
-    int? ContentType, 
-    int? Duration, 
-    DateTimeOffset? ReleasedAt,
-    int? PlannedSeries,
-    int? MinAge);

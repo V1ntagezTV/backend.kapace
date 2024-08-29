@@ -24,4 +24,5 @@ public interface IContentRepository
 
     Task UpdateAsync(ContentUpdateQuery model, CancellationToken token);
 
+    Task<IReadOnlyCollection<Content>> SearchByText(string? search, CancellationToken token);
 }

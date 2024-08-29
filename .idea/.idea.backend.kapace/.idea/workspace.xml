@@ -19,23 +19,48 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="e863d32b-f8af-451f-8084-8db13fa65ff5" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/backend.Migrator/appsettings.Local.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend.Migrator/appsettings.Production.json" afterDir="false" />
+    <list default="true" id="e863d32b-f8af-451f-8084-8db13fa65ff5" name="Changes" comment="fix running">
+      <change afterPath="$PROJECT_DIR$/backend.kapace/BLL/Exceptions/ChangesAlreadyApprovedException.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend.kapace/BLL/Models/ChangesHistoryQueryModel.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend.kapace/BLL/Models/HistoryListUnit.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend.kapace/BLL/Models/SearchContentUnit.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend.kapace/BLL/Models/UpdateContentModel.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend.kapace/Models/Requests/V1GetChangesRequest.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend.kapace/Models/Requests/V1RequestGetSearchByRequest.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend.kapace/Models/Response/V1RequestGetSearchByResponse.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.backend.kapace/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.backend.kapace/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Dockerfile" beforeDir="false" afterPath="$PROJECT_DIR$/Dockerfile" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/backend.Migrator/Properties/launchSettings.json" beforeDir="false" afterPath="$PROJECT_DIR$/backend.Migrator/Properties/launchSettings.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend.Migrator/appsettings.json" beforeDir="false" afterPath="$PROJECT_DIR$/backend.Migrator/appsettings.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend.Migrator/appsettings.Local.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend.Migrator/appsettings.Production.json" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/backend.Migrator/backend.Migrator.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/backend.Migrator/backend.Migrator.csproj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend.kapace/BLL/Services/ImageService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/backend.kapace/BLL/Services/ImageService.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend.kapace/BLL/Services/Interfaces/IImageService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/backend.kapace/BLL/Services/Interfaces/IImageService.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend.kapace/Controllers/ImagesController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/backend.kapace/Controllers/ImagesController.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend.Tests/ServiceTests/ChangesHistoryServiceTests.cs" beforeDir="false" afterPath="$PROJECT_DIR$/backend.Tests/ServiceTests/ChangesHistoryServiceTests.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend.kapace/BLL/Enums/Language.cs" beforeDir="false" afterPath="$PROJECT_DIR$/backend.kapace/BLL/Enums/Language.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend.kapace/BLL/Enums/TranslationType.cs" beforeDir="false" afterPath="$PROJECT_DIR$/backend.kapace/BLL/Enums/TranslationType.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend.kapace/BLL/Exceptions/EmptyRequiredPropertiesException.cs" beforeDir="false" afterPath="$PROJECT_DIR$/backend.kapace/BLL/Exceptions/EmptyRequiredPropertiesException.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend.kapace/BLL/Services/ChangesHistoryService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/backend.kapace/BLL/Services/ChangesHistoryService.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend.kapace/BLL/Services/ContentService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/backend.kapace/BLL/Services/ContentService.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend.kapace/BLL/Services/Interfaces/HistoryUnit.cs" beforeDir="false" afterPath="$PROJECT_DIR$/backend.kapace/BLL/Services/Interfaces/HistoryUnit.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend.kapace/BLL/Services/Interfaces/IChangesHistoryService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/backend.kapace/BLL/Services/Interfaces/IChangesHistoryService.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend.kapace/BLL/Services/Interfaces/IContentService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/backend.kapace/BLL/Services/Interfaces/IContentService.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend.kapace/Controllers/ChangesHistoryController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/backend.kapace/Controllers/ChangesHistoryController.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend.kapace/Controllers/ContentController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/backend.kapace/Controllers/ContentController.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend.kapace/Controllers/EpisodeController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/backend.kapace/Controllers/EpisodeController.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend.kapace/DAL/Models/ChangesHistoryQuery.cs" beforeDir="false" afterPath="$PROJECT_DIR$/backend.kapace/DAL/Models/ChangesHistoryQuery.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend.kapace/DAL/Models/QueryEpisode.cs" beforeDir="false" afterPath="$PROJECT_DIR$/backend.kapace/DAL/Models/QueryEpisode.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend.kapace/DAL/Repository/ChangesHistoryRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/backend.kapace/DAL/Repository/ChangesHistoryRepository.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend.kapace/DAL/Repository/ContentRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/backend.kapace/DAL/Repository/ContentRepository.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend.kapace/DAL/Repository/EpisodeRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/backend.kapace/DAL/Repository/EpisodeRepository.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend.kapace/DAL/Repository/Interfaces/IChangesHistoryRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/backend.kapace/DAL/Repository/Interfaces/IChangesHistoryRepository.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend.kapace/DAL/Repository/Interfaces/IContentRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/backend.kapace/DAL/Repository/Interfaces/IContentRepository.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend.kapace/DAL/Repository/Interfaces/IEpisodeRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/backend.kapace/DAL/Repository/Interfaces/IEpisodeRepository.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend.kapace/DAL/Repository/Interfaces/ITranslatorsRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/backend.kapace/DAL/Repository/Interfaces/ITranslatorsRepository.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend.kapace/DAL/Repository/TranslationRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/backend.kapace/DAL/Repository/TranslationRepository.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend.kapace/DAL/Repository/TranslatorsRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/backend.kapace/DAL/Repository/TranslatorsRepository.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend.kapace/Infrastructure/Database/BaseKapaceRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/backend.kapace/Infrastructure/Database/BaseKapaceRepository.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend.kapace/Models/Requests/Episode/V1EpisodeQueryRequest.cs" beforeDir="false" afterPath="$PROJECT_DIR$/backend.kapace/Models/Requests/Episode/V1EpisodeQueryRequest.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend.kapace/Models/Requests/V1CreateEpisodeHistoryRequest.cs" beforeDir="false" afterPath="$PROJECT_DIR$/backend.kapace/Models/Requests/V1CreateEpisodeHistoryRequest.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/backend.kapace/Program.cs" beforeDir="false" afterPath="$PROJECT_DIR$/backend.kapace/Program.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend.kapace/Properties/launchSettings.json" beforeDir="false" afterPath="$PROJECT_DIR$/backend.kapace/Properties/launchSettings.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/backend.kapace/appsettings.Local.json" beforeDir="false" afterPath="$PROJECT_DIR$/backend.kapace/appsettings.Local.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend.kapace/appsettings.Testing.json" beforeDir="false" afterPath="$PROJECT_DIR$/backend.kapace/appsettings.Testing.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend.kapace/appsettings.json" beforeDir="false" afterPath="$PROJECT_DIR$/backend.kapace/appsettings.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docker-compose.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/docker-compose.yaml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -54,6 +79,7 @@
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/44c0db71b152418abf938b97293d7c9118878/8c/e04def16/WebApplicationBuilder.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/44c0db71b152418abf938b97293d7c9118878/cb/74eff772/ConfigureHostBuilder.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/4c464a4bd3d54092a415b44fe574da3e7878/12/c350bd88/IServiceProvider.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/5f0c3cb16c8841e4af9e58ec3fa4ba42140000/6a/67b7a623/NpgsqlTransaction.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/7e62198beab24380bbac29171862d1d8adf10/8b/524d76d8/JsonConvert.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/a2747906576a46259d8a8aaa0318775f10c80/a6/564227f5/ImmutableHashSet`1.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/b616a04aee234f559f7397d94bd90dadf8a0/74/5ce75e9c/IHostBuilder.cs" root0="FORCE_HIGHLIGHTING" />
@@ -69,6 +95,7 @@
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/79fbf5ff554b611622a4207ff363d1c026ccac52f8ef8f6318a1cc5ab7e4/ObjectResult.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/7a9ad2597224d3d578188917875d83477882e03550c1d9153da781fae14e7bfc/Image.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/85448f861b1cb95910693f28a5ce3363967c79953b460b176d97298ae5ed0/Nullable.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/93d86075cc58e07d2afce083125d06d266cbabf93e4ec1d45c224d86a4a38e/DateTimeOffset.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/b1522679f4a20fb50968ccbf51269d3a82343b52b28883a59c419369126beea/DynamicParameters.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/bd1d5c50194fea68ff3559c160230b0ab50f5acf4ce3061bffd6d62958e2182/ExceptionDispatchInfo.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/bd55fb26296f9ba7a688ddc8a1b7add6c71c28f1f4f0e4e4e4fad8bccf518ea6/Single.cs" root0="SKIP_HIGHLIGHTING" />
@@ -88,6 +115,7 @@
   </component>
   <component name="PropertiesComponent">{
   &quot;keyToString&quot;: {
+    &quot;ASKED_ADD_EXTERNAL_FILES&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
     &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
@@ -99,7 +127,7 @@
     &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
     &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
     &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.lookFeel&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;reference.settings.ide.settings.new.ui&quot;,
     &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   },
   &quot;keyToStringList&quot;: {
@@ -210,8 +238,8 @@
     </list>
     <recent_temporary>
       <list>
-        <item itemvalue=".NET Static Method.backend.Migrator.Program.Main" />
         <item itemvalue=".NET Launch Settings Profile.backend.kapace" />
+        <item itemvalue=".NET Static Method.backend.Migrator.Program.Main" />
       </list>
     </recent_temporary>
   </component>
@@ -419,7 +447,34 @@
       <workItem from="1714263144288" duration="543000" />
       <workItem from="1714298451456" duration="3250000" />
       <workItem from="1714317032995" duration="4930000" />
-      <workItem from="1714490368547" duration="1928000" />
+      <workItem from="1714490368547" duration="7445000" />
+      <workItem from="1714569362512" duration="1189000" />
+      <workItem from="1714673640937" duration="3382000" />
+      <workItem from="1714782532307" duration="2752000" />
+      <workItem from="1719096934555" duration="11922000" />
+      <workItem from="1719254916229" duration="7070000" />
+      <workItem from="1719419225306" duration="4999000" />
+      <workItem from="1719432589738" duration="8701000" />
+      <workItem from="1719443891079" duration="3921000" />
+      <workItem from="1719521962329" duration="4944000" />
+      <workItem from="1719601166166" duration="4837000" />
+      <workItem from="1719699682603" duration="10286000" />
+      <workItem from="1719871294722" duration="1124000" />
+      <workItem from="1720045284740" duration="1902000" />
+      <workItem from="1720208353342" duration="2102000" />
+      <workItem from="1720371409675" duration="542000" />
+      <workItem from="1720897607989" duration="4775000" />
+      <workItem from="1720971098764" duration="1233000" />
+      <workItem from="1722639403038" duration="3022000" />
+      <workItem from="1722714939996" duration="4583000" />
+      <workItem from="1722773079539" duration="2901000" />
+      <workItem from="1722891506955" duration="1432000" />
+      <workItem from="1723064644471" duration="1410000" />
+      <workItem from="1723067762365" duration="3150000" />
+      <workItem from="1723411667337" duration="900000" />
+      <workItem from="1724422931662" duration="229000" />
+      <workItem from="1724423683309" duration="240000" />
+      <workItem from="1724953560974" duration="335000" />
     </task>
     <task id="LOCAL-00001" summary="add changes history, insert content and approve it">
       <created>1692487739565</created>
@@ -519,7 +574,14 @@
       <option name="project" value="LOCAL" />
       <updated>1713097863333</updated>
     </task>
-    <option name="localTasksCounter" value="15" />
+    <task id="LOCAL-00015" summary="update runs and delete system.drawing.common package using">
+      <created>1714501970377</created>
+      <option name="number" value="00015" />
+      <option name="presentableId" value="LOCAL-00015" />
+      <option name="project" value="LOCAL" />
+      <updated>1714501970377</updated>
+    </task>
+    <option name="localTasksCounter" value="16" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -569,7 +631,8 @@
     <MESSAGE value="add views and rating to episodes and queryByEpisodes" />
     <MESSAGE value="1. add episode query&#10;2. add episode-translation QueryContent.cs&#10;3. add episode create user info" />
     <MESSAGE value="fix created_at episode migration" />
-    <option name="LAST_COMMIT_MESSAGE" value="fix created_at episode migration" />
+    <MESSAGE value="update runs and delete system.drawing.common package using" />
+    <option name="LAST_COMMIT_MESSAGE" value="update runs and delete system.drawing.common package using" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -594,19 +657,6 @@
           <option name="timeStamp" value="15" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
-          <url>file://$PROJECT_DIR$/backend.kapace/Controllers/ChangesHistoryController.cs</url>
-          <line>23</line>
-          <properties documentPath="C:\Users\insur\RiderProjects\backend-kapace\backend.kapace\Controllers\ChangesHistoryController.cs" initialLine="22" containingFunctionPresentation="method 'V1CreateContentHistory'">
-            <startOffsets>
-              <option value="746" />
-            </startOffsets>
-            <endOffsets>
-              <option value="747" />
-            </endOffsets>
-          </properties>
-          <option name="timeStamp" value="19" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="DotNet Breakpoints">
           <url>file://$PROJECT_DIR$/backend.kapace/BLL/Services/ImageService.cs</url>
           <line>35</line>
           <properties documentPath="C:\Users\insur\RiderProjects\backend-kapace\backend.kapace\BLL\Services\ImageService.cs" initialLine="34" containingFunctionPresentation="method 'InsertImageAsync'">
@@ -618,19 +668,6 @@
             </endOffsets>
           </properties>
           <option name="timeStamp" value="22" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="DotNet Breakpoints">
-          <url>file://$PROJECT_DIR$/backend.kapace/DAL/Repository/ChangesHistoryRepository.cs</url>
-          <line>32</line>
-          <properties documentPath="C:\Users\insur\RiderProjects\backend-kapace\backend.kapace\DAL\Repository\ChangesHistoryRepository.cs" initialLine="32" containingFunctionPresentation="method 'QueryAsync'">
-            <startOffsets>
-              <option value="1162" />
-            </startOffsets>
-            <endOffsets>
-              <option value="1163" />
-            </endOffsets>
-          </properties>
-          <option name="timeStamp" value="24" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
           <url>file://$PROJECT_DIR$/backend.Migrator/Migrations/202304190010_CreateTranslationContentTable.cs</url>
@@ -646,30 +683,69 @@
           <option name="timeStamp" value="25" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
-          <url>file://$PROJECT_DIR$/backend.Migrator/Program.cs</url>
-          <line>11</line>
-          <properties documentPath="C:\Users\insur\RiderProjects\backend-kapace\backend.Migrator\Program.cs" initialLine="11" containingFunctionPresentation="method 'Main'">
+          <url>file://$PROJECT_DIR$/backend.kapace/Controllers/TranslationController.cs</url>
+          <line>55</line>
+          <properties documentPath="C:\Users\insur\RiderProjects\backend-kapace\backend.kapace\Controllers\TranslationController.cs" initialLine="55" containingFunctionPresentation="method 'GetByEpisodeAsync'">
             <startOffsets>
-              <option value="242" />
+              <option value="1974" />
             </startOffsets>
             <endOffsets>
-              <option value="281" />
+              <option value="1975" />
             </endOffsets>
           </properties>
-          <option name="timeStamp" value="26" />
+          <option name="timeStamp" value="28" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
           <url>file://$PROJECT_DIR$/backend.Migrator/Program.cs</url>
-          <line>14</line>
-          <properties documentPath="C:\Users\insur\RiderProjects\backend-kapace\backend.Migrator\Program.cs" initialLine="14" containingFunctionPresentation="lambda expression inside method 'Main'">
+          <line>13</line>
+          <properties documentPath="C:\Users\insur\RiderProjects\backend-kapace\backend.Migrator\Program.cs" initialLine="13" containingFunctionPresentation="lambda expression inside method 'Main'">
             <startOffsets>
-              <option value="362" />
+              <option value="348" />
             </startOffsets>
             <endOffsets>
-              <option value="539" />
+              <option value="349" />
             </endOffsets>
           </properties>
-          <option name="timeStamp" value="27" />
+          <option name="timeStamp" value="29" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/backend.kapace/BLL/Services/TranslationService.cs</url>
+          <line>37</line>
+          <properties documentPath="C:\Users\insur\RiderProjects\backend-kapace\backend.kapace\BLL\Services\TranslationService.cs" initialLine="37" containingFunctionPresentation="method 'GetByEpisodeAsync'">
+            <startOffsets>
+              <option value="1403" />
+            </startOffsets>
+            <endOffsets>
+              <option value="1695" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="30" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/backend.kapace/BLL/Services/ContentService.cs</url>
+          <line>297</line>
+          <properties documentPath="C:\Users\insur\RiderProjects\backend-kapace\backend.kapace\BLL\Services\ContentService.cs" initialLine="297" containingFunctionPresentation="method 'InsertAsync'">
+            <startOffsets>
+              <option value="11771" />
+            </startOffsets>
+            <endOffsets>
+              <option value="12731" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="32" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/backend.kapace/DAL/Repository/ContentRepository.cs</url>
+          <line>140</line>
+          <properties documentPath="C:\Users\insur\RiderProjects\backend-kapace\backend.kapace\DAL\Repository\ContentRepository.cs" initialLine="140" containingFunctionPresentation="method 'InsertAsync'">
+            <startOffsets>
+              <option value="4378" />
+            </startOffsets>
+            <endOffsets>
+              <option value="6083" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="33" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
