@@ -1,7 +1,9 @@
 ﻿namespace backend.kapace.Controllers;
 
-public record EpisodeQuery(
-    long[]? EpisodeIds, 
-    long[]? ContentIds,
-    int Limit,
-    int Offset);
+public class EpisodeQuery
+{
+    public long[]? EpisodeIds { get; init; }
+    public long[]? ContentIds { get; init; }
+    public int Limit { get; init; }
+    public int Offset { get; init; }
+};

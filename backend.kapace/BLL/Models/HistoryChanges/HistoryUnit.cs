@@ -1,8 +1,7 @@
-﻿using System.Drawing.Drawing2D;
-using backend.kapace.BLL.Enums;
+﻿using backend.kapace.BLL.Enums;
 using backend.Models.Enums;
 
-namespace backend.kapace.BLL.Services.Interfaces;
+namespace backend.kapace.BLL.Models.HistoryChanges;
 
 public class HistoryUnit
 {

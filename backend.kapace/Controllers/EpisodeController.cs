@@ -19,11 +19,13 @@ public class EpisodeController : Controller
     public async Task<ActionResult> Query(V1EpisodeQueryRequest request, CancellationToken token)
     {
         var result = await _episodeService.QueryAsync(
-            new EpisodeQuery(
-                request.EpisodeIds,
-                request.ContentIds,
-                request.Limit,
-                request.Offset),
+            new EpisodeQuery
+            {
+                EpisodeIds = request.EpisodeIds,
+                ContentIds = request.ContentIds,
+                Limit = request.Limit,
+                Offset = request.Offset
+            },
             token);
 
         return Ok(result

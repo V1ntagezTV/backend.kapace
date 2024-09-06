@@ -37,4 +37,5 @@ public class Content
     internal int MinAgeLimit { get; init; }
     
     internal int? Duration { get; init; }
+    internal string? Channel { get; init; }
 }

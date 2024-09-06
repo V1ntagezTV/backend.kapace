@@ -34,18 +34,18 @@ public class ContentController : Controller
             Id = x.Id,
             Title = x.Title,
             Description = x.Description,
-            Type = x.Type,
+            Type = x.ContentType,
             Status = x.Status,
             ImageId = x.ImageId,
             ImportStars = x.ImportStars,
             OutSeries = x.OutSeries,
             PlannedSeries = x.PlannedSeries,
             Views = x.Views,
-            Country = x.Country,
+            Country = (int)x.Country,
             ReleasedAt = x.ReleasedAt,
             CreatedAt = x.CreatedAt,
             LastUpdateAt = x.LastUpdateAt,
-            MinAgeLimit = x.MinAgeLimit,
+            MinAgeLimit = x.MinAge,
             Duration = x.Duration
         }).ToArray()));
     }

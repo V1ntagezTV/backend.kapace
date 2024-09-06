@@ -23,6 +23,7 @@ public record GetByQueryResult
     public DateTimeOffset LastUpdateAt { get; init; }
     public int MinAgeLimit { get; init; }
     public int? Duration { get; init; }
+    public string? Channel { get; init; }
 
     public GetByQueryTranslation[] Translations { get; init; } = Array.Empty<GetByQueryTranslation>();
     public GetByQueryEpisode[] Episodes { get; init; } = Array.Empty<GetByQueryEpisode>();

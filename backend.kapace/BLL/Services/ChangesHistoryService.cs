@@ -1,13 +1,16 @@
-﻿using System.Runtime.CompilerServices;
-using backend.kapace.BLL.Enums;
+﻿using backend.kapace.BLL.Enums;
 using backend.kapace.BLL.Exceptions;
+using backend.kapace.BLL.Extensions;
+using backend.kapace.BLL.Mapper.ChangesHistory;
 using backend.kapace.BLL.Models;
 using backend.kapace.BLL.Services.Interfaces;
+using backend.kapace.Controllers;
 using backend.kapace.DAL.Models;
 using backend.kapace.DAL.Repository.Interfaces;
 using Newtonsoft.Json;
 using static backend.kapace.BLL.Exceptions.ChangesHistoryService;
-using HistoryUnit = backend.kapace.BLL.Services.Interfaces.HistoryUnit;
+using Content = backend.kapace.BLL.Models.VideoService.Content;
+using HistoryUnit = backend.kapace.BLL.Models.HistoryChanges.HistoryUnit;
 
 namespace backend.kapace.BLL.Services;
 
@@ -19,23 +22,23 @@ public class ChangesHistoryService : IChangesHistoryService
     };
 
     private readonly IContentService _contentService;
-    private readonly IContentRepository _contentRepository;
     private readonly IChangesHistoryRepository _changesHistoryRepository;
     private readonly IEpisodeRepository _episodeRepository;
+    private readonly IEpisodeService _episodeService;
     private readonly ITranslationRepository _translationRepository;
 
     public ChangesHistoryService(
         ITranslationRepository translationRepository,
-        IContentRepository contentRepository,
         IContentService contentService,
         IChangesHistoryRepository changesHistoryRepository,
-        IEpisodeRepository episodeRepository)
+        IEpisodeRepository episodeRepository,
+        IEpisodeService episodeService)
     {
         _translationRepository = translationRepository;
-        _contentRepository = contentRepository;
         _contentService = contentService;
         _changesHistoryRepository = changesHistoryRepository;
         _episodeRepository = episodeRepository;
+        _episodeService = episodeService;
     }
 
     public async Task ApproveAsync(long historyId, long userId, CancellationToken token)
@@ -84,15 +87,19 @@ public class ChangesHistoryService : IChangesHistoryService
         var episodeId = changes.EpisodeId;
         if (changes.EpisodeId is null)
         {
-            var episodeQuery = new QueryEpisode() { 
-                Numbers = new long[] { changes.Number},
+            var episodeQuery = new QueryEpisode()
+            {
+                Numbers = new long[] { changes.Number },
                 ContentIds = new long[] { changes.ContentId.Value },
             };
 
             var episodes = await _episodeRepository.QueryAsync(episodeQuery, token);
-            if (episodes.Any()) {
+            if (episodes.Any())
+            {
                 episodeId = episodes.Single().Id;
-            } else {
+            }
+            else
+            {
                 episodeId = await _episodeRepository.InsertAsync(
                     Episode.CreateInsertModel(
                         changes.ContentId.Value,
@@ -105,15 +112,18 @@ public class ChangesHistoryService : IChangesHistoryService
         }
         else
         {
-            var episodeQuery = new QueryEpisode() { 
+            var episodeQuery = new QueryEpisode()
+            {
                 EpisodeIds = new long[] { changes.EpisodeId.Value },
                 ContentIds = new long[] { changes.ContentId.Value },
             };
 
             var episodes = await _episodeRepository.QueryAsync(episodeQuery, token);
-            if (!episodes.Any()) {
+            if (!episodes.Any())
+            {
                 throw new EpisodeNotFoundException(changes.EpisodeId.Value);
             }
+
             var episode = episodes.Single();
 
             var updateEpisode = new Episode()
@@ -221,112 +231,38 @@ public class ChangesHistoryService : IChangesHistoryService
             Offset = query.Offset,
         }, token);
 
-        return changes.Select(x =>
+        return changes.Select(historyUnit =>
         {
-            HistoryUnit.JsonChanges change;
-            if (x.HistoryType == HistoryType.Content)
-            {
-                change = JsonConvert.DeserializeObject<HistoryUnit.JsonContentChanges>(x.Text) ??
-                          new HistoryUnit.JsonChanges();
-            }
-            else
-            {
-                change = JsonConvert.DeserializeObject<HistoryUnit.JsonEpisodeChanges>(x.Text) ??
-                          new HistoryUnit.JsonChanges();
-            }
+            var changesModel = historyUnit.DeserializeToJsonChanges();
 
             return new HistoryUnit
             {
-                Id = x.Id,
-                TargetId = x.TargetId,
-                HistoryType = x.HistoryType,
-                Changes = change,
-                CreatedBy = x.CreatedBy,
-                CreatedAt = x.CreatedAt,
-                ApprovedBy = x.ApprovedBy,
-                ApprovedAt = x.ApprovedAt
+                Id = historyUnit.Id,
+                TargetId = historyUnit.TargetId,
+                HistoryType = historyUnit.HistoryType,
+                Changes = changesModel,
+                CreatedBy = historyUnit.CreatedBy,
+                CreatedAt = historyUnit.CreatedAt,
+                ApprovedBy = historyUnit.ApprovedBy,
+                ApprovedAt = historyUnit.ApprovedAt
             };
         }).ToArray();
     }
 
-    public async Task<HistoryListUnit[]> GetList(ChangesHistoryQueryModel query, CancellationToken token)
+    public async Task<IReadOnlyCollection<HistoryChangesComparisons>> GetChangesComparisons(
+        ChangesHistoryQueryModel query,
+        CancellationToken token)
     {
-        var changes = await _changesHistoryRepository.QueryAsync(new ChangesHistoryQuery
+        var changes = await QueryAsync(query, token);
+        var episodesMap = await GetEpisodesMap(changes, token);
+        var contentsMap = await GetContentMap(changes, token);
+
+        return changes.Select(unit => unit.HistoryType switch
         {
-            Ids = query.Ids,
-            TargetIds = query.TargetIds,
-            HistoryTypes = query.HistoryTypes,
-            CreatedByIds = query.CreatedByIds,
-            Limit = query.Limit,
-            Offset = query.Offset,
-        }, token);
-
-        var episodeIds = changes
-            .Where(x => x is { HistoryType: HistoryType.Episode, TargetId: > 0 })
-            .Select(x => x.TargetId!.Value)
-            .ToArray();
-        var episodes = Array.Empty<Episode>();
-        if (episodeIds.Any())
-        {
-            episodes = await _episodeRepository.QueryAsync(new QueryEpisode()
-            {
-                EpisodeIds = episodeIds,
-            }, token);
-        }
-
-        var contentIds = changes
-            .Where(x => x.HistoryType == HistoryType.Content && x.TargetId != 0)
-            .Select(x => x.TargetId!.Value)
-            .ToArray();
-        var contents = Array.Empty<Content>();
-        if (contentIds.Any())
-        {
-            contents = await _contentRepository.QueryAsync(new QueryContent()
-            {
-                Ids = contentIds
-            }, token);
-        }
-
-        return changes
-            .Select(x =>
-            {
-                string? title;
-                if (x.HistoryType is HistoryType.Episode && x.TargetId > 0)
-                {
-                    title = episodes.FirstOrDefault(e => e.Id == x.TargetId.Value)?.Title;
-                }
-                else if (x.HistoryType is HistoryType.Content && x.TargetId > 0)
-                {
-                    title = episodes.FirstOrDefault(e => e.Id == x.TargetId.Value)?.Title;
-                }
-                else
-                {
-                    if (x.HistoryType == HistoryType.Content)
-                    {
-                        var changes = JsonConvert.DeserializeObject<HistoryUnit.JsonContentChanges>(x.Text) ??
-                                      new HistoryUnit.JsonContentChanges();
-                        title = changes.Title;
-                    }
-                    else
-                    {
-                        var changes = JsonConvert.DeserializeObject<HistoryUnit.JsonEpisodeChanges>(x.Text) ??
-                                      new HistoryUnit.JsonEpisodeChanges();
-                        title = changes.Title;
-                    }
-                }
-
-                return new HistoryListUnit(
-                    x.Id,
-                    x.TargetId,
-                    title,
-                    x.HistoryType,
-                    x.Text,
-                    x.CreatedBy,
-                    x.CreatedAt,
-                    x.ApprovedBy,
-                    x.ApprovedAt);
-            })
-            .ToArray();
+            HistoryType.Content => unit.MapContentUnitToChangesComparison(contentsMap),
+            HistoryType.Episode => unit.MapEpisodeUnitToChangesComparison(episodesMap),
+            _ => throw new ArgumentOutOfRangeException(nameof(unit.HistoryType))
+        }).ToArray();
     }
 
     public async Task<long> InsertChangesAsync(HistoryUnit historyUnit, CancellationToken token)
@@ -372,4 +308,45 @@ public class ChangesHistoryService : IChangesHistoryService
         var jsonContentChanges = JsonConvert.SerializeObject(changes, JsonSerializerSettings);
         await _changesHistoryRepository.UpdateTextAsync(historyId, jsonContentChanges, token);
     }
+
+    private async Task<Dictionary<long, Content>> GetContentMap(HistoryUnit[] changes, CancellationToken token)
+    {
+        var contentIds = changes
+            .Where(unit => unit is { TargetId: > 0 })
+            .Select(unit => unit.TargetId!.Value)
+            .ToArray();
+
+        var contents = Array.Empty<Content>();
+        if (contentIds.Any())
+        {
+            contents = await _contentService.QueryAsync(new ContentQuery()
+            {
+                Ids = contentIds
+            }, token);
+        }
+
+        return contents.ToDictionary(unit => unit.Id);
+    }
+
+    private async Task<Dictionary<long, Models.Episode.Episode>> GetEpisodesMap(
+        HistoryUnit[] historyUnits, 
+        CancellationToken token)
+    {
+        var episodeIds = historyUnits
+            .Where(x => x is { TargetId: > 0, HistoryType: HistoryType.Episode })
+            .Select(x => x.TargetId!.Value)
+            .ToArray();
+    
+        var episodes = Array.Empty<Models.Episode.Episode>();
+        if (episodeIds.Any())
+        {
+            episodes = await _episodeService.QueryAsync(new EpisodeQuery()
+            {
+                EpisodeIds = episodeIds,
+            }, token);
+        }
+
+        return episodes.ToDictionary(x => x.Id);
+    }
 }
+

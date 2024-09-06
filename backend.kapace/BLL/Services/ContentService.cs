@@ -42,7 +42,7 @@ public class ContentService : IContentService
         };
 
         var contents = await _contentRepository.QueryAsync(dalQuery, token);
-        return contents.Select(Content.ToBLLContent).ToArray();
+        return contents.Select(Content.ToBllContent).ToArray();
     }
 
     public async Task<IReadOnlyDictionary<MainPageType, Content[]>> GetOrderByMapsAsync(
@@ -87,7 +87,7 @@ public class ContentService : IContentService
             content.Id,
             content.Title,
             content.Description,
-            content.Type,
+            content.ContentType,
             content.Status,
             content.ImageId,
             content.ImportStars,
@@ -98,7 +98,7 @@ public class ContentService : IContentService
             content.ReleasedAt,
             content.CreatedAt,
             content.LastUpdateAt,
-            content.MinAgeLimit,
+            content.MinAge,
             content.Duration,
             episodes
                 .Select(x => new FullContent.FullContentEpisode(x.Id, x.Title, x.Image, x.Number))
@@ -129,7 +129,7 @@ public class ContentService : IContentService
             _ => Array.Empty<DAL.Models.Content>()
         };
 
-        return content.Select(Content.ToBLLContent).ToArray();
+        return content.Select(Content.ToBllContent).ToArray();
     }
 
     public async Task<IReadOnlyCollection<GetByQueryResult>> GetByQueryAsync(
@@ -273,6 +273,7 @@ public class ContentService : IContentService
             LastUpdateAt = x.LastUpdateAt,
             MinAgeLimit = x.MinAgeLimit,
             Duration = x.Duration,
+            Channel = x.Channel,
             Genres = genresMapByContentId.TryGetValue(x.Id, out var genres)
                 ? genres
                 : Array.Empty<GetByQueryResult.GetByQueryGenre>(),

@@ -8,6 +8,7 @@ public class ChangesHistoryQuery
     public long[] TargetIds { get; init; }
     public HistoryType[] HistoryTypes { get; init; }
     public long[] CreatedByIds { get; init; }
+    public bool? Approved { get; init; }
     public int Limit { get; init; }
     public int Offset { get; init; }
 }

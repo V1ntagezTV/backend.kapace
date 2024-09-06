@@ -43,6 +43,13 @@ public class ChangesHistoryRepository : BaseKapaceRepository, IChangesHistoryRep
             filters.Add("id = Any(@Ids)");
         }
 
+        if (query.Approved.HasValue)
+        {
+            filters.Add(query.Approved is false
+                ? "approved_by is null and approved_at is null"
+                : "approved_by is not null and approved_at is not null");
+        }
+
         if (query.HistoryTypes is {Length: > 0})
         {
             var values = query.HistoryTypes.Cast<int>().ToArray();
@@ -52,7 +59,7 @@ public class ChangesHistoryRepository : BaseKapaceRepository, IChangesHistoryRep
 
         if (query.TargetIds is {Length: > 0})
         {
-            parameters.Add("@TargetIds", query.HistoryTypes);
+            parameters.Add("@TargetIds", query.TargetIds);
             filters.Add("target_id = ANY(@TargetIds)");
         }
 

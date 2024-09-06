@@ -3,7 +3,7 @@ using backend.kapace.BLL.Models;
 using backend.kapace.DAL.Models;
 using backend.Models.Enums;
 using Bogus;
-using HistoryUnit = backend.kapace.BLL.Services.Interfaces.HistoryUnit;
+using HistoryUnit = backend.kapace.BLL.Models.HistoryChanges.HistoryUnit;
 
 namespace backend.Tests.Helpers;
 

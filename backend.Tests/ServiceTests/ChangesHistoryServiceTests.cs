@@ -1,5 +1,6 @@
 using backend.kapace.BLL.Enums;
 using backend.kapace.BLL.Models;
+using backend.kapace.BLL.Models.HistoryChanges;
 using backend.kapace.BLL.Services.Interfaces;
 using backend.Tests.Fixtures;
 using backend.Tests.Helpers;

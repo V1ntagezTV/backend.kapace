@@ -7,7 +7,6 @@ namespace backend.kapace.BLL.Services.Interfaces;
 
 public interface IContentService
 {
-    [Obsolete("Используйте GetByQueryAsync")]
     Task<Content[]> QueryAsync(ContentQuery query, CancellationToken token);
 
     Task<IReadOnlyDictionary<MainPageType, Content[]>> GetOrderByMapsAsync(

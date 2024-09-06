@@ -4,7 +4,7 @@ using backend.kapace.BLL.Services.Interfaces;
 using backend.kapace.Models.Requests;
 using backend.kapace.Models.Response;
 using Microsoft.AspNetCore.Mvc;
-using HistoryUnit = backend.kapace.BLL.Services.Interfaces.HistoryUnit;
+using HistoryUnit = backend.kapace.BLL.Models.HistoryChanges.HistoryUnit;
 
 namespace backend.kapace.Controllers;
 
@@ -63,21 +63,19 @@ public class ChangesHistoryController : Controller
         {
             TargetId = historyRequest.ContentId,
             HistoryType = HistoryType.Episode,
-            Changes = historyRequest.ChangeableFields is not null 
-                ? new HistoryUnit.JsonEpisodeChanges()
-                    {
-                        ContentId = historyRequest.ContentId,
-                        EpisodeId = historyRequest.ChangeableFields.EpisodeId,
-                        TranslatorId = historyRequest.ChangeableFields.TranslatorId,
-                        Number = historyRequest.ChangeableFields.Number,
-                        Title = historyRequest.ChangeableFields.Title,
-                        Image = historyRequest.ChangeableFields.Image,
-                        VideoScript = historyRequest.ChangeableFields.VideoScript,
-                        TranslationType = historyRequest.ChangeableFields.TranslationType,
-                        Language = historyRequest.ChangeableFields.Language,
-                        Quality = historyRequest.ChangeableFields.Quality,
-                    }
-                : new HistoryUnit.JsonEpisodeChanges(),
+            Changes = new HistoryUnit.JsonEpisodeChanges()
+            {
+                ContentId = historyRequest.ContentId,
+                EpisodeId = historyRequest.ChangeableFields.EpisodeId,
+                TranslatorId = historyRequest.ChangeableFields.TranslatorId,
+                Number = historyRequest.ChangeableFields.Number,
+                Title = historyRequest.ChangeableFields.Title,
+                Image = historyRequest.ChangeableFields.Image,
+                VideoScript = historyRequest.ChangeableFields.VideoScript,
+                TranslationType = historyRequest.ChangeableFields.TranslationType,
+                Language = historyRequest.ChangeableFields.Language,
+                Quality = historyRequest.ChangeableFields.Quality,
+            },
             CreatedBy = historyRequest.CreatedBy,
             CreatedAt = DateTimeOffset.Now,
             ApprovedBy = null,
@@ -95,8 +93,8 @@ public class ChangesHistoryController : Controller
         await _changesHistoryService.ApproveAsync(request.HistoryId, request.UserId, token);
     }
 
-    [HttpPost("get-list")]
-    public async Task<ActionResult> V1GetChanges(V1GetChangesRequest request, CancellationToken token)
+    [HttpPost("get-changes-comparisons")]
+    public async Task<ActionResult> V1GetChangesComparisons(V1GetChangesRequest request, CancellationToken token)
     {
         var query = new ChangesHistoryQueryModel
         {
@@ -104,28 +102,32 @@ public class ChangesHistoryController : Controller
             TargetIds = request.TargetIds,
             CreatedByIds = request.CreatedByIds,
             HistoryTypes = request.HistoryTypes,
+            Approved = request.Approved,
             Limit = request.Limit,
             Offset = request.Offset
         };
 
-        var result = await _changesHistoryService.GetList(query, token);
+        var result = await _changesHistoryService.GetChangesComparisons(query, token);
 
         return Ok(new
         {
-            Changes = result
-                .Select(x => new
+            Changes = result.Select(unit => new
+            {
+                HistoryId = unit.HistoryId,
+                TargetId = unit.TargetId,
+                Title = unit.Title,
+                HistoryType = unit.HistoryType,
+                FieldsComparisons = unit.FieldsComparisons.Select(field => new
                 {
-                    HistoryId = x.HistoryId,
-                    TargetId = x.TargetId,
-                    Title = x.Title,
-                    HistoryType = x.HistoryType,
-                    Text = x.Text,
-                    CreatedBy = x.CreatedBy,
-                    CreatedAt = x.CreatedAt,
-                    ApprovedBy = x.ApprovedBy,
-                    ApprovedAt = x.ApprovedAt,
-                })
-                .ToArray()
+                    Name = field.Key,
+                    OldValue = field.Value.oldValue,
+                    NewValue = field.Value.newValue
+                }).ToArray(),
+                CreatedBy = unit.CreatedBy,
+                CreatedAt = unit.CreatedAt,
+                ApprovedBy = unit.ApprovedBy,
+                ApprovedAt = unit.ApprovedAt,
+            }).ToArray()
         });
     }
 }
