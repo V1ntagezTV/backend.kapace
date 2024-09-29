@@ -11,6 +11,7 @@ internal sealed class ExperimentalQueryBuilder
     private readonly string _initSql;
     private readonly DynamicParameters _dynamicParameters = new();
     private readonly List<string> _whereSqlFilters = new();
+    private string[] _orderByColumns = Array.Empty<string>();
     private int _limit = 0;
     private int _offset = 0;
 
@@ -26,6 +27,11 @@ internal sealed class ExperimentalQueryBuilder
         if (_whereSqlFilters.Any())
         {
             sql = _initSql + $" AND {string.Join(" AND ", _whereSqlFilters)}";
+        }
+
+        if (_orderByColumns.Any())
+        {
+            sql += $" ORDER BY {string.Join(", ", _orderByColumns)} ";
         }
         
         if (_limit > 0)
@@ -71,6 +77,13 @@ internal sealed class ExperimentalQueryBuilder
         _limit = limit;
         _offset = offset;
         
+        return this;
+    }
+
+    public ExperimentalQueryBuilder OrderBy(params string[] columns)
+    {
+        _orderByColumns = columns;
+
         return this;
     }
 

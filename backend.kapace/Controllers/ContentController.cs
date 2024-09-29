@@ -18,6 +18,14 @@ public class ContentController : Controller
         _contentService = contentService;
     }
 
+    [HttpPost("increment-views")]
+    public async Task<ActionResult> V1IncrementViews(V1IncrementViewsRequest request, CancellationToken token)
+    {
+        await _contentService.IncrementViews(request.ContentId, token);
+
+        return Ok();
+    }
+
     [Obsolete("Используйте get-by-query")]
     [HttpPost("query")]
     public async Task<ActionResult<V1QueryResponse>> V1QueryAsync(V1QueryRequest request, CancellationToken token)
@@ -29,25 +37,11 @@ public class ContentController : Controller
             Offset = request.QueryPaging.Offset,
         }, token);
 
-        return new OkObjectResult(new V1QueryResponse(response.Select(x => new V1QueryResponse.Content
-        {
-            Id = x.Id,
-            Title = x.Title,
-            Description = x.Description,
-            Type = x.ContentType,
-            Status = x.Status,
-            ImageId = x.ImageId,
-            ImportStars = x.ImportStars,
-            OutSeries = x.OutSeries,
-            PlannedSeries = x.PlannedSeries,
-            Views = x.Views,
-            Country = (int)x.Country,
-            ReleasedAt = x.ReleasedAt,
-            CreatedAt = x.CreatedAt,
-            LastUpdateAt = x.LastUpdateAt,
-            MinAgeLimit = x.MinAge,
-            Duration = x.Duration
-        }).ToArray()));
+        var content = response
+            .Select(content => (QueryContent)content)
+            .ToArray();
+
+        return Ok(new V1QueryResponse(content));
     }
 
     [HttpPost("get-main-page-content")]
@@ -55,66 +49,41 @@ public class ContentController : Controller
         V1GetMainPageContentRequest request, 
         CancellationToken token)
     {
-        var response = await _contentService.GetOrderByMapsAsync(
+        var contents = await _contentService.GetOrderByMapsAsync(
             request.MainPageTypes,
             new QueryPaging(request.Limit, request.Offset),
             token);
 
-        return new OkObjectResult(
-            new V1GetMainPageContentResponse(
-                response.Select(x => new V1GetMainPageContentResponse.V1GetMainPagePair
-                {
-                    MainPageType = x.Key,
-                    Content = x.Value.Select(x =>
-                        new V1GetMainPageContentResponse.V1GetMainPageContent
-                        {
-                            Id = x.Id,
-                            Title = x.Title,
-                            ImageId = x.ImageId,
-                            Views = x.Views,
-                            ImportStars = x.ImportStars,
-                            SeriesOut = x.OutSeries,
-                            SeriesPlanned = x.PlannedSeries
-                        }).ToArray()
-                }).ToArray())
-            );
+        var response = new V1GetMainPageContentResponse(
+            contents
+                .Select(pair => new V1GetMainPageContentResponse.V1GetMainPagePair(
+                    pair.Key,
+                    QueryContent.MapArray(pair.Value).ToArray()))
+                .ToArray());
+        
+        return Ok(response);
     }
 
     [HttpPost("get-by-id")]
-    public async Task<ActionResult<V1GetFullContentResponse>> V1GetFullContentAsync(
+    public async Task<ActionResult<V1GetByIdResponse>> V1GetFullContentAsync(
         V1GetFullContentRequest request,
         CancellationToken token)
     {
-        var content = await _contentService.GetFullAsync(
+        var data = await _contentService.GetFullAsync(
             request.ContentId,
             request.UserId,
             request.SelectedInfo,
             token);
 
-        return new OkObjectResult(new V1GetFullContentResponse(
-            content.ContentId,
-            content.Title,
-            content.Description,
-            content.Type,
-            content.Status,
-            content.ImageId,
-            content.ImportStars,
-            content.OutSeries,
-            content.PlannedSeries,
-            content.Views,
-            content.Country,
-            content.ReleasedAt,
-            content.CreatedAt,
-            content.LastUpdateAt,
-            content.MinAgeLimit,
-            content.Duration,
-            content.Episodes
-                .Select(x => new V1GetFullContentResponse.V1GetFullContentEpisode(x.Id, x.Title, x.Image, x.Number))
-                .ToArray(),
-            content.Genres
-                .Select(x => new V1GetFullContentResponse.V1GetFullContentGenre(x.GenreId, x.Name))
-                .ToArray(),
-            null));
+        var episodes = data.Episodes
+            .Select(x => new V1GetByIdResponse.V1GetFullContentEpisode(x.Id, x.Title, x.Image, x.Number))
+            .ToArray();
+
+        var genres = data.Genres
+            .Select(x => new V1GetByIdResponse.V1GetFullContentGenre(x.GenreId, x.Name))
+            .ToArray();
+
+        return Ok(new V1GetByIdResponse((QueryContent)data.Content, episodes, genres, null));
     }
 
     [HttpPost("get-by-query")]
@@ -133,30 +102,12 @@ public class ContentController : Controller
             request.QueryPaging, 
             request.SelectedInfo,
             token);
-    
-        return new OkObjectResult(new V1GetByQueryResponse()
+
+        return Ok(new V1GetByQueryResponse
         {
-            Content = contents.Select(x => new V1GetByQueryResponse.V1GetByQueryContent
+            Content = contents.Select(response =>
             {
-                Id = x.Id,
-                Title = x.Title,
-                EngTitle = x.EngTitle,
-                OriginTitle = x.OriginTitle,
-                Description = x.Description,
-                Type = x.Type,
-                Status = x.Status,
-                ImageId = x.ImageId,
-                ImportStars = x.ImportStars,
-                OutSeries = x.OutSeries,
-                PlannedSeries = x.PlannedSeries,
-                Views = x.Views,
-                Country = x.Country,
-                ReleasedAt = x.ReleasedAt,
-                CreatedAt = x.CreatedAt,
-                LastUpdateAt = x.LastUpdateAt,
-                MinAgeLimit = x.MinAgeLimit,
-                Duration = x.Duration,
-                Translations = x.Translations.Select(x => new V1GetByQueryResponse.V1GetByQueryTranslation
+                var translactions = response.Translations.Select(x => new V1GetByQueryResponse.V1GetByQueryTranslation
                 {
                     Id = x.Id,
                     EpisodeId = x.EpisodeId,
@@ -169,23 +120,31 @@ public class ContentController : Controller
                     TranslatorId = x.TranslatorId,
                     TranslatorName = x.TranslatorName,
                     TranslatorLink = x.TranslatorLink,
-                }).ToArray(),
-                Episodes = x.Episodes.Select(x => new V1GetByQueryResponse.V1GetByQueryEpisode
+                }).ToArray();
+
+                var episodes = response.Episodes.Select(x => new V1GetByQueryResponse.V1GetByQueryEpisode
                 {
                     Id = x.Id,
                     ContentId = x.ContentId,
                     Title = x.Title,
                     Image = x.Image,
                     Number = x.Number
-                }).ToArray(),
-                Genres = x.Genres.Select(x => new V1GetByQueryResponse.V1GetByQueryGenre
+                }).ToArray();
+
+                var genres = response.Genres.Select(x => new V1GetByQueryResponse.V1GetByQueryGenre
                 {
                     ContentId = x.ContentId,
                     GenreId = x.GenreId,
                     Name = x.Name,
                     CreatedAt = x.CreatedAt,
                     CreatedBy = x.CreatedBy
-                }).ToArray(),
+                }).ToArray();
+
+                return new V1GetByQueryResponse.V1GetByQueryContent(
+                    Content: (QueryContent)response,
+                    Translations: translactions,
+                    Episodes: episodes,
+                    Genres: genres);
             }).ToArray()
         });
     }

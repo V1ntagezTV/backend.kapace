@@ -12,48 +12,35 @@ namespace backend.kapace.DAL.Repository;
 public class TranslationRepository : BaseKapaceRepository, ITranslationRepository
 {
     public TranslationRepository(NpgsqlDataSource npgsqlDataSource) : base(npgsqlDataSource) { }
-
-    public async Task<IReadOnlyCollection<Translation>> QueryAsync(
+    
+    
+    public async Task<IReadOnlyCollection<BaseTranslation>> QueryAsync(
         long[]? contentIds,
         long[]? episodeIds,
         long[]? translationIds,
         CancellationToken token)
     {
-        var initSql = @"
-        SELECT
-            ct.*,
-            t.name as translator_name, t.link as translator_link,
-            e.title as episode_title, e.number, e.views as episode_views, e.stars as episode_stars
-            FROM episode e
-                JOIN content_translation ct on ct.episode_id = e.id
-                LEFT JOIN translator t on ct.translator_id = t.id
-            WHERE 1 = 1";
+        const string initSql = """
+            SELECT 
+                ct.id as translation_id,
+                ct.*, 
+                t.id as translator_id,
+                t.name as translator_name,
+                t.link as translator_link 
+            FROM content_translation ct 
+            LEFT JOIN translator t on t.id = ct.translator_id 
+            WHERE 1 = 1 
+        """;
 
-        var parameters = new DynamicParameters();
-        var whereFilters = new List<string>();
-        
-        if (episodeIds?.Any() is true)
-        {
-            parameters.Add($"@EpisodeIds", episodeIds);
-            whereFilters.Add("e.id = ANY(@EpisodeIds)");
-        }
+        var command = new ExperimentalQueryBuilder(initSql)
+            .WhereAny("ct.content_id", contentIds)
+            .WhereAny("ct.episode_id", episodeIds)
+            .WhereAny("ct.translator_id", translationIds)
+            .Build(token);
 
-        if (translationIds?.Any() is true) 
-        {
-            parameters.Add($"@Translator_ids", translationIds);
-            whereFilters.Add("ct.translator_id = ANY(@Translator_ids)");
-        }
-
-        if (contentIds?.Any() is true)
-        {
-            parameters.Add($"@ContentIds", contentIds);
-            whereFilters.Add("e.content_id = ANY(@ContentIds)");
-        }
-
-        initSql += $" AND {string.Join(" AND ", whereFilters)} ORDER BY e.number;";
         await using var connection = CreateConnection();
-        var command = new CommandDefinition(initSql, parameters, cancellationToken: token);
-        var result = await connection.QueryAsync<Translation>(command);
+        var result = await connection.QueryAsync<BaseTranslation>(command);
+        
         return result.ToArray();
     }
 

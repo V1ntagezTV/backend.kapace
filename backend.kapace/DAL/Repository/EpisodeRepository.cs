@@ -68,4 +68,16 @@ public class EpisodeRepository : BaseKapaceRepository, IEpisodeRepository
         var command = new CommandDefinition(initSql, parameters, cancellationToken: token);
         await connection.QueryAsync(command);
     }
+
+    public async Task IncrementViews(long episodeId, CancellationToken token)
+    {
+        const string initSql = "UPDATE episode SET views = views + 1 WHERE 1=1";
+
+        var command = new ExperimentalQueryBuilder(initSql)
+            .Where("id", episodeId)
+            .Build(token);
+        
+        await using var connection = CreateConnection();
+        await connection.QueryAsync(command);
+    }
 }

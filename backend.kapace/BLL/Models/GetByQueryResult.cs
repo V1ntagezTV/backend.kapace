@@ -10,8 +10,8 @@ public record GetByQueryResult
     public string EngTitle { get; init; }
     public string OriginTitle { get; init; }
     public string Description { get; init; }
-    public ContentType Type { get; init; }
-    public ContentStatus Status { get; init; }
+    public ContentType ContentType { get; init; }
+    public ContentStatus? Status { get; init; }
     public long ImageId { get; init; }
     public decimal ImportStars { get; init; }
     public int OutSeries { get; init; }
@@ -21,7 +21,7 @@ public record GetByQueryResult
     public DateTimeOffset? ReleasedAt { get; init; }
     public DateTimeOffset CreatedAt { get; init; }
     public DateTimeOffset LastUpdateAt { get; init; }
-    public int MinAgeLimit { get; init; }
+    public int MinAge { get; init; }
     public int? Duration { get; init; }
     public string? Channel { get; init; }
 

@@ -37,4 +37,6 @@ public interface IContentService
     Task UpdateAsync(UpdateContentModel newContent, CancellationToken token);
     
     Task<SearchContentUnit[]> SearchBy(string? search, CancellationToken token);
+    
+    Task IncrementViews(long contentId, CancellationToken token);
 }

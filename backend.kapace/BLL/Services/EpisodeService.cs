@@ -1,4 +1,5 @@
-﻿using backend.kapace.BLL.Services.Interfaces;
+﻿using backend.kapace.BLL.Models.Episode;
+using backend.kapace.BLL.Services.Interfaces;
 using backend.kapace.Controllers;
 using backend.kapace.DAL.Models;
 using backend.kapace.DAL.Repository.Interfaces;
@@ -36,5 +37,10 @@ public class EpisodeService : IEpisodeService
                 x.CreatedAt,
                 x.CreatedBy))
             .ToArray();
+    }
+
+    public async Task IncrementViews(long episodeId, CancellationToken token)
+    {
+        await _episodeRepository.IncrementViews(episodeId, token);
     }
 }

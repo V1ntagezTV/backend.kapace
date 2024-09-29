@@ -115,12 +115,12 @@ public class ChangesHistoryServiceTests : IClassFixture<MainFixture>
         content.OriginTitle.Should().Be(updates.OriginTitle);
         content.Description.Should().Be(updates.Description);
         content.Country.Should().Be(updates.Country);
-        content.Type.Should().Be(updates.ContentType);
+        content.ContentType.Should().Be(updates.ContentType);
         content.Genres.Should().BeEmpty();
         content.Duration.Should().Be(updates.Duration);
         content.ReleasedAt.Should().BeCloseTo(updates.ReleasedAt!.Value, TimeSpan.FromSeconds(1));
         content.PlannedSeries.Should().Be(updates.PlannedSeries);
-        content.MinAgeLimit.Should().Be(updates.MinAge);
+        content.MinAge.Should().Be(updates.MinAge);
     }
 
     [Fact]

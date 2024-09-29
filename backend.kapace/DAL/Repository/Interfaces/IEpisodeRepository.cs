@@ -9,4 +9,5 @@ public interface IEpisodeRepository
     Task<long> InsertAsync(Episode model, CancellationToken token);
     
     Task UpdateAsync(Episode episode, CancellationToken token);
+    Task IncrementViews(long episodeId, CancellationToken token);
 }

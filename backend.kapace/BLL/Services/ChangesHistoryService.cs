@@ -3,6 +3,7 @@ using backend.kapace.BLL.Exceptions;
 using backend.kapace.BLL.Extensions;
 using backend.kapace.BLL.Mapper.ChangesHistory;
 using backend.kapace.BLL.Models;
+using backend.kapace.BLL.Models.Episode;
 using backend.kapace.BLL.Services.Interfaces;
 using backend.kapace.Controllers;
 using backend.kapace.DAL.Models;
@@ -10,6 +11,7 @@ using backend.kapace.DAL.Repository.Interfaces;
 using Newtonsoft.Json;
 using static backend.kapace.BLL.Exceptions.ChangesHistoryService;
 using Content = backend.kapace.BLL.Models.VideoService.Content;
+using Episode = backend.kapace.DAL.Models.Episode;
 using HistoryUnit = backend.kapace.BLL.Models.HistoryChanges.HistoryUnit;
 
 namespace backend.kapace.BLL.Services;
@@ -25,15 +27,18 @@ public class ChangesHistoryService : IChangesHistoryService
     private readonly IChangesHistoryRepository _changesHistoryRepository;
     private readonly IEpisodeRepository _episodeRepository;
     private readonly IEpisodeService _episodeService;
+    private readonly IContentRepository _contentRepository;
     private readonly ITranslationRepository _translationRepository;
 
     public ChangesHistoryService(
         ITranslationRepository translationRepository,
+        IContentRepository contentRepository,
         IContentService contentService,
         IChangesHistoryRepository changesHistoryRepository,
         IEpisodeRepository episodeRepository,
         IEpisodeService episodeService)
     {
+        _contentRepository = contentRepository;
         _translationRepository = translationRepository;
         _contentService = contentService;
         _changesHistoryRepository = changesHistoryRepository;
@@ -108,6 +113,8 @@ public class ChangesHistoryService : IChangesHistoryService
                         changes.Image,
                         changeUnit.CreatedBy),
                     token);
+
+                await _contentRepository.IncrementOutEpisodesCounter(changes.ContentId.Value, token);
             }
         }
         else
@@ -205,11 +212,11 @@ public class ChangesHistoryService : IChangesHistoryService
                 contentChanges.OriginTitle ?? selectedContend.OriginTitle,
                 contentChanges.Description ?? selectedContend.Description,
                 (int?)contentChanges.Country ?? (int)selectedContend.Country,
-                (int?)contentChanges.ContentType ?? (int)selectedContend.Type,
+                (int?)contentChanges.ContentType ?? (int)selectedContend.ContentType,
                 contentChanges.Duration ?? selectedContend.Duration,
                 contentChanges.ReleasedAt ?? selectedContend.ReleasedAt,
                 contentChanges.PlannedSeries ?? selectedContend.PlannedSeries,
-                contentChanges.MinAge ?? selectedContend.MinAgeLimit
+                contentChanges.MinAge ?? selectedContend.MinAge
             ), token);
 
             if (contentChanges.Genres is not null)

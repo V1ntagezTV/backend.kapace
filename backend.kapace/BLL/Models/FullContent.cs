@@ -1,24 +1,9 @@
-﻿using backend.Models.Enums;
+﻿using backend.kapace.BLL.Models.VideoService;
 
 namespace backend.kapace.BLL.Models;
 
 public record FullContent(
-    long ContentId,
-    string Title,
-    string Description,
-    ContentType Type,
-    ContentStatus Status,
-    long ImageId,
-    decimal ImportStars,
-    int OutSeries,
-    int PlannedSeries,
-    int Views,
-    string Country,
-    DateTimeOffset? ReleasedAt,
-    DateTimeOffset CreatedAt,
-    DateTimeOffset LastUpdateAt,
-    int MinAgeLimit,
-    int? Duration,
+    Content Content,
     FullContent.FullContentEpisode[] Episodes,
     FullContent.FullContentGenre[] Genres,
     FullContent.FullContentUserInfo? UserInfo)

@@ -7,7 +7,7 @@ public record TranslatesView(
     TranslatesView.Episode[] Episodes)
 {
     public record Episode(
-        long Id,
+        long EpisodeId,
         string Title,
         int Number,
         int Views,
@@ -15,7 +15,7 @@ public record TranslatesView(
         EpisodeTranslation[] Translations);
     
     public record EpisodeTranslation(
-        long Id,
+        long TransalationId,
         long EpisodeId,
         Language Lang,
         string Link,

@@ -25,7 +25,7 @@ public class ChangesHistoryRepository : BaseKapaceRepository, IChangesHistoryRep
         var parameters = new { Id = id, UserId = userId, ApprovedAt = approvedAt };
 
         await using var connection = CreateConnection();
-        var command = new CommandDefinition(sql, parameters, cancellationToken: token);
+        var command = new CommandDefinition(sql, parameters, commandTimeout: ConnectionTimeout.Seconds, cancellationToken: token);
         await connection.QueryAsync<Content>(command);
     }
 

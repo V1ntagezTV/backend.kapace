@@ -35,66 +35,64 @@ public class TranslationService : ITranslationService
         long? translationId,
         CancellationToken token)
     {
-        var episodeTranslations = await _translationRepository.QueryAsync(
-            new[] { contentId },
-             episodeId.HasValue ? new[] { episodeId.Value } : Array.Empty<long>(),
-            translationId.HasValue ? new[] { translationId.Value } : Array.Empty<long>(),
-            token);
-        
-        if (!episodeTranslations.Any())
+        var episodes = await _episodeRepository.QueryAsync(new QueryEpisode()
+        {
+            ContentIds = new[] { contentId },
+            EpisodeIds = episodeId is not null ? new[] { episodeId.Value } : null,
+        }, token);
+
+        if (!episodes.Any())
         {
             return new TranslatesView(
                 Array.Empty<TranslatesView.Translator>(),
                 Array.Empty<TranslatesView.Episode>()
             );
         }
+        
+        var translations = await _translationRepository.QueryAsync(
+            new[] { contentId },
+             episodeId.HasValue ? new[] { episodeId.Value } : null,
+            translationId.HasValue ? new[] { translationId.Value } : null,
+            token);
 
         var translators = new Dictionary<long, TranslatesView.Translator>();
-        var translationsByEpisodeNumber = new Dictionary<long, List<Translation>>();
-        foreach (var translation in episodeTranslations)
-        {
-            translators.TryAdd(
-                translation.TranslatorId,
-                new TranslatesView.Translator(
-                    translation.TranslatorId, 
-                    translation.Name)
-                );
 
-            if (!translationsByEpisodeNumber.TryAdd(translation.Number, new() {translation}))
-            {
-                translationsByEpisodeNumber[translation.Number].Add(translation);
-            }
-        }
-        
-        var episodesByNumber = new List<TranslatesView.Episode>();
-        foreach (var (_, translations) in translationsByEpisodeNumber)
+        var translationsMap = translations
+            .GroupBy(t => t.EpisodeId)
+            .ToDictionary(t => t.Key);
+
+        var episodeUnits = episodes.Select(model =>
         {
-            var episodeTranslation = translations
-                .Select(x =>
-                    new TranslatesView.EpisodeTranslation(
-                        x.Id,
-                        x.EpisodeId,
-                        x.Lang,
-                        x.Link,
-                        x.TranslationType,
-                        x.CreatedAt,
-                        x.CreatedBy,
-                        x.Quality))
+            translationsMap.TryGetValue(model.Id, out var episodeTranslations);
+
+            var episodeTranslation =
+                (episodeTranslations?.ToArray() ?? Array.Empty<BaseTranslation>())
+                .Select(t =>
+                {
+                    translators.Add(t.TranslatorId, new TranslatesView.Translator(t.TranslatorId, t.TranslatorName));
+
+                    return new TranslatesView.EpisodeTranslation(
+                        t.TranslationId,
+                        t.EpisodeId,
+                        t.Language,
+                        t.Link,
+                        t.TranslationType,
+                        t.CreatedAt,
+                        t.CreatedBy,
+                        t.Quality);
+                })
                 .ToArray();
 
-            var episodeInfoSource = translations.First();
-            var episode = new TranslatesView.Episode(
-                episodeInfoSource.EpisodeId,
-                episodeInfoSource.EpisodeTitle,
-                episodeInfoSource.Number,
-                episodeInfoSource.EpisodeViews,
-                episodeInfoSource.EpisodeStars,
+            return new TranslatesView.Episode(
+                model.Id,
+                model.Title,
+                model.Number,
+                model.Views,
+                model.Stars,
                 episodeTranslation);
+        }).ToArray();
 
-            episodesByNumber.Add(episode);
-        }
-
-        return new TranslatesView(translators.Values.ToArray(), episodesByNumber.ToArray());
+        return new TranslatesView(translators.Values.ToArray(), episodeUnits);
     }
 
     public async Task<EpisodeTranslation[]> QueryAsync(EpisodeTranslationQuery request, CancellationToken token)

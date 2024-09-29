@@ -1,9 +1,11 @@
-﻿using backend.kapace.DAL.Models;
+﻿using backend.kapace.DAL.Experimental;
+using backend.kapace.DAL.Models;
 using backend.kapace.DAL.Repository.Interfaces;
 using backend.kapace.Infrastructure.Database;
 using backend.kapace.Models;
 using Dapper;
 using Npgsql;
+using QueryContent = backend.kapace.DAL.Models.QueryContent;
 
 namespace backend.kapace.DAL.Repository;
 
@@ -205,6 +207,30 @@ OFFSET @Offset";
         await using var connection = CreateConnection();
         var command = new CommandDefinition(sql, parameters, cancellationToken: token);
         return await connection.QueryFirstOrDefaultAsync<long>(command);
+    }
+
+    public async Task IncrementViews(long contentId, CancellationToken token)
+    {
+        const string initSql = "UPDATE content SET views = views + 1 WHERE 1=1";
+
+        var command = new ExperimentalQueryBuilder(initSql)
+            .Where("id", contentId)
+            .Build(token);
+        
+        await using var connection = CreateConnection();
+        await connection.QueryAsync(command);
+    }
+    
+    public async Task IncrementOutEpisodesCounter(long contentId, CancellationToken token)
+    {
+        const string initSql = "UPDATE content SET out_series = out_series + 1 WHERE 1=1";
+
+        var command = new ExperimentalQueryBuilder(initSql)
+            .Where("id", contentId)
+            .Build(token);
+        
+        await using var connection = CreateConnection();
+        await connection.QueryAsync(command);
     }
 
     public async Task UpdateAsync(ContentUpdateQuery model, CancellationToken token)

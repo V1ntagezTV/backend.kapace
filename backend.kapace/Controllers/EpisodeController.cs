@@ -1,4 +1,5 @@
-﻿using backend.kapace.BLL.Services.Interfaces;
+﻿using backend.kapace.BLL.Models.Episode;
+using backend.kapace.BLL.Services.Interfaces;
 using backend.kapace.Models.Requests.Episode;
 using Microsoft.AspNetCore.Mvc;
 
@@ -13,6 +14,14 @@ public class EpisodeController : Controller
     public EpisodeController(IEpisodeService episodeService)
     {
         _episodeService = episodeService;
+    }
+    
+    [HttpPost("increment-views")]
+    public async Task<ActionResult> V1IncrementViews(V1IncrementViewsRequest request, CancellationToken token)
+    {
+        await _episodeService.IncrementViews(request.EpisodeId, token);
+
+        return Ok();
     }
     
     [HttpPost("query")]

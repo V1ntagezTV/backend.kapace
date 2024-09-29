@@ -8,6 +8,7 @@ using backend.kapace.Models;
 using backend.Models.Enums;
 using Content = backend.kapace.BLL.Models.VideoService.Content;
 using ContentQuery = backend.kapace.BLL.Models.ContentQuery;
+using QueryContent = backend.kapace.DAL.Models.QueryContent;
 using Translation = backend.kapace.DAL.Models.Translation;
 
 namespace backend.kapace.BLL.Services;
@@ -84,22 +85,7 @@ public class ContentService : IContentService
             : Array.Empty<ContentGenre.WithName>();
 
         return new FullContent(
-            content.Id,
-            content.Title,
-            content.Description,
-            content.ContentType,
-            content.Status,
-            content.ImageId,
-            content.ImportStars,
-            content.OutSeries,
-            content.PlannedSeries,
-            content.Views,
-            $"{(Country)content.Country}",
-            content.ReleasedAt,
-            content.CreatedAt,
-            content.LastUpdateAt,
-            content.MinAge,
-            content.Duration,
+            content,
             episodes
                 .Select(x => new FullContent.FullContentEpisode(x.Id, x.Title, x.Image, x.Number))
                 .ToArray(),
@@ -260,7 +246,7 @@ public class ContentService : IContentService
             EngTitle = x.EngTitle,
             OriginTitle = x.OriginTitle,
             Description = x.Description,
-            Type = (ContentType)x.Type,
+            ContentType = (ContentType)x.Type,
             Status = (ContentStatus)x.Status,
             ImageId = x.ImageId,
             ImportStars = x.ImportStars,
@@ -271,7 +257,7 @@ public class ContentService : IContentService
             ReleasedAt = x.ReleasedAt,
             CreatedAt = x.CreatedAt,
             LastUpdateAt = x.LastUpdateAt,
-            MinAgeLimit = x.MinAgeLimit,
+            MinAge = x.MinAgeLimit,
             Duration = x.Duration,
             Channel = x.Channel,
             Genres = genresMapByContentId.TryGetValue(x.Id, out var genres)
@@ -307,7 +293,7 @@ public class ContentService : IContentService
                 Country = (int)model.Country,
                 OriginTitle = model.OriginTitle,
                 EngTitle = model.EngTitle,
-                Status = (int?) model.Status ?? (int) ContentStatus.Null,
+                Status = (int?) model.Status,
                 Channel = model.Channel,
                 MinAge = model.MinAge,
                 Duration = model.Duration,
@@ -363,6 +349,11 @@ public class ContentService : IContentService
         result.AddRange(searchByText.Select(x => new SearchContentUnit(x.Id, x.Title, x.ImageId)).ToArray());
 
         return result.ToArray();
+    }
+
+    public async Task IncrementViews(long contentId, CancellationToken token)
+    {
+        await _contentRepository.IncrementViews(contentId, token);
     }
 
     private async Task<Dictionary<long, GetByQueryResult.GetByQueryGenre[]>> GetByQueryGenresMapByContentIds(

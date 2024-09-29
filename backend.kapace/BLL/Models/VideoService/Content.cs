@@ -13,7 +13,7 @@ public record Content
     public string OriginTitle { get; private init; }
     public string Description { get; private init; }
     public ContentType ContentType { get; private init; }
-    public ContentStatus Status { get; private init; }
+    public ContentStatus? Status { get; private init; }
     public long ImageId { get; private init; }
     public decimal ImportStars { get; private init; }
     public int OutSeries { get; private init; }

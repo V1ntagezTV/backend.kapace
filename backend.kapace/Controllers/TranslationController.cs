@@ -66,14 +66,14 @@ public class TranslationController : Controller
 
         var episodes = response.Episodes
             .Select(episode => new V1GetByEpisodeResponse.Episode(
-                Id: episode.Id,
+                Id: episode.EpisodeId,
                 episode.Title,
                 episode.Number,
                 episode.Views,
                 episode.Stars,
                 episode.Translations
                     .Select(translation => new V1GetByEpisodeResponse.EpisodeTranslation(
-                        translation.Id,
+                        translation.TransalationId,
                         translation.EpisodeId,
                         translation.Lang,
                         translation.Link,

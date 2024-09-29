@@ -96,7 +96,7 @@ public class ContentServiceTests : IClassFixture<MainFixture>
         unit.EngTitle.Should().Be(rndContent.EngTitle);
         unit.OriginTitle.Should().Be(rndContent.OriginTitle);
         unit.Description.Should().Be(rndContent.Description);
-        unit.Type.Should().Be(rndContent.ContentType);
+        unit.ContentType.Should().Be(rndContent.ContentType);
         unit.Status.Should().Be(rndContent.Status);
         unit.ImageId.Should().Be(rndContent.ImageId);
         unit.ImportStars.Should().Be(0); //rndContent.ImportStars);
@@ -107,7 +107,7 @@ public class ContentServiceTests : IClassFixture<MainFixture>
         unit.ReleasedAt.Should().BeCloseTo(rndContent.ReleasedAt!.Value, TimeSpan.FromMinutes(1));
         unit.CreatedAt.Should().BeCloseTo(DateTimeOffset.UtcNow, TimeSpan.FromMinutes(1));
         unit.LastUpdateAt.Should().BeCloseTo(DateTimeOffset.UtcNow, TimeSpan.FromMinutes(1));
-        unit.MinAgeLimit.Should().Be(rndContent.MinAge);
+        unit.MinAge.Should().Be(rndContent.MinAge);
         unit.Duration.Should().Be(rndContent.Duration);
         unit.Translations.Should().BeEmpty();
         unit.Episodes.Should().BeEmpty();

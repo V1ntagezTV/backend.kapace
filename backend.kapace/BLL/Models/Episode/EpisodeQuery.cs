@@ -1,4 +1,4 @@
-﻿namespace backend.kapace.Controllers;
+﻿namespace backend.kapace.BLL.Models.Episode;
 
 public class EpisodeQuery
 {
