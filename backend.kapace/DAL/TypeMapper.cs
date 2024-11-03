@@ -1,19 +1,14 @@
 ﻿using backend.kapace.DAL.Models;
 using Npgsql;
-using Npgsql.NameTranslation;
 
 namespace backend.kapace.DAL;
 
 public static class TypeMapper
 {
-    private static readonly INpgsqlNameTranslator TranslatorForClasses = new NpgsqlSnakeCaseNameTranslator();
-    
-    public static NpgsqlDataSourceBuilder MapComposites(this NpgsqlDataSourceBuilder builder, string connectionString)
+    public static NpgsqlDataSourceBuilder MapComposites(this NpgsqlDataSourceBuilder builder)
     {
-        Console.WriteLine($"{nameof(TypeMapper)} starts composite types mapping");
-        builder.MapComposite<Content>("content", TranslatorForClasses);
-        Console.WriteLine($"{nameof(TypeMapper)} end composite types mapping");
-
+        builder.MapComposite<Content>();
+        builder.MapComposite<ContentGenreV1>("content_genre_v1");
         return builder;
     }
 }

@@ -30,7 +30,7 @@ public class EpisodeService : IEpisodeService
                 x.Id,
                 x.ContentId,
                 x.Title,
-                x.Image,
+                x.ImageId,
                 x.Number,
                 x.Views,
                 x.Stars,

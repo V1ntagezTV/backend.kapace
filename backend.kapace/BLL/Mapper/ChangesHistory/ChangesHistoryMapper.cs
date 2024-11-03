@@ -19,18 +19,19 @@ internal static class ChangesHistoryMapper
         // Эпизод
         AddChange(fieldsComparisons, "Название", model?.Title, episode?.Title);
         AddChange(fieldsComparisons, "Серия", model?.Number, episode?.Number);
-        AddChange(fieldsComparisons, "Изображение", model?.Image, episode?.Image);
+        AddChange(fieldsComparisons, "Изображение", model?.ImageId, episode?.ImageId);
         // Перевод
         AddChange(fieldsComparisons, "Тип перевода", model?.TranslationType);
-        AddChange(fieldsComparisons, "Видео", model?.VideoScript);
         AddChange(fieldsComparisons, "Язык", model?.Language);
         AddChange(fieldsComparisons, "Качество", model?.Quality);
+        AddChange(fieldsComparisons, "Видео", model?.VideoScript);
 
         return new HistoryChangesComparisons
         {
             HistoryId = unit.Id,
             TargetId = unit.TargetId,
             Title = model?.Title ?? episode?.Title ?? default,
+            ImageId = model?.ImageId,
             HistoryType = unit.HistoryType,
             FieldsComparisons = fieldsComparisons,
             CreatedBy = unit.CreatedBy,
@@ -58,7 +59,7 @@ internal static class ChangesHistoryMapper
         AddChange(fieldsComparisons, "Статус", model?.Status, content?.Status);
         AddChange(fieldsComparisons, "Страна", model?.Country, content?.Country );
         AddChange(fieldsComparisons, "Тип", model?.ContentType, content?.ContentType);
-        AddChange(fieldsComparisons, "Длительность", model?.Duration, content?.Duration );
+        AddChange(fieldsComparisons, "Длительность", model?.Duration, content?.Duration);
         AddChange(fieldsComparisons, "Дата выпуска", model?.ReleasedAt, content?.ReleasedAt);
         AddChange(fieldsComparisons, "Запланировано серий", model?.PlannedSeries, content?.PlannedSeries);
         AddChange(fieldsComparisons, "Возраст", model?.MinAge, content?.MinAge);
@@ -69,6 +70,7 @@ internal static class ChangesHistoryMapper
             HistoryId = unit.Id,
             TargetId = unit.TargetId,
             Title = model?.Title ?? content?.Title ?? default,
+            ImageId = model?.ImageId,
             HistoryType = unit.HistoryType,
             FieldsComparisons = fieldsComparisons,
             CreatedBy = unit.CreatedBy,

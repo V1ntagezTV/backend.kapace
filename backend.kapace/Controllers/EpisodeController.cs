@@ -43,7 +43,7 @@ public class EpisodeController : Controller
                 Id = x.Id,
                 ContentId = x.ContentId,
                 Title = x.Title,
-                Image = x.Image,
+                Image = x.ImageId,
                 Number = x.Number,
                 Views = x.Views,
                 Stars = x.Stars,

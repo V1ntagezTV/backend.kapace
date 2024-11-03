@@ -5,8 +5,8 @@ using backend.kapace.BLL.Mapper.ChangesHistory;
 using backend.kapace.BLL.Models;
 using backend.kapace.BLL.Models.Episode;
 using backend.kapace.BLL.Services.Interfaces;
-using backend.kapace.Controllers;
 using backend.kapace.DAL.Models;
+using backend.kapace.DAL.Models.Query;
 using backend.kapace.DAL.Repository.Interfaces;
 using Newtonsoft.Json;
 using static backend.kapace.BLL.Exceptions.ChangesHistoryService;
@@ -27,10 +27,14 @@ public class ChangesHistoryService : IChangesHistoryService
     private readonly IChangesHistoryRepository _changesHistoryRepository;
     private readonly IEpisodeRepository _episodeRepository;
     private readonly IEpisodeService _episodeService;
+    private readonly IContentGenreRepository _contentGenreRepository;
+    private readonly IGenreRepository _genreRepository;
     private readonly IContentRepository _contentRepository;
     private readonly ITranslationRepository _translationRepository;
 
     public ChangesHistoryService(
+        IContentGenreRepository contentGenreRepository,
+        IGenreRepository genreRepository,
         ITranslationRepository translationRepository,
         IContentRepository contentRepository,
         IContentService contentService,
@@ -38,6 +42,8 @@ public class ChangesHistoryService : IChangesHistoryService
         IEpisodeRepository episodeRepository,
         IEpisodeService episodeService)
     {
+        _contentGenreRepository = contentGenreRepository;
+        _genreRepository = genreRepository;
         _contentRepository = contentRepository;
         _translationRepository = translationRepository;
         _contentService = contentService;
@@ -64,7 +70,7 @@ public class ChangesHistoryService : IChangesHistoryService
         if (false) //TODO: changeUnit.CreatedBy == userId)
             throw new ArgumentException($"User - {userId} can't self-approve changes - {historyId}.");
 
-        await using var transaction = await _changesHistoryRepository.BeginTransaction(token);
+        //await using var transaction = await _changesHistoryRepository.BeginTransaction(token);
         await _changesHistoryRepository.ApproveAsync(historyId, userId, approvedAt: DateTimeOffset.UtcNow, token);
 
         switch (changeUnit.HistoryType)
@@ -78,7 +84,50 @@ public class ChangesHistoryService : IChangesHistoryService
                 break;
         }
 
-        await transaction.CommitAsync(token);
+        //await transaction.CommitAsync(token);
+    }
+
+    public async Task<long> InsertContentChangesAsync(HistoryUnit historyUnit, CancellationToken token)
+    {
+        if (historyUnit.Changes is not HistoryUnit.JsonContentChanges changes)
+        {
+            throw new ArgumentException(nameof(historyUnit.Changes));
+        }
+        
+        var jsonContentChanges = JsonConvert.SerializeObject(historyUnit.Changes, JsonSerializerSettings);
+
+        var id = await _changesHistoryRepository.InsertAsync(new DAL.Models.HistoryUnit
+        {
+            TargetId = historyUnit.TargetId,
+            HistoryType = historyUnit.HistoryType,
+            Text = jsonContentChanges,
+            CreatedBy = historyUnit.CreatedBy,
+            CreatedAt = historyUnit.CreatedAt,
+            ApprovedBy = historyUnit.ApprovedBy,
+            ApprovedAt = historyUnit.ApprovedAt
+        }, token);
+
+        if (changes.Genres is {Length: > 0})
+        {
+            var genres = await _genreRepository.Query(new GenreQuery()
+            {
+                Names = changes.Genres
+            }, token);
+
+            var contentGenres = genres
+                .Select(genre => new ContentGenreV1
+                {
+                    ContentId = id,
+                    GenreId = genre.Id,
+                    CreatedAt = historyUnit.CreatedAt,
+                    CreatedBy = historyUnit.CreatedBy
+                })
+                .ToArray();
+
+            await _contentGenreRepository.Insert(contentGenres, token);
+        }
+
+        return id;
     }
 
     private async Task ApproveEpisodeAsync(HistoryUnit changeUnit, CancellationToken token)
@@ -110,7 +159,7 @@ public class ChangesHistoryService : IChangesHistoryService
                         changes.ContentId.Value,
                         changes.Number,
                         changes.Title,
-                        changes.Image,
+                        changes.ImageId,
                         changeUnit.CreatedBy),
                     token);
 
@@ -139,7 +188,7 @@ public class ChangesHistoryService : IChangesHistoryService
                 ContentId = episode.ContentId,
                 Number = changes.Number,
                 Title = changes.Title ?? episode.Title,
-                Image = changes.Image ?? episode.Image,
+                ImageId = changes.ImageId ?? episode.ImageId,
             };
             await _episodeRepository.UpdateAsync(updateEpisode, token);
         }
@@ -234,6 +283,8 @@ public class ChangesHistoryService : IChangesHistoryService
             TargetIds = query.TargetIds,
             HistoryTypes = query.HistoryTypes,
             CreatedByIds = query.CreatedByIds,
+            Approved = query.Approved,
+            OrderBy = query.OrderBy,
             Limit = query.Limit,
             Offset = query.Offset,
         }, token);

@@ -12,8 +12,8 @@ internal sealed class ExperimentalQueryBuilder
     private readonly DynamicParameters _dynamicParameters = new();
     private readonly List<string> _whereSqlFilters = new();
     private string[] _orderByColumns = Array.Empty<string>();
-    private int _limit = 0;
-    private int _offset = 0;
+    private int? _limit;
+    private int? _offset;
 
     internal ExperimentalQueryBuilder(string initSql)
     {
@@ -40,7 +40,7 @@ internal sealed class ExperimentalQueryBuilder
             _dynamicParameters.Add("@Limit", _limit);
         }
 
-        if (_offset > 0)
+        if (_offset >= 0)
         {
             sql += " OFFSET @Offset";
             _dynamicParameters.Add("@Offset", _offset);
@@ -71,8 +71,36 @@ internal sealed class ExperimentalQueryBuilder
         
         return this;
     }
+    
+    internal ExperimentalQueryBuilder WhereAny(string columnName, string[]? value)
+    {
+        if (value.IsNullOrEmpty())
+        {
+            return this;
+        }
 
-    public ExperimentalQueryBuilder AddPaging(int limit, int offset)
+        var rndName = GenerateRandomString(10);
+        _dynamicParameters.Add(rndName, value);
+        _whereSqlFilters.Add($"{columnName} = ANY(@{rndName})");
+        
+        return this;
+    }
+    
+    public ExperimentalQueryBuilder Like(string columnName, string? searchInput)
+    {   
+        if (string.IsNullOrEmpty(searchInput))
+        {
+            return this;
+        }
+        
+        var rndName = GenerateRandomString(10);
+        _dynamicParameters.Add(rndName, searchInput);
+        _whereSqlFilters.Add($"{columnName} ILIKE CONCAT('%',@{rndName},'%')");
+
+        return this;
+    }
+
+    public ExperimentalQueryBuilder AddPaging(int? limit, int? offset)
     {
         _limit = limit;
         _offset = offset;

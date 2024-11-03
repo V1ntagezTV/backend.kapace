@@ -36,7 +36,7 @@ public class EpisodeRepository : BaseKapaceRepository, IEpisodeRepository
         {
             model.ContentId,
             model.Title,
-            model.Image,
+            Image = model.ImageId,
             model.Number
         };
 
@@ -50,7 +50,7 @@ public class EpisodeRepository : BaseKapaceRepository, IEpisodeRepository
         const string initSql = $@"
             UPDATE episode SET
                 content_id = @{nameof(episode.ContentId)}
-                image = @{nameof(episode.Image)},
+                image = @{nameof(episode.ImageId)},
                 title = @{nameof(episode.Title)},
                 number = @{nameof(episode.Number)}
             WHERE id = @{nameof(episode.Id)};";
@@ -59,7 +59,7 @@ public class EpisodeRepository : BaseKapaceRepository, IEpisodeRepository
         {
             episode.ContentId,
             episode.Id,
-            episode.Image,
+            Image = episode.ImageId,
             episode.Title,
             episode.Number
         };

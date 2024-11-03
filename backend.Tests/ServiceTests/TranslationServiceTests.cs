@@ -40,7 +40,7 @@ public class TranslationServiceTests : IClassFixture<MainFixture>
                 contentId,
                 rndInt,
                 rndString,
-                rndString,
+                rndInt,
                 rndInt),
             token);
         //var translationId = await translationsService.InsertAsync();

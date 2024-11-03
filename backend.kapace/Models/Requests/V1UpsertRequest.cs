@@ -15,11 +15,13 @@ public record V1CreateContentHistoryRequest(
         string? OriginalTitle,
         string? Description,
         Country? Country,
+        ContentStatus? ContentStatus,
         ContentType? ContentType,
-        string? Genres,
+        string[]? Genres,
         int? Duration,
         DateTimeOffset? ReleasedAt,
         int? PlannedSeries,
-        int? MinAge
+        int? MinAge,
+        string? Channel
     );
 }

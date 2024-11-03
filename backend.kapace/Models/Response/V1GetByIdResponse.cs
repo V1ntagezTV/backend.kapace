@@ -11,7 +11,7 @@ public record V1GetByIdResponse(
     public record V1GetFullContentEpisode(
         long Id,
         string Title,
-        string Image,
+        long? Image,
         int Number);
 
     public record V1GetFullContentUserInfo(

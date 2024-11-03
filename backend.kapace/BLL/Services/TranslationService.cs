@@ -69,7 +69,7 @@ public class TranslationService : ITranslationService
                 (episodeTranslations?.ToArray() ?? Array.Empty<BaseTranslation>())
                 .Select(t =>
                 {
-                    translators.Add(t.TranslatorId, new TranslatesView.Translator(t.TranslatorId, t.TranslatorName));
+                    translators.TryAdd(t.TranslatorId, new TranslatesView.Translator(t.TranslatorId, t.TranslatorName));
 
                     return new TranslatesView.EpisodeTranslation(
                         t.TranslationId,

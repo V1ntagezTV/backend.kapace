@@ -6,7 +6,7 @@ public record Episode
     public long Id { get; init; }
     public long ContentId { get; init;}
     public string Title { get; init;}
-    public string Image { get; init; }
+    public long? ImageId { get; init; }
     public int Number { get; init; }
     public int Views { get; init; }
     public int Stars { get; init; }
@@ -17,7 +17,7 @@ public record Episode
         long contentId,
         int number,
         string title,
-        string image,
+        long? image,
         long createdBy)
     {
         return new Episode {
@@ -25,7 +25,7 @@ public record Episode
             ContentId = contentId,
             Number = number,
             Title = title,
-            Image = image,
+            ImageId = image,
             Views = 0,
             Stars = 0,
             CreatedAt = DateTimeOffset.UtcNow,

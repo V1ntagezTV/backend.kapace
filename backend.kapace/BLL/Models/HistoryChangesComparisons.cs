@@ -7,6 +7,7 @@ public class HistoryChangesComparisons
     public long HistoryId { get; init; }
     public long? TargetId { get; init; }
     public string? Title { get; init; }
+    public long? ImageId { get; init; }
     public HistoryType HistoryType { get; init; }
     public Dictionary<string, (string newValue, string oldValue)> FieldsComparisons { get; init; }
     public long? CreatedBy { get; init; }

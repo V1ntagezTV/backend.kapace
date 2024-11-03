@@ -17,7 +17,7 @@ public record V1GetByQueryResponse
         public required long Id {get; set; }
         public required long ContentId {get; set; }
         public required string Title {get; set; }
-        public required string Image {get; set; }
+        public required long? Image {get; set; }
         public required int Number {get; set; }
     }
     

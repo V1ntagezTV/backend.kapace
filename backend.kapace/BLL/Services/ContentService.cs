@@ -1,6 +1,7 @@
 ﻿using backend.kapace.BLL.Enums;
 using backend.kapace.BLL.Exceptions;
 using backend.kapace.BLL.Models;
+using backend.kapace.BLL.Models.Genre;
 using backend.kapace.BLL.Services.Interfaces;
 using backend.kapace.DAL.Models;
 using backend.kapace.DAL.Repository.Interfaces;
@@ -46,7 +47,7 @@ public class ContentService : IContentService
         return contents.Select(Content.ToBllContent).ToArray();
     }
 
-    public async Task<IReadOnlyDictionary<MainPageType, Content[]>> GetOrderByMapsAsync(
+    public async Task<IReadOnlyDictionary<MainPageType, ContentWithGenres[]>> GetOrderByMapsAsync(
         IReadOnlyCollection<MainPageType> pageTypes,
         QueryPaging pagingSettings,
         CancellationToken token)
@@ -57,9 +58,31 @@ public class ContentService : IContentService
 
         await Task.WhenAll(contentTasks.Values);
 
-        return contentTasks.ToDictionary(
-            x => x.Key,
-            x => x.Value.Result.ToArray());
+        var contentIds = contentTasks.Values
+            .SelectMany(c => c.Result.Select(x => x.Id))
+            .Distinct()
+            .ToArray();
+
+        var contentGenresQuery = await _contentGenreRepository.GetByContentIdsAsync(contentIds, token);
+        var contentGenresMap = contentGenresQuery
+            .GroupBy(g => g.ContentId)
+            .ToDictionary(g => g.Key);
+
+        var contents = contentTasks.ToDictionary(
+            keyValuePair => keyValuePair.Key,
+            keyValuePair => keyValuePair.Value.Result
+                .Select(content =>
+                {
+                    contentGenresMap.TryGetValue(content.Id, out var genres);
+                    var contentGenres = (genres?.ToArray() ?? Array.Empty<ContentGenreV1.WithName>())
+                        .Select(x => new Models.Genre.Genre(x.GenreId, x.Name, x.CreatedAt, x.CreatedBy))
+                        .ToArray();
+
+                    return new ContentWithGenres(content, contentGenres);
+                })
+                .ToArray());
+
+        return contents;
     }
 
     public async Task<FullContent> GetFullAsync(long contentId, long? userId, ContentSelectedInfo selectedInfo, CancellationToken token)
@@ -81,13 +104,13 @@ public class ContentService : IContentService
             : Array.Empty<DAL.Models.Episode>();
 
         var contentGenres = selectedInfo.HasFlag(ContentSelectedInfo.ContentGenres)
-            ? await _contentGenreRepository.GetByContentIdAsync(contentId, token)
-            : Array.Empty<ContentGenre.WithName>();
+            ? await _contentGenreRepository.GetByContentIdsAsync(new []{contentId}, token)
+            : Array.Empty<ContentGenreV1.WithName>();
 
         return new FullContent(
             content,
             episodes
-                .Select(x => new FullContent.FullContentEpisode(x.Id, x.Title, x.Image, x.Number))
+                .Select(x => new FullContent.FullContentEpisode(x.Id, x.Title, x.ImageId, x.Number))
                 .ToArray(),
             contentGenres
                 .Select(x => new FullContent.FullContentGenre(x.GenreId, x.Name))
@@ -207,7 +230,7 @@ public class ContentService : IContentService
                             Id = translate.Id,
                             EpisodeId = translate.EpisodeId,
                             ContentId = translate.ContentId,
-                            Language = translate.Lang,
+                            Language = translate.Language,
                             Link = translate.Link,
                             TranslationType = translate.TranslationType,
                             CreatedAt = translate.CreatedAt,
@@ -231,7 +254,7 @@ public class ContentService : IContentService
                                         Id = x.Id,
                                         ContentId = x.ContentId,
                                         Title = x.Title,
-                                        Image = x.Image,
+                                        Image = x.ImageId,
                                         Number = x.Number
                                     }).ToArray());
         }
@@ -360,7 +383,7 @@ public class ContentService : IContentService
         QueryContentGenre queryContentGenre, 
         CancellationToken token)
     {
-        var contentsByGenres = await _contentGenreRepository.QueryAsync<ContentGenre.WithName>(queryContentGenre, token);
+        var contentsByGenres = await _contentGenreRepository.QueryAsync<ContentGenreV1.WithName>(queryContentGenre, token);
         
         return contentsByGenres
             .GroupBy(x => x.ContentId)

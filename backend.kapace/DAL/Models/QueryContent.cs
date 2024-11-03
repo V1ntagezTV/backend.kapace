@@ -6,8 +6,7 @@ public class QueryContent
     public int[]? Countries { get; init; }
     public int[]? Statuses { get; init; }
     public int[]? Types { get; init; }
-    public long Limit { get; init; }
-
-    public long Offset { get; init; }
+    public int Limit { get; init; }
+    public int Offset { get; init; }
 
 }

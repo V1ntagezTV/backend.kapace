@@ -2,6 +2,7 @@
 using backend.kapace.DAL.Models;
 using backend.kapace.DAL.Repository.Interfaces;
 using backend.kapace.Infrastructure.Database;
+using backend.Models.Enums;
 using Dapper;
 using Npgsql;
 
@@ -72,6 +73,23 @@ public class ChangesHistoryRepository : BaseKapaceRepository, IChangesHistoryRep
         if (filters.Any())
         {
             sql += " AND " + string.Join(" AND ", filters);
+        }
+
+        if (query.OrderBy is not null and not HistoryChangesOrderType.Unspecified)
+        {
+            switch (query.OrderBy)
+            {
+                case HistoryChangesOrderType.ByCreated:
+                    sql += " ORDER BY created_at ";
+                    break;
+                case HistoryChangesOrderType.ById:
+                    sql += " ORDER BY id ";
+                    break;
+                case HistoryChangesOrderType.ByName:
+                    // TODO: SEQ-SQAN!!! ВООБЩЕ НЕ ОПТИМАЛЬНО!!! Нужно что-то придумать!!!
+                    sql += " ORDER BY text ->> 'Title'::TEXT, (text ->> 'Number')::numeric ";
+                    break;
+            }
         }
         
         if (query.Limit > 0)

@@ -1,4 +1,6 @@
-﻿using backend.kapace.DAL.Models;
+﻿using backend.kapace.DAL.Experimental;
+using backend.kapace.DAL.Models;
+using backend.kapace.DAL.Models.Query;
 using backend.kapace.DAL.Repository.Interfaces;
 using backend.kapace.Infrastructure.Database;
 using Dapper;
@@ -10,17 +12,18 @@ public class GenreRepository : BaseKapaceRepository, IGenreRepository
 {
     public GenreRepository(NpgsqlDataSource npgsqlDataSource) : base(npgsqlDataSource) { }
 
-    public async Task<Genre[]> GetByIds(long[] genreIds, CancellationToken token)
+    public async Task<IEnumerable<Genre>> Query(GenreQuery query, CancellationToken token)
     {
-        var initSql = $@"SELECT * FROM content WHERE id = ANY(@GenreIds)";
+        const string initSql = "SELECT * FROM genre WHERE 1 = 1";
 
-        var parameters = new
-        {
-            GenreIds = genreIds,
-        };
+        var command = new ExperimentalQueryBuilder(initSql)
+            .WhereAny("id", query.GenreIds)
+            .WhereAny("name", query.Names)
+            .Like("name", query.Search)
+            .AddPaging(query.Limit, query.Offset)
+            .Build(token);
 
         await using var connection = CreateConnection();
-        var result = await connection.QueryAsync<Genre>(initSql, parameters);
-        return result.ToArray();
+        return await connection.QueryAsync<Genre>(command);
     }
 }

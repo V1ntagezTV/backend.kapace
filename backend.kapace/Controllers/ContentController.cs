@@ -58,7 +58,10 @@ public class ContentController : Controller
             contents
                 .Select(pair => new V1GetMainPageContentResponse.V1GetMainPagePair(
                     pair.Key,
-                    QueryContent.MapArray(pair.Value).ToArray()))
+                    pair.Value.Select(contentWithGenres => new V1GetMainPageContentResponse.ContentInfo(
+                            (QueryContent)contentWithGenres.ContentInfo,
+                            contentWithGenres.Genres.Select(x => x.Name).ToArray()))
+                        .ToArray()))
                 .ToArray());
         
         return Ok(response);

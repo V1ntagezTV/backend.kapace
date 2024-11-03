@@ -89,7 +89,7 @@ internal static class RandomDataModelFactory
             Description = faker.Random.String2(10),
             Country = faker.PickRandom<Country>(),
             ContentType = faker.PickRandom<ContentType>(),
-            Genres = "", // TODO: Должно быть массивом жанров а не строкой
+            Genres = Array.Empty<string>(), //TODO: нужно написать тест
             Duration = faker.Random.Int(0, 100),
             ReleasedAt = DateTimeOffset.UtcNow,
             PlannedSeries = faker.Random.Int(0, 100),
@@ -104,7 +104,7 @@ internal static class RandomDataModelFactory
             //ContentId = contentId ?? faker.Random.Long(min: 0),
             EpisodeId = faker.Random.Long(min: 0),
             Number = faker.Random.Int(max:10),
-            Image = faker.Random.String2(10),
+            ImageId = faker.Random.Long(max: 10),
             Title = faker.Random.String2(10),
         };
     }

@@ -96,9 +96,4 @@ public record QueryContent(
             content.Duration,
             content.Channel);
     }
-    
-    public static IEnumerable<QueryContent> MapArray(params Content[] content)
-    {
-        return content.Select(c => (QueryContent)c);
-    }
 }

@@ -29,33 +29,36 @@ public class ChangesHistoryController : Controller
             TargetId = historyRequest.ContentId,
             HistoryType = HistoryType.Content,
             Changes = historyRequest.ChangeableFields is not null ? new HistoryUnit.JsonContentChanges
-            {
-                ImageId = historyRequest.ChangeableFields.ImageId,
-                Title = historyRequest.ChangeableFields.Title,
-                EngTitle = historyRequest.ChangeableFields.EngTitle,
-                OriginTitle = historyRequest.ChangeableFields.OriginalTitle,
-                Description = historyRequest.ChangeableFields.Description,
-                Country = historyRequest.ChangeableFields.Country,
-                ContentType = historyRequest.ChangeableFields.ContentType,
-                Genres = historyRequest.ChangeableFields.Genres,
-                Duration = historyRequest.ChangeableFields.Duration,
-                ReleasedAt = historyRequest.ChangeableFields.ReleasedAt,
-                PlannedSeries = historyRequest.ChangeableFields.PlannedSeries,
-                MinAge = historyRequest.ChangeableFields.MinAge
-            } : new HistoryUnit.JsonContentChanges(),
+                {
+                    ImageId = historyRequest.ChangeableFields.ImageId,
+                    Title = historyRequest.ChangeableFields.Title,
+                    EngTitle = historyRequest.ChangeableFields.EngTitle,
+                    OriginTitle = historyRequest.ChangeableFields.OriginalTitle,
+                    Description = historyRequest.ChangeableFields.Description,
+                    Channel = historyRequest.ChangeableFields.Channel,
+                    Status = historyRequest.ChangeableFields.ContentStatus,
+                    Country = historyRequest.ChangeableFields.Country,
+                    ContentType = historyRequest.ChangeableFields.ContentType,
+                    Genres = historyRequest.ChangeableFields.Genres,
+                    Duration = historyRequest.ChangeableFields.Duration,
+                    ReleasedAt = historyRequest.ChangeableFields.ReleasedAt,
+                    PlannedSeries = historyRequest.ChangeableFields.PlannedSeries,
+                    MinAge = historyRequest.ChangeableFields.MinAge,
+                }
+                : new HistoryUnit.JsonContentChanges(),
             CreatedBy = historyRequest.CreatedBy,
             CreatedAt = DateTimeOffset.Now,
             ApprovedBy = null,
             ApprovedAt = null,
         };
 
-        var insertedId = await _changesHistoryService.InsertChangesAsync(newHistoryUnit, token);
+        var insertedId = await _changesHistoryService.InsertContentChangesAsync(newHistoryUnit, token);
 
-        return new V1CreateContentResponse(insertedId);
+        return Ok(new V1CreateContentResponse(insertedId));
     }
 
     [HttpPost("create-episode")]
-    public async Task<ActionResult<V1CreateEpisodeHistoryResponse>> V1CreateEpisodeHistory(
+    public async Task<ActionResult> V1CreateEpisodeHistory(
         V1CreateEpisodeHistoryRequest historyRequest,
         CancellationToken token) 
     {
@@ -70,7 +73,7 @@ public class ChangesHistoryController : Controller
                 TranslatorId = historyRequest.ChangeableFields.TranslatorId,
                 Number = historyRequest.ChangeableFields.Number,
                 Title = historyRequest.ChangeableFields.Title,
-                Image = historyRequest.ChangeableFields.Image,
+                ImageId = historyRequest.ChangeableFields.Image,
                 VideoScript = historyRequest.ChangeableFields.VideoScript,
                 TranslationType = historyRequest.ChangeableFields.TranslationType,
                 Language = historyRequest.ChangeableFields.Language,
@@ -84,27 +87,32 @@ public class ChangesHistoryController : Controller
 
         var insertedId = await _changesHistoryService.InsertChangesAsync(newHistoryUnit, token);
 
-        return new V1CreateEpisodeHistoryResponse(insertedId);
+        return Ok(new V1CreateEpisodeHistoryResponse(insertedId));
     }
 
     [HttpPost("approve")]
-    public async Task V1Approve(V1ApproveRequest request, CancellationToken token)
+    public async Task<ActionResult> V1Approve(V1ApproveRequest request, CancellationToken token)
     {
         await _changesHistoryService.ApproveAsync(request.HistoryId, request.UserId, token);
+
+        return Ok();
     }
 
     [HttpPost("get-changes-comparisons")]
-    public async Task<ActionResult> V1GetChangesComparisons(V1GetChangesRequest request, CancellationToken token)
+    public async Task<ActionResult> V1GetChangesComparisons(
+        V1GetChangesComparisonsRequest comparisonsRequest, 
+        CancellationToken token)
     {
         var query = new ChangesHistoryQueryModel
         {
-            Ids = request.Ids,
-            TargetIds = request.TargetIds,
-            CreatedByIds = request.CreatedByIds,
-            HistoryTypes = request.HistoryTypes,
-            Approved = request.Approved,
-            Limit = request.Limit,
-            Offset = request.Offset
+            Ids = comparisonsRequest.Ids,
+            TargetIds = comparisonsRequest.TargetIds,
+            CreatedByIds = comparisonsRequest.CreatedByIds,
+            HistoryTypes = comparisonsRequest.HistoryTypes,
+            Approved = comparisonsRequest.Approved,
+            OrderBy = comparisonsRequest.OrderBy,
+            Limit = comparisonsRequest.Limit,
+            Offset = comparisonsRequest.Offset
         };
 
         var result = await _changesHistoryService.GetChangesComparisons(query, token);
@@ -117,12 +125,14 @@ public class ChangesHistoryController : Controller
                 TargetId = unit.TargetId,
                 Title = unit.Title,
                 HistoryType = unit.HistoryType,
-                FieldsComparisons = unit.FieldsComparisons.Select(field => new
-                {
-                    Name = field.Key,
-                    OldValue = field.Value.oldValue,
-                    NewValue = field.Value.newValue
-                }).ToArray(),
+                ImageId = unit.ImageId,
+                FieldsComparisons = unit.FieldsComparisons
+                    .Select(field => new
+                    {
+                        Name = field.Key,
+                        OldValue = field.Value.oldValue,
+                        NewValue = field.Value.newValue
+                    }).ToArray(),
                 CreatedBy = unit.CreatedBy,
                 CreatedAt = unit.CreatedAt,
                 ApprovedBy = unit.ApprovedBy,

@@ -9,10 +9,33 @@ namespace backend.kapace.DAL.Repository;
 
 public class ContentGenreRepository : BaseKapaceRepository, IContentGenreRepository
 {
-    public ContentGenreRepository(NpgsqlDataSource npgsqlDataSource) : base(npgsqlDataSource) { }
+    private readonly NpgsqlDataSource _npgsqlDataSource;
 
+    public ContentGenreRepository(NpgsqlDataSource npgsqlDataSource) : base(npgsqlDataSource)
+    {
+        _npgsqlDataSource = npgsqlDataSource;
+    }
+
+    public async Task Insert(ContentGenreV1[] contentGenres, CancellationToken token)
+    {
+        const string sql =
+            @"
+            INSERT INTO content_genre(content_id, genre_id, created_at, created_by) 
+            SELECT * FROM unnest(@Values::content_genre_v1[]);
+            ";
+
+        var parameters = new
+        {
+            Values = contentGenres
+        };
+
+        await using var connection = _npgsqlDataSource.CreateConnection();
+        var command = new CommandDefinition(sql, parameters, cancellationToken: token);
+        await connection.QueryAsync(command);
+    }
+    
     public async Task<TQueryResult[]> QueryAsync<TQueryResult>(QueryContentGenre query, CancellationToken token)
-        where TQueryResult: ContentGenre
+        where TQueryResult: ContentGenreV1
     {
         var initSql = @"SELECT * FROM content_genre";
         var parameters = new DynamicParameters();
@@ -30,12 +53,12 @@ public class ContentGenreRepository : BaseKapaceRepository, IContentGenreReposit
             filters.Add($"genre_id = @{nameof(query.GenreIds)}");
         }
 
-        if (typeof(TQueryResult) == typeof(ContentGenre.WithName))
+        if (typeof(TQueryResult) == typeof(ContentGenreV1.WithName))
         {
             initSql += " JOIN genre ON genre.id = content_genre.genre_id ";
         }
         
-        if (filters.Any())
+        if (filters.Count != 0)
         {
             initSql += $" WHERE {string.Join(" AND ", filters)}";
         }
@@ -45,28 +68,22 @@ public class ContentGenreRepository : BaseKapaceRepository, IContentGenreReposit
         return result.ToArray();
     }
 
-    public Task<ContentGenre[]> QueryAsync(QueryContentGenre query, CancellationToken token)
-    {
-        throw new NotImplementedException();
-    }
-
-    public async Task<ContentGenre.WithName[]> GetByContentIdAsync(long contentId, CancellationToken token)
+    public async Task<ContentGenreV1.WithName[]> GetByContentIdsAsync(long[] contentIds, CancellationToken token)
     {
         const string initSql = @"
 SELECT * FROM content_genre cg
 JOIN genre g on g.id = cg.genre_id
-WHERE content_id = @ContentId;";
-        
+WHERE content_id = ANY(@ContentIds);";
+
         var parameters = new
         {
-            ContentId = contentId,
+            ContentIds = contentIds,
         };
 
         await using var connection = CreateConnection();
-        var result = await connection.QueryAsync<ContentGenre.WithName>(
+        var result = await connection.QueryAsync<ContentGenreV1.WithName>(
             initSql,
-            parameters,
-            commandType: CommandType.Text);
+            parameters);
         
         return result.ToArray();
     }

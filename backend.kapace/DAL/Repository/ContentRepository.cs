@@ -17,54 +17,16 @@ public class ContentRepository : BaseKapaceRepository, IContentRepository
 
     public async Task<Content[]> QueryAsync(QueryContent query, CancellationToken token)
     {
-        var initSql = @"SELECT * FROM content";
-        var parameters = new DynamicParameters();
-        var filters = new List<string>();
+        const string initSql = @"SELECT * FROM content WHERE 1=1";
+        var command = new ExperimentalQueryBuilder(initSql)
+            .WhereAny("id", query.Ids)
+            .WhereAny("status", query.Statuses)
+            .WhereAny("type", query.Types)
+            .WhereAny("country", query.Countries)
+            .AddPaging(query.Limit, query.Offset)
+            .Build(token);
         
-        if (query.Ids is {Length: > 0})
-        {
-            parameters.Add(nameof(query.Ids), query.Ids);
-            filters.Add($"id = ANY(@{nameof(query.Ids)})");
-        }
-
-        if (query.Statuses is { Length: > 0 })
-        {
-            parameters.Add(nameof(query.Statuses), query.Statuses);
-            filters.Add($"status = ANY(@{nameof(query.Statuses)})");
-        }
-        
-        if (query.Types is { Length: > 0 })
-        {
-            parameters.Add(nameof(query.Types), query.Types);
-            filters.Add($"type = ANY(@{nameof(query.Types)})");
-        }
-
-        if (query.Countries is { Length: > 0 })
-        {
-            parameters.Add(nameof(query.Countries), query.Countries);
-            filters.Add($"country = ANY(@{nameof(query.Countries)})");
-        }
-
-        if (filters.Any())
-        {
-            initSql += $" WHERE {string.Join(" AND ", filters)} ";
-        }
-
-        if (query.Limit > 0)
-        {
-            parameters.Add(nameof(query.Limit), query.Limit);
-            initSql += $" LIMIT @{nameof(query.Limit)} ";
-        }
-
-        if (query.Offset > 0)
-        {
-            parameters.Add(nameof(query.Offset), query.Offset);
-            initSql += $" OFFSET @{nameof(query.Offset)} ";
-        }
-
-        Console.WriteLine(initSql);
         await using var connection = CreateConnection();
-        var command = new CommandDefinition(initSql, parameters, cancellationToken: token);
         var result = await connection.QueryAsync<Content>(command);
         return result.ToArray();
     }
@@ -74,12 +36,14 @@ public class ContentRepository : BaseKapaceRepository, IContentRepository
         QueryPaging paging,
         CancellationToken token)
     {
-        const string initSql = @"
-SELECT * FROM content
-WHERE created_at > (current_timestamp::date - @ForLastDaysCount)
-ORDER BY views DESC, import_stars DESC
-LIMIT @Limit
-OFFSET @Offset";
+        const string initSql =
+            """
+            SELECT * FROM content
+            WHERE created_at > (current_timestamp::date - @ForLastDaysCount)
+            ORDER BY views DESC, import_stars DESC
+            LIMIT @Limit
+            OFFSET @Offset
+            """;
 
         var parameters = new
         {
@@ -98,11 +62,13 @@ OFFSET @Offset";
         QueryPaging paging,
         CancellationToken token)
     {
-        const string initSql = @"
-SELECT * FROM content
-ORDER BY created_at DESC
-LIMIT @Limit
-OFFSET @Offset";
+        const string initSql = 
+            """
+            SELECT * FROM content
+            ORDER BY created_at DESC
+            LIMIT @Limit
+            OFFSET @Offset
+            """;
 
         var parameters = new
         {
@@ -273,7 +239,7 @@ OFFSET @Offset";
 
     public async Task<IReadOnlyCollection<Content>> SearchByText(string? search, CancellationToken token)
     {
-        const string initSql = @$"SELECT * FROM content WHERE title LIKE CONCAT('%',@Search,'%');";
+        const string initSql = @$"SELECT * FROM content WHERE title ILIKE CONCAT('%',@Search,'%');";
 
         var parameters = new
         {

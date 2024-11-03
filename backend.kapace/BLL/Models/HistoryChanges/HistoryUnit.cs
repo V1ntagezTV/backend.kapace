@@ -28,7 +28,7 @@ public class HistoryUnit
         public ContentStatus? Status { get; init; }
         public Country? Country { get; init; }
         public ContentType? ContentType { get; init; }
-        public string? Genres { get; init; }
+        public string[]? Genres { get; init; }
         public int? Duration { get; init; }
         public DateTimeOffset? ReleasedAt { get; init; }
         public int? PlannedSeries { get; init; }
@@ -43,7 +43,7 @@ public class HistoryUnit
 
         // Episode fields
         public int Number { get; init; }
-        public string? Image { get; init; }
+        public long? ImageId { get; init; }
         public string? Title { get; init; }
 
         // Translation fields

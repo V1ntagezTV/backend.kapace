@@ -16,7 +16,7 @@ public record V1CreateEpisodeHistoryRequest(
         long? EpisodeId,
         long? TranslatorId,
         string? Title,
-        string? Image,
+        long? Image,
         int? Quality
     );
 }

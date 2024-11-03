@@ -13,7 +13,7 @@ public record FullContent(
     public record FullContentEpisode(
         long Id,
         string Title,
-        string Image,
+        long? Image,
         int Number);
 
     public record FullContentUserInfo(

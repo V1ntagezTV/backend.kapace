@@ -9,7 +9,7 @@ public interface IContentService
 {
     Task<Content[]> QueryAsync(ContentQuery query, CancellationToken token);
 
-    Task<IReadOnlyDictionary<MainPageType, Content[]>> GetOrderByMapsAsync(
+    Task<IReadOnlyDictionary<MainPageType, ContentWithGenres[]>> GetOrderByMapsAsync(
         IReadOnlyCollection<MainPageType> pageTypes,
         QueryPaging pagingSettings,
         CancellationToken token);

@@ -41,7 +41,7 @@ public class MainFixture
         
         var connection = config.GetSection("SqlConnection").Value ?? throw new ArgumentException();
         var dataSource = new NpgsqlDataSourceBuilder(connection)
-            .MapComposites(connection)
+            .MapComposites()
             .Build();
         services.AddSingleton<NpgsqlDataSource>(_ => dataSource);
         services

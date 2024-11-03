@@ -63,7 +63,7 @@ public class ChangesHistoryServiceTests : IClassFixture<MainFixture>
         changes.Description.Should().Be(updates.Description);
         changes.Country.Should().Be(updates.Country);
         changes.ContentType.Should().Be(updates.ContentType);
-        changes.Genres.Should().Be(updates.Genres);
+        changes.Genres.Should().Equal(updates.Genres);  //TODO: нужно написать тест
         changes.Duration.Should().Be(updates.Duration);
         changes.ReleasedAt.Should().Be(updates.ReleasedAt);
         changes.PlannedSeries.Should().Be(updates.PlannedSeries);

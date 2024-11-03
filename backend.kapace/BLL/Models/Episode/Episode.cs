@@ -4,7 +4,7 @@ public record Episode(
     long Id,
     long ContentId,
     string Title,
-    string Image,
+    long? ImageId,
     int Number,
     int Views,
     int Stars,
