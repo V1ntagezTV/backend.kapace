@@ -2,6 +2,7 @@
 using backend.kapace.DAL.Models;
 using backend.kapace.DAL.Repository.Interfaces;
 using backend.kapace.Infrastructure.Database;
+using backend.Models.Enums;
 using Dapper;
 using Npgsql;
 
@@ -17,6 +18,7 @@ public class EpisodeRepository : BaseKapaceRepository, IEpisodeRepository
             .WhereAny("id", query.EpisodeIds)
             .WhereAny("content_id", query.ContentIds)
             .WhereAny("number", query.Numbers)
+            .OrderBy(GetColumnByEpisodeOrderType(query.OrderBy))
             .AddPaging(query.Limit, query.Offset)
             .Build(token);
         
@@ -79,5 +81,18 @@ public class EpisodeRepository : BaseKapaceRepository, IEpisodeRepository
         
         await using var connection = CreateConnection();
         await connection.QueryAsync(command);
+    }
+
+    private static string[] GetColumnByEpisodeOrderType(EpisodeOrderType? orderType)
+    {
+        return orderType switch
+        {
+            EpisodeOrderType.Unspecified => Array.Empty<string>(),
+            EpisodeOrderType.ByNumber => new[] { "number" },
+            EpisodeOrderType.ByNumberDescending => new[] { "number DESC" },
+            EpisodeOrderType.ByStars => new[] { "stars" },
+            EpisodeOrderType.ByViews => new[] { "views" },
+            _ or null => Array.Empty<string>()
+        };
     }
 }

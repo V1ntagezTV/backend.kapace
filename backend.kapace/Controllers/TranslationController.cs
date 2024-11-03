@@ -58,6 +58,7 @@ public class TranslationController : Controller
             request.ContentId,
             request.EpisodeId, 
             request.TranslatorId,
+            request.OrderBy,
             token);
 
         var translators = response.Translators

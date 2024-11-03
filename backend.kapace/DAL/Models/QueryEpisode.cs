@@ -1,4 +1,6 @@
-﻿namespace backend.kapace.DAL.Models;
+﻿using backend.Models.Enums;
+
+namespace backend.kapace.DAL.Models;
 
 public class QueryEpisode
 {
@@ -7,4 +9,5 @@ public class QueryEpisode
     public long[]? Numbers { get; init; }
     public int Limit { get; init; }
     public int Offset { get; init; }
+    public EpisodeOrderType? OrderBy { get; init; }
 }

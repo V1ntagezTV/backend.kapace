@@ -24,12 +24,12 @@ internal sealed class ExperimentalQueryBuilder
     {
         var sql = _initSql;
         
-        if (_whereSqlFilters.Any())
+        if (_whereSqlFilters.Count != 0)
         {
             sql = _initSql + $" AND {string.Join(" AND ", _whereSqlFilters)}";
         }
 
-        if (_orderByColumns.Any())
+        if (_orderByColumns.Length != 0)
         {
             sql += $" ORDER BY {string.Join(", ", _orderByColumns)} ";
         }
