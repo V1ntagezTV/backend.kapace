@@ -21,7 +21,7 @@ public class ContentGenreRepository : BaseKapaceRepository, IContentGenreReposit
         const string sql =
             @"
             INSERT INTO content_genre(content_id, genre_id, created_at, created_by) 
-            SELECT * FROM unnest(@Values::content_genre_v1[]);
+            SELECT * FROM unnest(@Values);
             ";
 
         var parameters = new

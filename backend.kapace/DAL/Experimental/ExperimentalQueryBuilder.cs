@@ -15,6 +15,8 @@ internal sealed class ExperimentalQueryBuilder
     private int? _limit;
     private int? _offset;
 
+    private bool _canReturnWholeTable = false;
+
     internal ExperimentalQueryBuilder(string initSql)
     {
         _initSql = initSql;
@@ -27,6 +29,13 @@ internal sealed class ExperimentalQueryBuilder
         if (_whereSqlFilters.Count != 0)
         {
             sql = _initSql + $" AND {string.Join(" AND ", _whereSqlFilters)}";
+        }
+        else
+        {
+            if (!_canReturnWholeTable)
+            {
+                throw new ArgumentException("SQL without any filters");
+            }
         }
 
         if (_orderByColumns.Length != 0)
@@ -96,6 +105,13 @@ internal sealed class ExperimentalQueryBuilder
         var rndName = GenerateRandomString(10);
         _dynamicParameters.Add(rndName, searchInput);
         _whereSqlFilters.Add($"{columnName} ILIKE CONCAT('%',@{rndName},'%')");
+
+        return this;
+    }
+
+    public ExperimentalQueryBuilder CanReturnWholeTable(bool value)
+    {
+        _canReturnWholeTable = value;
 
         return this;
     }

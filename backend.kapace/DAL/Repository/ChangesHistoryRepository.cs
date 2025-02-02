@@ -16,7 +16,7 @@ public class ChangesHistoryRepository : BaseKapaceRepository, IChangesHistoryRep
 
     public async Task ApproveAsync(long id, long userId, DateTimeOffset approvedAt, CancellationToken token)
     {
-        var sql = @"
+        const string sql = @"
             UPDATE changes_history 
             SET 
                 approved_by = @UserId, 
@@ -123,6 +123,20 @@ public class ChangesHistoryRepository : BaseKapaceRepository, IChangesHistoryRep
         await using var connection = CreateConnection();
         var command = new CommandDefinition(sql, parameters, cancellationToken: token);
         await connection.QueryAsync(command);
+    }
+
+    public async Task UpdateTargetId(long historyId, long newTargetId, CancellationToken token)
+    {
+        const string sql = @"UPDATE changes_history SET target_id = @newTargetId WHERE id = @HistoryId;";
+        var parameters = new
+        {
+            HistoryId = historyId,
+            NewTargetId = newTargetId
+        };
+        
+        await using var connection = CreateConnection();
+        var command = new CommandDefinition(sql, parameters, cancellationToken: token);
+        await connection.QueryAsync(command);    
     }
 
     public async Task<long> InsertAsync(

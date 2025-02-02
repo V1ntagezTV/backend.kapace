@@ -350,14 +350,14 @@ public class ContentService : IContentService
         }, token);
     }
     
-    public async Task<SearchContentUnit[]> SearchBy(string? search, CancellationToken token)
+    public async Task<SearchContentUnit[]> SearchBy(string search, int limit, CancellationToken token)
     {
         if (string.IsNullOrEmpty(search))
         {
             return Array.Empty<SearchContentUnit>();
         }
-        
-        var result = new List<SearchContentUnit>();
+
+        var result = new Dictionary<long, SearchContentUnit>(capacity: limit);
         if (long.TryParse(search, out var contentId))
         {
             var queryResponse = await _contentRepository.QueryAsync(new QueryContent
@@ -365,13 +365,27 @@ public class ContentService : IContentService
                 Ids = new[] { contentId }
             }, token);
 
-            result.AddRange(queryResponse.Select(x => new SearchContentUnit(x.Id, x.Title, x.ImageId)).ToArray());
+            foreach (var content in queryResponse)
+            {
+                result.TryAdd(content.Id, new SearchContentUnit(content.Id, content.Title, content.ImageId));
+                if (result.Count == limit)
+                {
+                    break;
+                }
+            }
         }
 
         var searchByText = await _contentRepository.SearchByText(search, token);
-        result.AddRange(searchByText.Select(x => new SearchContentUnit(x.Id, x.Title, x.ImageId)).ToArray());
+        foreach (var content in searchByText)
+        {
+            result.TryAdd(content.Id, new SearchContentUnit(content.Id, content.Title, content.ImageId));
+            if (result.Count == limit)
+            {
+                break;
+            }
+        }
 
-        return result.ToArray();
+        return result.Values.OrderBy(x => x.ContentId).ToArray();
     }
 
     public async Task IncrementViews(long contentId, CancellationToken token)

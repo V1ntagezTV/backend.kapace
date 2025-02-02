@@ -10,7 +10,12 @@
       <PackageReference Include="Dapper" Version="2.1.35" />
       <PackageReference Include="FluentMigrator" Version="6.2.0" />
       <PackageReference Include="FluentMigrator.Runner" Version="6.2.0" />
+      <PackageReference Include="Microsoft.AspNetCore.Authorization" Version="8.0.11" />
       <PackageReference Include="Microsoft.Extensions.Hosting" Version="8.0.1" />
       <PackageReference Include="Npgsql" Version="8.0.5" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="Web" />
     </ItemGroup>
 </Project>

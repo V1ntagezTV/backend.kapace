@@ -4,6 +4,7 @@ using backend.kapace.Models;
 using backend.kapace.Models.Requests;
 using backend.kapace.Models.Response;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Server.HttpSys;
 
 namespace backend.kapace.Controllers;
 
@@ -155,7 +156,7 @@ public class ContentController : Controller
     [HttpPost("search-by")]
     public async Task<ActionResult<V1RequestGetSearchByResponse>> GetSearchBy(V1RequestGetSearchByRequest request, CancellationToken token)
     {
-        var response = await _contentService.SearchBy(request.Search, token);
+        var response = await _contentService.SearchBy(request.Search, request.Limit, token);
 
         return Ok(new V1RequestGetSearchByResponse(
             response.Select(x => new SearchContentUnit(x.ContentId, x.Title, x.ImageId)).ToArray())

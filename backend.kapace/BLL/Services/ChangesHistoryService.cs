@@ -71,18 +71,20 @@ public class ChangesHistoryService : IChangesHistoryService
             throw new ArgumentException($"User - {userId} can't self-approve changes - {historyId}.");
 
         //await using var transaction = await _changesHistoryRepository.BeginTransaction(token);
-        await _changesHistoryRepository.ApproveAsync(historyId, userId, approvedAt: DateTimeOffset.UtcNow, token);
 
         switch (changeUnit.HistoryType)
         {
             case HistoryType.Content:
-                await ApproveContentAsync(changeUnit, token);
+                var contentId = await ApproveContentAsync(changeUnit, token);
+                await _changesHistoryRepository.UpdateTargetId(changeUnit.Id, contentId, token);
 
                 break;
             case HistoryType.Episode:
                 await ApproveEpisodeAsync(changeUnit, token);
                 break;
         }
+        
+        await _changesHistoryRepository.ApproveAsync(historyId, userId, approvedAt: DateTimeOffset.UtcNow, token);
 
         //await transaction.CommitAsync(token);
     }
@@ -107,25 +109,27 @@ public class ChangesHistoryService : IChangesHistoryService
             ApprovedAt = historyUnit.ApprovedAt
         }, token);
 
-        if (changes.Genres is {Length: > 0})
+        if (changes.Genres is not { Length: > 0 })
         {
-            var genres = await _genreRepository.Query(new GenreQuery()
-            {
-                Names = changes.Genres
-            }, token);
-
-            var contentGenres = genres
-                .Select(genre => new ContentGenreV1
-                {
-                    ContentId = id,
-                    GenreId = genre.Id,
-                    CreatedAt = historyUnit.CreatedAt,
-                    CreatedBy = historyUnit.CreatedBy
-                })
-                .ToArray();
-
-            await _contentGenreRepository.Insert(contentGenres, token);
+            return id;
         }
+        
+        var genres = await _genreRepository.Query(new GenreQuery()
+        {
+            Names = changes.Genres
+        }, token);
+
+        var contentGenres = genres
+            .Select(genre => new ContentGenreV1
+            {
+                ContentId = id,
+                GenreId = genre.Id,
+                CreatedAt = historyUnit.CreatedAt,
+                CreatedBy = historyUnit.CreatedBy
+            })
+            .ToArray();
+
+        await _contentGenreRepository.Insert(contentGenres, token);
 
         return id;
     }
@@ -214,13 +218,13 @@ public class ChangesHistoryService : IChangesHistoryService
         await _translationRepository.InsertAsync(translate, token);
     }
 
-    private async Task ApproveContentAsync(HistoryUnit changeUnit, CancellationToken token)
+    private async Task<long> ApproveContentAsync(HistoryUnit changeUnit, CancellationToken token)
     {
         var contentChanges = (HistoryUnit.JsonContentChanges)changeUnit.Changes;
         if (changeUnit.TargetId is 0 or null)
         {
             // Для создания контента используется идентификатор из changes_history записи
-            await _contentService.InsertAsync(new InsertContentModel(
+            var newContentId = await _contentService.InsertAsync(new InsertContentModel(
                 Id: changeUnit.Id,
                 ImageId: contentChanges.ImageId ?? throw new ArgumentException(),
                 Title: contentChanges.Title ?? throw new ArgumentException(),
@@ -236,43 +240,45 @@ public class ChangesHistoryService : IChangesHistoryService
                 PlannedSeries: contentChanges.PlannedSeries,
                 MinAge: contentChanges.MinAge
             ), token);
+
+            return newContentId;
         }
-        else
+
+        var contents = await _contentService.GetByQueryAsync(
+            new SearchFilters()
+            {
+                ContentIds = new[] { changeUnit.TargetId.Value },
+            },
+            ContentSelectedInfo.None,
+            token);
+
+        if (contents.Count == 0)
         {
-            var contents = await _contentService.GetByQueryAsync(
-                new SearchFilters()
-                {
-                    ContentIds = new[] { changeUnit.TargetId.Value },
-                },
-                ContentSelectedInfo.None,
-                token);
-
-            if (!contents.Any())
-            {
-                throw new ContentNotFoundException(changeUnit.TargetId.Value);
-            }
-
-            var selectedContend = contents.Single();
-            await _contentService.UpdateAsync(new UpdateContentModel(
-                changeUnit.TargetId.Value,
-                contentChanges.ImageId ?? selectedContend.ImageId,
-                contentChanges.Title ?? selectedContend.Title,
-                contentChanges.EngTitle ?? selectedContend.EngTitle,
-                contentChanges.OriginTitle ?? selectedContend.OriginTitle,
-                contentChanges.Description ?? selectedContend.Description,
-                (int?)contentChanges.Country ?? (int)selectedContend.Country,
-                (int?)contentChanges.ContentType ?? (int)selectedContend.ContentType,
-                contentChanges.Duration ?? selectedContend.Duration,
-                contentChanges.ReleasedAt ?? selectedContend.ReleasedAt,
-                contentChanges.PlannedSeries ?? selectedContend.PlannedSeries,
-                contentChanges.MinAge ?? selectedContend.MinAge
-            ), token);
-
-            if (contentChanges.Genres is not null)
-            {
-                //TODO: Create Genres
-            }
+            throw new ContentNotFoundException(changeUnit.TargetId.Value);
         }
+
+        var selectedContend = contents.Single();
+        await _contentService.UpdateAsync(new UpdateContentModel(
+            changeUnit.TargetId.Value,
+            contentChanges.ImageId ?? selectedContend.ImageId,
+            contentChanges.Title ?? selectedContend.Title,
+            contentChanges.EngTitle ?? selectedContend.EngTitle,
+            contentChanges.OriginTitle ?? selectedContend.OriginTitle,
+            contentChanges.Description ?? selectedContend.Description,
+            (int?)contentChanges.Country ?? (int)selectedContend.Country,
+            (int?)contentChanges.ContentType ?? (int)selectedContend.ContentType,
+            contentChanges.Duration ?? selectedContend.Duration,
+            contentChanges.ReleasedAt ?? selectedContend.ReleasedAt,
+            contentChanges.PlannedSeries ?? selectedContend.PlannedSeries,
+            contentChanges.MinAge ?? selectedContend.MinAge
+        ), token);
+
+        if (contentChanges.Genres is not null)
+        {
+            //TODO: Create Genres
+        }
+
+        return changeUnit.TargetId.Value;
     }
 
     public async Task<HistoryUnit[]> QueryAsync(ChangesHistoryQueryModel query, CancellationToken token)

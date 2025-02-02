@@ -19,6 +19,7 @@ public class ContentRepository : BaseKapaceRepository, IContentRepository
     {
         const string initSql = @"SELECT * FROM content WHERE 1=1";
         var command = new ExperimentalQueryBuilder(initSql)
+            .CanReturnWholeTable(true)
             .WhereAny("id", query.Ids)
             .WhereAny("status", query.Statuses)
             .WhereAny("type", query.Types)
@@ -222,7 +223,7 @@ OFFSET @Offset";
             model.ImageId,
             model.Title,
             model.EngTitle,
-            OriginalTitle = model.OriginTitle,
+            model.OriginTitle,
             model.Description,
             model.Country,
             model.ContentType,

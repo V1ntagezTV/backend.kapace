@@ -20,16 +20,61 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="e863d32b-f8af-451f-8084-8db13fa65ff5" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/backend.Models/Enums/EpisodeOrderType.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend.Migrator/Migrations/202411150153_AddUsers.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend.Migrator/Migrations/202502020134_AddContentGenreCompositeType.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend.Migrator/Migrations/202502020234_AddTitleColumnToChangesHistory.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend.kapace/AuthOptions.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend.kapace/BLL/Exceptions/UserNotFoundException.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend.kapace/BLL/Models/Permissions/Permission.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend.kapace/BLL/Models/Permissions/PermissionQuery.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend.kapace/BLL/Models/User/User.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend.kapace/BLL/Models/User/UserPermission.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend.kapace/BLL/Services/Interfaces/IPermissionService.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend.kapace/BLL/Services/Interfaces/IUserService.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend.kapace/BLL/Services/PermissionService.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend.kapace/BLL/Services/UserService.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend.kapace/Controllers/PermissionController.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend.kapace/Controllers/UserController.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend.kapace/Controllers/UserPermissionController.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend.kapace/DAL/Models/Permission.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend.kapace/DAL/Models/Query/PermissionQuery.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend.kapace/DAL/Models/Query/UserPermissionsQuery.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend.kapace/DAL/Models/Query/UserQuery.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend.kapace/DAL/Models/User.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend.kapace/DAL/Models/UserPermission.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend.kapace/DAL/Repository/Interfaces/IPermissionRepository.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend.kapace/DAL/Repository/Interfaces/IUserPermissionRepository.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend.kapace/DAL/Repository/Interfaces/IUserRepository.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend.kapace/DAL/Repository/PermissionRepository.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend.kapace/DAL/Repository/UserPermissionRepository.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend.kapace/DAL/Repository/UserRepository.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend.kapace/Middlewares/ClaimsPrinciapalExtension.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend.kapace/Models/Requests/Permission/V1PermissionCreateRequest.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend.kapace/Models/Requests/Permission/V1PermissionQueryRequest.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend.kapace/Models/Requests/User/V1LogInRequest.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend.kapace/Models/Requests/User/V1QueryRequest.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend.kapace/Models/Requests/User/V1QueryResponse.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend.kapace/Models/Requests/User/V1RegisterRequest.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend.kapace/Models/Requests/UserPermission/V1UserPermissionQueryRequest.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend.kapace/Models/Requests/UserPermission/V1UserRoleCreateRequest.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend.kapace/Models/Response/V1LogInResponse.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.backend.kapace/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.backend.kapace/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend.Tests/ServiceTests/TranslationServiceTests.cs" beforeDir="false" afterPath="$PROJECT_DIR$/backend.Tests/ServiceTests/TranslationServiceTests.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend.kapace/BLL/Services/Interfaces/ITranslationService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/backend.kapace/BLL/Services/Interfaces/ITranslationService.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend.kapace/BLL/Services/TranslationService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/backend.kapace/BLL/Services/TranslationService.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend.kapace/Controllers/TranslationController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/backend.kapace/Controllers/TranslationController.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Dockerfile" beforeDir="false" afterPath="$PROJECT_DIR$/Dockerfile" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend.Infrastructure/backend.Infrastructure.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/backend.Infrastructure/backend.Infrastructure.csproj" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend.Migrator/appsettings.json" beforeDir="false" afterPath="$PROJECT_DIR$/backend.Migrator/appsettings.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend.kapace/BLL/Services/ChangesHistoryService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/backend.kapace/BLL/Services/ChangesHistoryService.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend.kapace/BLL/Services/ContentService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/backend.kapace/BLL/Services/ContentService.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend.kapace/BLL/Services/Interfaces/IContentService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/backend.kapace/BLL/Services/Interfaces/IContentService.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend.kapace/Controllers/ContentController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/backend.kapace/Controllers/ContentController.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/backend.kapace/DAL/Experimental/ExperimentalQueryBuilder.cs" beforeDir="false" afterPath="$PROJECT_DIR$/backend.kapace/DAL/Experimental/ExperimentalQueryBuilder.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend.kapace/DAL/Models/QueryEpisode.cs" beforeDir="false" afterPath="$PROJECT_DIR$/backend.kapace/DAL/Models/QueryEpisode.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend.kapace/DAL/Repository/EpisodeRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/backend.kapace/DAL/Repository/EpisodeRepository.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend.kapace/Models/Requests/V1GetByEpisodeRequest.cs" beforeDir="false" afterPath="$PROJECT_DIR$/backend.kapace/Models/Requests/V1GetByEpisodeRequest.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend.kapace/DAL/Repository/ChangesHistoryRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/backend.kapace/DAL/Repository/ChangesHistoryRepository.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend.kapace/DAL/Repository/ContentGenreRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/backend.kapace/DAL/Repository/ContentGenreRepository.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend.kapace/DAL/Repository/ContentRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/backend.kapace/DAL/Repository/ContentRepository.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend.kapace/DAL/Repository/Interfaces/IChangesHistoryRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/backend.kapace/DAL/Repository/Interfaces/IChangesHistoryRepository.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend.kapace/Models/Requests/V1RequestGetSearchByRequest.cs" beforeDir="false" afterPath="$PROJECT_DIR$/backend.kapace/Models/Requests/V1RequestGetSearchByRequest.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend.kapace/Program.cs" beforeDir="false" afterPath="$PROJECT_DIR$/backend.kapace/Program.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend.kapace/appsettings.json" beforeDir="false" afterPath="$PROJECT_DIR$/backend.kapace/appsettings.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend.kapace/backend.kapace.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/backend.kapace/backend.kapace.csproj" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -64,48 +109,86 @@
   <component name="HighlightingSettingsPerFile">
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/ILViewer/7a1ee6358a994161bde0ad1d67710e9331800/96/9fc37270/02000013pdb18.il" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/0569b0077204454f81bddfb6b9cedcdb11878/d7/15bd8890/IFormFile.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/0629abf46cc04042af761ac9e079516fb08b0/0b/afd4dcc4/Controller.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/1b0e1e21e75b48dcba018df3219ae8d013918/03/529183d7/AuthorizationAppBuilderExtensions.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/2c9a834339734971a26ff4809ce820ac16930/0f/6cd13f78/CorsPolicyBuilder.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/2e05c689147a42f6af92b86a11453a171f48b0/b1/1882f319/RandomNumberGenerator.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/44c0db71b152418abf938b97293d7c9118878/8c/e04def16/WebApplicationBuilder.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/44c0db71b152418abf938b97293d7c9118878/cb/74eff772/ConfigureHostBuilder.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/45630cf4483c452baedc1386b464839e26908/cd/56adeab6/AuthAppBuilderExtensions.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/4c464a4bd3d54092a415b44fe574da3e7878/12/c350bd88/IServiceProvider.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/5f0c3cb16c8841e4af9e58ec3fa4ba42140000/6a/67b7a623/NpgsqlTransaction.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/5f0c3cb16c8841e4af9e58ec3fa4ba42140000/e7/84c04911/NpgsqlDataSourceBuilder.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/68eb204781ff4937ba821ccddcf1fb121a920/90/179011af/ClaimsAuthorizationRequirement.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/7462dfe485934fe8b101381ea7f8a32318930/09/27246ee5/ClaimTypes.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/7e62198beab24380bbac29171862d1d8adf10/8b/524d76d8/JsonConvert.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/8861306adf8e4e239787353bb94c2c416d910/44/d646a6a6/PasswordHasher`1.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/9a75db2ee53a44f18e16ec32eaee72c6157800/02/e89f0c8f/NpgsqlSnakeCaseNameTranslator.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/9a75db2ee53a44f18e16ec32eaee72c6157800/45/6da959b6/NpgsqlDataSourceBuilder.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/9e70c4835c5b4a869ad017ebfa8cf5741de928/44/06a21159/ControllerBase.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/9e70c4835c5b4a869ad017ebfa8cf5741de928/87/6c85878a/NotFoundResult.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/a2747906576a46259d8a8aaa0318775f10c80/a6/564227f5/ImmutableHashSet`1.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/b616a04aee234f559f7397d94bd90dadf8a0/74/5ce75e9c/IHostBuilder.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/baaa78b6cf7e4b1a992d232affca545d2e0878/3d/e955f67c/CommandType.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/cd09a527672c4f27bd06cb028e98e96245c20/5b/b01a67ca/SigningCredentials.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/dd85d1af76a544e1a8083607f687e374b1d8a0/11/5cf84b31/String.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/dd85d1af76a544e1a8083607f687e374b1d8a0/1b/a532f517/FileMode.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/dd85d1af76a544e1a8083607f687e374b1d8a0/b5/2a04f0ac/IComparable.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/dd85d1af76a544e1a8083607f687e374b1d8a0/c4/0b1d2888/Int64.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/dd85d1af76a544e1a8083607f687e374b1d8a0/cc/c389bb52/IEquatable`1.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/dd85d1af76a544e1a8083607f687e374b1d8a0/da/a8f07ca8/FileStream.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/e4442d07fd8b419c9f280663e454bc1f10908/19/c331a31d/AuthenticationProperties.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/135d867c4d4e51c04ef59bb0217b3148b1206070e29579a6ce187125a52bf54e/AbstractValidator.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/16d5123f56d0ba4dd3a469ce5c9819531fb0679a3fc4608defed55dc4a795f/DynamicParameters.ParamInfo.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/1d8b23e1e431b24cf7c1dfb82e9beaa902041dd7e3da0f56c5991144595/AuthorizeAttribute.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/1e3ef8e0f531f5eda8476faaad7e4cc6d1b4259df0279c917a648dc6b4f62b/LogLevel.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/1e8feaadf5c3fa14d36ea2a638c432a2e1a47b7837d8b83d88303c5d9c15cf/AsyncValueTaskMethodBuilderT.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/23c646a82d4df66af1cb96f366d74b6bf136a4ca66a38de00ceae827db540f3/SwaggerBuilderExtensions.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/27633a066f89dc9a0c637aaa4ab422ea3485c058fefc65fe8cbaa534bca92/System.Drawing.Common.notsupported.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/294078ecfce6fdb942ecfee089f09717de7a6fcfe5efd9fdb6f4f93c0fb4813/ActionMethodExecutor.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/2b25845d6452361ed239f2bec3cd760f672bdd0f7548ab198186b74bcd9ad/UIntPtr.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/2b96b5151352ef131bdd49e82bf5fa369d33728159a2f6b78f0b23b2083c47/CorsPolicy.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/2fc4c8cf3df228218c71fb73de47eda7c4e6d3c0aaac3da0b2e83ffd2b84b/MarshalByRefObject.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/34d8f3c0e7b1546c52a1dbf62b96e6dd742311e89a576f862ae9869ec70d111/PasswordHasherCompatibilityMode.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/3762d68b262a12e791b5994fdf443d3c8fca5d94a67de27b4c94a92e4ba170/Claim.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/387238ef9c8f8c6b1dccf4dcba4eed0e459454919b2e4b9cad11a5071789df/Dictionary.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/3dfd26dc82a1e3cfd661c24f53c10313261d6b818f681ae91e5cb23659834e/CookieSecurePolicy.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/4393b886a286b7656c92b4aee5d9759858ee3ca3f858a1b518be26bea0c7/String.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/4b145ae2c3f9a0568b79fb9dbbad66cb088e694a46e2ff6c4afd542b46a738f/PasswordHasherOptions.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/4eae6449caa21e90c2ff2d63846343457a0e4192fb25892da80d78feb4774f/JsonSerializer.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/519fdeecd06ab5f295de876cdd5cd44e48d971adf6f425b2ee587af0e9a83256/SwaggerUIBuilderExtensions.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/58e753b49452a9b2ca6a4a8ffb5fdf4e88633db5cdc6516141328567148779/NpgsqlConnection.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/5b20caa11edefc0a29fd9d51441ec5312aec93f13c72f85f79a7bf134b12/CorsMiddlewareExtensions.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/621526284d3e4868b98948aff942206525763e57e194a27623b66c384466/ServiceProviderServiceExtensions.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/6547c88d29ba952d3c54048f6075ce669941604b4d5c17dcb724a92cd79d1/IPasswordHasher.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/664cbee725962b135a242df29ab516bb40b0a044f987163922ae7f53593d85cb/CorsPolicyBuilder.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/6f7c864e5dc34b4273776aed9bd84122db8bd56697216d14da3ae529ff5a39f/Int64.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/73636858f7daab78f2cc49bdcbeaa9d9ef62f4b520b14958fcf6c4c276b2b53d/CookieAuthenticationOptions.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/7462dfe485934fe8b101381ea7f8a32318930/_065bf/ClaimTypes.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/783dde63b7e28bd3cc8f639cca40dbd7b98d947e8dbb403d329ccfbc9741a1c/IAuthorizationRequirement.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/79fbf5ff554b611622a4207ff363d1c026ccac52f8ef8f6318a1cc5ab7e4/ObjectResult.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/7a9ad2597224d3d578188917875d83477882e03550c1d9153da781fae14e7bfc/Image.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/7d137b6d70f9e4b5f7c4ab2881b71031d997eb5484062a6cb603cd12f8415c0/ClaimsAuthorizationRequirement.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/85448f861b1cb95910693f28a5ce3363967c79953b460b176d97298ae5ed0/Nullable.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/89fc03ca4e165e42ae4986035c8134456453dfd324d3af5cea356e64881201c/UseMiddlewareExtensions.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/8d42d5f1712377031e2892d1c29db5c23b8c7d49b9dc632fbf463bd930a8/RuntimeHelpers.CoreCLR.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/93d86075cc58e07d2afce083125d06d266cbabf93e4ec1d45c224d86a4a38e/DateTimeOffset.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/946d42e3573fb27245b682703c129c21b2b471d74fac086296ee2dd68772534/ValueType.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/9a6b1457cbcf17db31a383ba49ef9bcc786cf3ef77146d997eee499b27a46d/Object.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/a192798a378756b65d39ade7e525d998a5a4132be299822f925fc6b5712698/NpgsqlCommand.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/a29a41e2a5f155c6a4aa89680cf4647cdfaf461525f344b2c3191449d4a711/AuthenticationProperties.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/b1522679f4a20fb50968ccbf51269d3a82343b52b28883a59c419369126beea/DynamicParameters.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/b313da33bf23fc7b4c94424a811e95904df761ec7d362ce9cbea94a75369e9b2/DbCommand.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/b38f9bbbb9cc9593cbc2a53acc97482ffee1bb4a2482150a9c85e9d4a1dac/CookieBuilder.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/b8c56d5b036f2a6fe79726c905c982bb3e77beec6526d3695d5daf1286da/SqlMapper.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/bb22307331e5e85550767561182cfbce172780bed0e5e9c1faf39ec237b49e/CommandDefinition.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/bd1d5c50194fea68ff3559c160230b0ab50f5acf4ce3061bffd6d62958e2182/ExceptionDispatchInfo.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/bd55fb26296f9ba7a688ddc8a1b7add6c71c28f1f4f0e4e4e4fad8bccf518ea6/Single.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/c59a6f62bf176cfd6fef0e1271a615c3d713edf32ca954785c28cc66b9395d/HttpPostAttribute.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/d266c1e77fc3dc9a487449a3302d8d3126708063695aa99c8d3a9beea16149/AuthorizationHandler.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/ddfe5f2cab585726db85fc046e76ea5725f69d647c242379a11c6da8029c727/ClaimsPrincipal.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/df93188ecf20a1b2429bc6e272ea50b3ed54a7d55a57f087a853f1b2939d8a/SpanHelpers.Char.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/e6ffa07170418d752d8a58b1274f31a9a168653dc121755eb77a3f8fea12/PasswordHasher.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/e74356f198b598e97eaeea83e8b7b1f2bfe27c0a39fedf86bb7dc44827fbda/ActionMethodExecutor.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/f3981d658666ec9cc1e6958fe22f8614bfe02ccb6625b056c3ece3729c9262/JsonConvert.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/f44bd7399a5543e18e9023705c5cc16330878/_7bd20/KeyAttribute.cs" root0="SKIP_HIGHLIGHTING" />
@@ -141,10 +224,13 @@
     &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
     &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
     &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;Errors&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;RoslynSettingsId&quot;,
     &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   },
   &quot;keyToStringList&quot;: {
+    &quot;DatabaseDriversLRU&quot;: [
+      &quot;postgresql&quot;
+    ],
     &quot;rider.external.source.directories&quot;: [
       &quot;C:\\Users\\insur\\AppData\\Roaming\\JetBrains\\Rider2022.3\\resharper-host\\DecompilerCache&quot;,
       &quot;C:\\Users\\insur\\AppData\\Roaming\\JetBrains\\Rider2022.3\\resharper-host\\SourcesCache&quot;,
@@ -533,6 +619,42 @@
       <workItem from="1730402203015" duration="595000" />
       <workItem from="1730497912979" duration="8649000" />
       <workItem from="1730634992909" duration="12245000" />
+      <workItem from="1730731227980" duration="1421000" />
+      <workItem from="1730843767727" duration="709000" />
+      <workItem from="1730912421019" duration="2876000" />
+      <workItem from="1731006518068" duration="599000" />
+      <workItem from="1731076603111" duration="10224000" />
+      <workItem from="1731246937778" duration="2778000" />
+      <workItem from="1731347857928" duration="8772000" />
+      <workItem from="1731435071748" duration="2059000" />
+      <workItem from="1731526648847" duration="5209000" />
+      <workItem from="1731605894482" duration="10026000" />
+      <workItem from="1731679845044" duration="30830000" />
+      <workItem from="1731850212930" duration="8712000" />
+      <workItem from="1731955922766" duration="11217000" />
+      <workItem from="1732129141442" duration="1709000" />
+      <workItem from="1732227670561" duration="9518000" />
+      <workItem from="1732307473810" duration="12534000" />
+      <workItem from="1732404483182" duration="5049000" />
+      <workItem from="1732476015072" duration="2650000" />
+      <workItem from="1732565505370" duration="6487000" />
+      <workItem from="1732724279629" duration="11564000" />
+      <workItem from="1732833839434" duration="414000" />
+      <workItem from="1732903248897" duration="1731000" />
+      <workItem from="1733071372340" duration="1241000" />
+      <workItem from="1733251919161" duration="7759000" />
+      <workItem from="1733511074520" duration="401000" />
+      <workItem from="1734193799707" duration="7068000" />
+      <workItem from="1734373140896" duration="2179000" />
+      <workItem from="1734382553235" duration="818000" />
+      <workItem from="1736181380354" duration="2247000" />
+      <workItem from="1736364627990" duration="1319000" />
+      <workItem from="1736697402026" duration="1490000" />
+      <workItem from="1736878465663" duration="718000" />
+      <workItem from="1736879411468" duration="8000" />
+      <workItem from="1738101685685" duration="1476000" />
+      <workItem from="1738189711773" duration="3661000" />
+      <workItem from="1738347504337" duration="18358000" />
     </task>
     <task id="LOCAL-00001" summary="add changes history, insert content and approve it">
       <created>1692487739565</created>
@@ -711,17 +833,30 @@
           <option name="timeStamp" value="7" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
-          <url>file://$PROJECT_DIR$/backend.kapace/BLL/Services/ChangesHistoryService.cs</url>
-          <line>218</line>
-          <properties documentPath="C:\Users\insur\RiderProjects\backend-kapace\backend.kapace\BLL\Services\ChangesHistoryService.cs" initialLine="218" containingFunctionPresentation="method 'ApproveContentAsync'">
+          <url>file://$PROJECT_DIR$/backend.kapace/Middlewares/ClaimsPrinciapalExtension.cs</url>
+          <line>7</line>
+          <properties documentPath="C:\Users\insur\RiderProjects\backend-kapace\backend.kapace\Middlewares\ClaimsPrinciapalExtension.cs" initialLine="7" containingFunctionPresentation="method 'GetUserId'">
             <startOffsets>
-              <option value="8222" />
+              <option value="193" />
             </startOffsets>
             <endOffsets>
-              <option value="8294" />
+              <option value="194" />
             </endOffsets>
           </properties>
-          <option name="timeStamp" value="17" />
+          <option name="timeStamp" value="25" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/backend.kapace/Controllers/UserController.cs</url>
+          <line>36</line>
+          <properties documentPath="C:\Users\insur\RiderProjects\backend-kapace\backend.kapace\Controllers\UserController.cs" initialLine="38" containingFunctionPresentation="method 'V1GetCurrent'">
+            <startOffsets>
+              <option value="1248" />
+            </startOffsets>
+            <endOffsets>
+              <option value="1278" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="26" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
@@ -732,6 +867,11 @@
         <PinnedItemInfo parentTag="Type#Swashbuckle.AspNetCore.SwaggerGen.SwaggerGeneratorOptions" memberName="OperationFilters" />
       </pinned-members>
     </pin-to-top-manager>
+    <watches-manager>
+      <configuration name="LaunchSettings">
+        <watch expression="new Microsoft.AspNetCore.Server.Kestrel.Core.Internal.Http.HttpHeaders.HttpHeadersDebugView(new Microsoft.AspNetCore.Http.HttpRequest.HttpRequestDebugView(new Microsoft.AspNetCore.Http.HttpContext.HttpContextDebugView(this.&lt;&gt;4__this.HttpContext).Request).Headers).Items[13]" />
+      </configuration>
+    </watches-manager>
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />

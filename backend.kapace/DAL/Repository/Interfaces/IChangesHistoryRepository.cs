@@ -10,4 +10,5 @@ public interface IChangesHistoryRepository
     Task<IReadOnlyCollection<HistoryUnit>> QueryAsync(ChangesHistoryQuery query, CancellationToken token);
     Task UpdateTextAsync(long historyId, string text, CancellationToken token);
     Task<NpgsqlTransaction> BeginTransaction(CancellationToken token);
+    Task UpdateTargetId(long historyId, long newTargetId, CancellationToken token);
 }
