@@ -5,4 +5,5 @@ public record User(
     string Nickname,
     string HashedPassword,
     string Email,
+    bool IsMailVerified,
     DateTimeOffset CreatedAt);

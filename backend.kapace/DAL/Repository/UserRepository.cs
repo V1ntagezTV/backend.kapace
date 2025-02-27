@@ -51,4 +51,61 @@ VALUES (@Nickname, @Email, @PasswordHash, @CreatedAt);";
         var command = new CommandDefinition(initSql, parameters, cancellationToken: token);
         await connection.ExecuteAsync(command);
     }
+
+    public async Task UpdateVerifiedMail(long userId, bool isMailVerified, CancellationToken token)
+    {
+        const string initSql = $"""
+                                UPDATE users
+                                SET is_mail_verified = @{nameof(isMailVerified)}
+                                WHERE id = @{nameof(userId)}
+                                """;
+
+        var parameters = new
+        {
+            userId,
+            isMailVerified
+        };
+        
+        await using var connection = CreateConnection();
+        var command = new CommandDefinition(initSql, parameters, cancellationToken: token);
+        await connection.ExecuteAsync(command);
+    }
+
+    public async Task UpdatePassword(long userId, string passwordHash, CancellationToken token)
+    {
+        const string initSql = $"""
+                               UPDATE users
+                               SET password_hash = @{nameof(passwordHash)}
+                               WHERE id = @{nameof(userId)}
+                               """;
+
+        var parameters = new
+        {
+            userId,
+            passwordHash
+        };
+        
+        await using var connection = CreateConnection();
+        var command = new CommandDefinition(initSql, parameters, cancellationToken: token);
+        await connection.ExecuteAsync(command);
+    }
+
+    public async Task UpdateNickname(long userId, string newNickname, CancellationToken token)
+    {
+        var initSql = $"""
+                       UPDATE users
+                       SET nickname = @{newNickname}
+                       WHERE id = @{userId}
+                       """;
+
+        var parameters = new
+        {
+            userId,
+            newNickname
+        };
+        
+        await using var connection = CreateConnection();
+        var command = new CommandDefinition(initSql, parameters, cancellationToken: token);
+        await connection.ExecuteAsync(command);
+    }
 }

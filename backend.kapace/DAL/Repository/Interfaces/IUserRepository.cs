@@ -13,4 +13,8 @@ public interface IUserRepository
         string passwordHash,
         DateTimeOffset createdAt,
         CancellationToken token);
+
+    Task UpdateVerifiedMail(long userId, bool isMailVerified, CancellationToken token);
+    Task UpdatePassword(long userId, string passwordHash, CancellationToken token);
+    Task UpdateNickname(long userId, string newNickname, CancellationToken token);
 }

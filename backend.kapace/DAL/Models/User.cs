@@ -7,4 +7,6 @@ public class User
     public string PasswordHash { get; set; }
     public string Email { get; set; }
     public DateTimeOffset CreatedAt { get; set; }
+    
+    public bool IsMailVerified { get; set; }
 }

@@ -7,9 +7,12 @@ using backend.kapace.DAL.Experimental;
 using backend.kapace.DAL.Experimental.StarsRepository;
 using backend.kapace.DAL.Repository;
 using backend.kapace.DAL.Repository.Interfaces;
+using backend.kapace.Middlewares;
+using backend.kapace.Options;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.CookiePolicy;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
@@ -20,9 +23,13 @@ AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
 Dapper.DefaultTypeMap.MatchNamesWithUnderscores = true;
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddExceptionHandler<ServiceExceptionHandler>();
+builder.Services.AddProblemDetails();
 var services = builder.Services;
 var config = builder.Configuration;
 
+services.Configure<SmtpMailOptions>(builder.Configuration.GetSection(nameof(SmtpMailOptions)));
 services.AddScoped<IContentRepository, ContentRepository>();
 services.AddScoped<IContentService, ContentService>();
 services.AddScoped<IEpisodeRepository, EpisodeRepository>();
@@ -65,8 +72,9 @@ services.AddSwaggerGen(c =>
     c.SwaggerDoc("v0.1", new OpenApiInfo { Title = "My API", Version = "v0.1" });
 });
 AddAuthorization();
-var app = builder.Build();
 
+var app = builder.Build();
+app.UseExceptionHandler();
 app.MapControllers();
 app.UseSwagger();
 app.UseSwaggerUI(c =>
@@ -90,12 +98,20 @@ app.Run();
 void AddAuthorization()
 {
     services
-        .AddAuthorization()
+        .AddAuthorization(options =>
+        {
+            var defaultPolicies = new AuthorizationPolicyBuilder(
+                CookieAuthenticationDefaults.AuthenticationScheme,
+                JwtBearerDefaults.AuthenticationScheme);
+            
+            defaultPolicies = defaultPolicies.RequireAuthenticatedUser();
+            options.DefaultPolicy = defaultPolicies.Build();
+        })
         .AddAuthentication(options =>
         {
             options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
         })
-        .AddCookie(options =>
+        .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme, options =>
         {
             options.LoginPath = "";
             // флаг, чтобы кука передавалась только по HTTPS. Это защищает куку от перехвата через атаки типа "man-in-the-middle" на незашифрованных соединениях. Настройка в ASP.NET Core:
@@ -107,7 +123,7 @@ void AddAuthorization()
             // Время жизни куки
             options.ExpireTimeSpan = TimeSpan.FromHours(24);
         })
-        .AddJwtBearer(options =>
+        .AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, options =>
         {
             options.TokenValidationParameters = new TokenValidationParameters
             {
