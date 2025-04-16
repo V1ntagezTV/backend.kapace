@@ -1,5 +1,6 @@
 ﻿using System.Text.Json.Serialization;
 using backend.kapace;
+using backend.kapace.BLL;
 using backend.kapace.BLL.Services;
 using backend.kapace.BLL.Services.Interfaces;
 using backend.kapace.DAL;
@@ -51,7 +52,11 @@ services.AddScoped<IUserRepository, UserRepository>();
 services.AddScoped<IUserPermissionRepository, UserPermissionRepository>();
 services.AddScoped<IPermissionRepository, PermissionRepository>();
 services.AddScoped<IPermissionService, PermissionService>();
-
+services.AddScoped<IVerificationCodeRepository, VerificationCodeRepository>();
+services.AddScoped<IFavoriteRepository, FavoriteRepository>();
+services.AddScoped<IFavoriteService, FavoriteService>();
+services.AddScoped<ILoggingRepository, LoggingRepository>();
+services.AddMemoryCache();
 var connection = config.GetSection("SqlConnection").Value ?? throw new ArgumentException();
 var npgsqlBuilder = new NpgsqlDataSourceBuilder(connection);
 npgsqlBuilder.MapComposites();
@@ -122,6 +127,10 @@ void AddAuthorization()
             options.Cookie.SameSite = SameSiteMode.None;
             // Время жизни куки
             options.ExpireTimeSpan = TimeSpan.FromHours(24);
+            // Включает "скользящее" время жизни куки, которое автоматически обновляет время жизни куки при каждом запросе
+            options.SlidingExpiration = true;
+            // Включает проверку валидности куки при каждом запросе
+            options.Cookie.IsEssential = true;
         })
         .AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, options =>
         {

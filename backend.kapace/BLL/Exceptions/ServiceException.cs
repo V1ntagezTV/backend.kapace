@@ -19,4 +19,9 @@ internal sealed class ServiceException : Exception
 
         return this;
     }
+
+    internal ServiceException SetData<T>(string key, T value) where T : struct
+    {
+        return SetData(key, value.ToString());
+    }
 }

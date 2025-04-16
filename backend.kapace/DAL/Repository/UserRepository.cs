@@ -8,10 +8,9 @@ using Npgsql;
 
 namespace backend.kapace.DAL.Repository;
 
-public class UserRepository : BaseKapaceRepository, IUserRepository
+public class UserRepository(NpgsqlDataSource npgsqlDataSource)
+    : BaseKapaceRepository(npgsqlDataSource), IUserRepository
 {
-    public UserRepository(NpgsqlDataSource npgsqlDataSource) : base(npgsqlDataSource) { }
-
     public async Task<IReadOnlyCollection<User>> Query(UserQuery query, CancellationToken token)
     {
         const string initSql = "SELECT * FROM users WHERE 1=1";
@@ -28,16 +27,17 @@ public class UserRepository : BaseKapaceRepository, IUserRepository
         return result.ToArray();
     }
 
-    public async Task Insert(
-        string nickname,
+    public async Task<long> Insert(string nickname,
         string email,
         string passwordHash,
         DateTimeOffset createdAt,
         CancellationToken token)
     {
-        const string initSql = @"
-INSERT INTO users(nickname, email, password_hash, created_at)
-VALUES (@Nickname, @Email, @PasswordHash, @CreatedAt);";
+        const string initSql = """
+                               INSERT INTO users(nickname, email, password_hash, created_at)
+                               VALUES (@Nickname, @Email, @PasswordHash, @CreatedAt)
+                               RETURNING id;
+                               """;
         
         var parameters = new
         {
@@ -49,7 +49,7 @@ VALUES (@Nickname, @Email, @PasswordHash, @CreatedAt);";
         
         await using var connection = CreateConnection();
         var command = new CommandDefinition(initSql, parameters, cancellationToken: token);
-        await connection.ExecuteAsync(command);
+        return await connection.QuerySingleAsync<long>(command);
     }
 
     public async Task UpdateVerifiedMail(long userId, bool isMailVerified, CancellationToken token)
@@ -92,11 +92,11 @@ VALUES (@Nickname, @Email, @PasswordHash, @CreatedAt);";
 
     public async Task UpdateNickname(long userId, string newNickname, CancellationToken token)
     {
-        var initSql = $"""
-                       UPDATE users
-                       SET nickname = @{newNickname}
-                       WHERE id = @{userId}
-                       """;
+        const string initSql = $"""
+                               UPDATE users
+                               SET nickname = @{nameof(newNickname)}
+                               WHERE id = @{nameof(userId)}
+                               """;
 
         var parameters = new
         {
@@ -104,6 +104,20 @@ VALUES (@Nickname, @Email, @PasswordHash, @CreatedAt);";
             newNickname
         };
         
+        await using var connection = CreateConnection();
+        var command = new CommandDefinition(initSql, parameters, cancellationToken: token);
+        await connection.ExecuteAsync(command);
+    }
+
+    public async Task EmailUpdate(long userId, string newEmail, CancellationToken token)
+    {
+        const string initSql = $"""
+                                UPDATE users
+                                SET email = @{nameof(newEmail)}
+                                WHERE id = @{nameof(userId)}
+                                """;
+
+        var parameters = new { userId, newEmail };
         await using var connection = CreateConnection();
         var command = new CommandDefinition(initSql, parameters, cancellationToken: token);
         await connection.ExecuteAsync(command);

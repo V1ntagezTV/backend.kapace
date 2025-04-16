@@ -1,4 +1,5 @@
 ﻿using System.Data;
+using backend.kapace.DAL.Experimental;
 using backend.kapace.DAL.Models;
 using backend.kapace.DAL.Repository.Interfaces;
 using backend.kapace.Infrastructure.Database;
@@ -19,10 +20,10 @@ public class ContentGenreRepository : BaseKapaceRepository, IContentGenreReposit
     public async Task Insert(ContentGenreV1[] contentGenres, CancellationToken token)
     {
         const string sql =
-            @"
+            """
             INSERT INTO content_genre(content_id, genre_id, created_at, created_by) 
             SELECT * FROM unnest(@Values);
-            ";
+            """;
 
         var parameters = new
         {
@@ -34,10 +35,13 @@ public class ContentGenreRepository : BaseKapaceRepository, IContentGenreReposit
         await connection.QueryAsync(command);
     }
     
-    public async Task<TQueryResult[]> QueryAsync<TQueryResult>(QueryContentGenre query, CancellationToken token)
+    public async Task<TQueryResult[]> QueryAsync<TQueryResult>(
+        QueryContentGenre query,
+        CancellationToken token)
         where TQueryResult: ContentGenreV1
     {
-        var initSql = @"SELECT * FROM content_genre";
+        var initSql = "SELECT * FROM content_genre";
+        
         var parameters = new DynamicParameters();
         var filters = new List<string>();
         

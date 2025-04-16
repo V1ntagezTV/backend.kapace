@@ -7,6 +7,7 @@ using backend.kapace.DAL.Models;
 using backend.kapace.DAL.Repository.Interfaces;
 using backend.kapace.Models;
 using backend.Models.Enums;
+using Microsoft.Extensions.Caching.Memory;
 using Content = backend.kapace.BLL.Models.VideoService.Content;
 using ContentQuery = backend.kapace.BLL.Models.ContentQuery;
 using QueryContent = backend.kapace.DAL.Models.QueryContent;
@@ -16,17 +17,20 @@ namespace backend.kapace.BLL.Services;
 
 public class ContentService : IContentService
 {
+    private readonly IMemoryCache _memoryCache;
     private readonly IContentRepository _contentRepository;
     private readonly IEpisodeRepository _episodeRepository;
     private readonly IContentGenreRepository _contentGenreRepository;
     private readonly ITranslationRepository _translationRepository;
 
     public ContentService(
+        IMemoryCache memoryCache,
         IContentRepository contentRepository,
         IEpisodeRepository episodeRepository,
         IContentGenreRepository contentGenreRepository,
         ITranslationRepository translationRepository)
     {
+        _memoryCache = memoryCache;
         _contentRepository = contentRepository;
         _episodeRepository = episodeRepository;
         _contentGenreRepository = contentGenreRepository;
@@ -123,6 +127,14 @@ public class ContentService : IContentService
         QueryPaging pagingSettings,
         CancellationToken token)
     {
+        const string mainPageCacheKey = "main_page_key";
+
+        var cacheKey = mainPageCacheKey + mainPageType;
+        if (_memoryCache.TryGetValue(cacheKey, out IReadOnlyCollection<Content>? value) && value != null)
+        {
+            return value;
+        }
+
         const int popularListForDays = 14;
         var content = mainPageType switch
         {
@@ -137,6 +149,10 @@ public class ContentService : IContentService
             
             _ => Array.Empty<DAL.Models.Content>()
         };
+
+        const int absoluteCacheLiveDuration = 5 * 1000;
+
+        _memoryCache.Set(cacheKey, content, TimeSpan.FromMinutes(absoluteCacheLiveDuration));
 
         return content.Select(Content.ToBllContent).ToArray();
     }

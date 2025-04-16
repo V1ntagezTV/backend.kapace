@@ -240,7 +240,7 @@ OFFSET @Offset";
 
     public async Task<IReadOnlyCollection<Content>> SearchByText(string? search, CancellationToken token)
     {
-        const string initSql = @$"SELECT * FROM content WHERE title ILIKE CONCAT('%',@Search,'%');";
+        const string initSql = "SELECT * FROM content WHERE title ILIKE CONCAT('%', @Search, '%');";
 
         var parameters = new
         {

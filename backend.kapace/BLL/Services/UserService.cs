@@ -1,8 +1,7 @@
 ﻿using System.Security.Cryptography;
 using backend.kapace.BLL.Exceptions;
-using backend.kapace.BLL.Models.Cache;
-using backend.kapace.BLL.Models.User;
 using backend.kapace.BLL.Services.Interfaces;
+using backend.kapace.DAL.Models;
 using backend.kapace.DAL.Models.Query;
 using backend.kapace.DAL.Repository.Interfaces;
 using backend.kapace.Options;
@@ -10,37 +9,24 @@ using backend.Models.Enums;
 using MailKit.Net.Smtp;
 using MailKit.Security;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Options;
+using Microsoft.IdentityModel.Tokens;
 using MimeKit;
 using User = backend.kapace.BLL.Models.User.User;
+using UserPermission = backend.kapace.BLL.Models.User.UserPermission;
 
 namespace backend.kapace.BLL.Services;
 
-public class UserService : IUserService
+public class UserService(
+    IOptions<SmtpMailOptions> smtpMailOptions,
+    IVerificationCodeRepository verificationCodeRepository,
+    IUserRepository userRepository,
+    IPermissionRepository permissionRepository,
+    IUserPermissionRepository userPermissionRepository,
+    ILoggingRepository loggingRepository)
+    : IUserService
 {
-    const string MailVerificationCodePrefix = "mail_verification_code";
-    const string RestorePasswordCodePrefix = "restore_password_code";
-
-    private readonly SmtpMailOptions _smtpMailOptions;
-    private readonly IMemoryCache _memoryCache;
-    private readonly IUserRepository _userRepository;
-    private readonly IPermissionRepository _permissionRepository;
-    private readonly IUserPermissionRepository _userPermissionRepository;
-
-    public UserService(
-        IOptions<SmtpMailOptions> smtpMailOptions,
-        IMemoryCache memoryCache,
-        IUserRepository userRepository,
-        IPermissionRepository permissionRepository,
-        IUserPermissionRepository userPermissionRepository)
-    {
-        _smtpMailOptions = smtpMailOptions.Value;
-        _memoryCache = memoryCache;
-        _userRepository = userRepository;
-        _permissionRepository = permissionRepository;
-        _userPermissionRepository = userPermissionRepository;
-    }
+    private readonly SmtpMailOptions _smtpMailOptions = smtpMailOptions.Value;
 
     public async Task<(User, UserPermission[])> GetCurrent(long currentUserId, CancellationToken token)
     {
@@ -61,7 +47,7 @@ public class UserService : IUserService
 
     public async Task<User[]> Query(UserQuery query, CancellationToken token)
     {
-        var users = await _userRepository.Query(new UserQuery
+        var users = await userRepository.Query(new UserQuery
         {
             UserIds = query.UserIds,
             Nicknames = query.Nicknames,
@@ -75,7 +61,8 @@ public class UserService : IUserService
                 user.PasswordHash,
                 user.Email,
                 user.IsMailVerified,
-                user.CreatedAt))
+                user.CreatedAt,
+                user.ImageUrl))
             .ToArray();
     }
 
@@ -85,18 +72,39 @@ public class UserService : IUserService
         CancellationToken token)
     {
         var user = await GetUserByEmailOrThrow(email, token);
-        ValidateUserPassword(password, user.HashedPassword);
+        if (!IsValidHashedInput(password, user.HashedPassword))
+        {
+            throw new ServiceException(ErrorCode.WrongInputCode);
+        }
+        
         var userRoles = await GetUserPermissions(user.Id, token);
         return (user, userRoles);
     }
 
-    public async Task UpdatePassword(long userId, string oldPassword, string newPassword, CancellationToken token)
+    public async Task UpdatePassword(
+        long userId,
+        string oldPassword,
+        string newPassword,
+        CancellationToken token)
     {
         var user = await GetUserByIdOrThrow(userId, token);
-        ValidateUserPassword(oldPassword, user.HashedPassword);
+        if (IsValidHashedInput(oldPassword, user.HashedPassword))
+        {
+            throw new ServiceException(ErrorCode.WrongInputCode);
+        }
         var hasher = new PasswordHasher<User>();
         var passwordHash = hasher.HashPassword(null!, newPassword);
-        await _userRepository.UpdatePassword(userId, passwordHash, token);
+        await userRepository.UpdatePassword(userId, passwordHash, token);
+
+        var logModel = new LogModel
+        {
+            UserId = userId,
+            Changes = [new LogModel.Value(user.HashedPassword, passwordHash)],
+            CreatedAt = DateTimeOffset.UtcNow,
+            Metadata = ["PasswordUpdate"]
+        };
+        
+        await loggingRepository.Insert(logModel, token);
     }
 
     public async Task Register(string nickname, string email, string password, CancellationToken token)
@@ -105,7 +113,21 @@ public class UserService : IUserService
         var hasher = new PasswordHasher<User>();
         var passwordHash = hasher.HashPassword(null!, password);
 
-        await _userRepository.Insert(nickname, email, passwordHash, DateTimeOffset.UtcNow, token);
+        var userId = await userRepository.Insert(nickname, email, passwordHash, DateTimeOffset.UtcNow, token);
+        
+        var logModel = new LogModel
+        {
+            UserId = userId,
+            Changes = [
+                new LogModel.Value(null, nickname),
+                new LogModel.Value(null, email),
+                new LogModel.Value(null, passwordHash)
+            ],
+            CreatedAt = DateTimeOffset.UtcNow,
+            Metadata = ["Registration"]
+        };
+        
+        await loggingRepository.Insert(logModel, token);
     }
     
     public async Task<bool> TryVerifyMail(long userId, int verificationCode, CancellationToken token)
@@ -113,59 +135,100 @@ public class UserService : IUserService
         var user = await GetUserByIdOrThrow(userId, token);
         if (user.IsMailVerified)
         {
-            throw new ServiceException(ErrorCode.UserMailAlreadyVerified);
+            throw new ServiceException(ErrorCode.EmailAlreadyVerified);
         }
 
-        var cacheKey = GetMailVerificationCodeCacheKey(userId, user.Email);
-        if (_memoryCache.TryGetValue(cacheKey, out MailVerificationCacheValue? value) && value is not null)
+        var codeModels = await verificationCodeRepository.Query(new VerificationCodeQuery
         {
-            if (DateTimeOffset.UtcNow > value.CreatedAt.AddMinutes(Constants.MailVerificationCodeExpiration))
-            {
-                throw new ServiceException(ErrorCode.MailVerificationError);
-            }
+            UserId = userId,
+            Type = VerificationCodeType.MailApprove,
+            IsUsed = false
+        }, token);
 
-            if (value.AttemptsLeft == 0)
-            {
-                throw new ServiceException(ErrorCode.MailVerificationError);
-            }
-
-            if (value.Code == verificationCode)
-            {
-                await _userRepository.UpdateVerifiedMail(userId, true, token);
-                return true;
-            }
-
-            _memoryCache.Remove(cacheKey);
-            _memoryCache.Set(cacheKey, value with { AttemptsLeft = value.AttemptsLeft - 1 });
+        if (codeModels is null || codeModels.Count == 0)
+        {
             return false;
         }
 
-        return false;
-    }
-
-    public async Task InitMailVerification(long userId, CancellationToken token)
-    {
-        var users = await _userRepository.Query(new UserQuery()
+        var lastCode = codeModels.MaxBy(x => x.CreatedAt);
+        if (DateTimeOffset.UtcNow > lastCode.ExpiresAt.ToUniversalTime())
         {
-            UserIds = new[] { userId },
-        }, token);
-
-        if (users.Count == 0)
-        {
-            throw new ServiceException(ErrorCode.UserNotFound)
-                .SetData(nameof(userId), userId.ToString());
+            throw new ServiceException(ErrorCode.EmailVerificationError);
         }
 
-        var user = users.Single();
+        if (lastCode.Attempts <= 0)
+        {
+            throw new ServiceException(ErrorCode.EmailVerificationError);
+        }
+
+        if (!IsValidHashedInput(verificationCode.ToString(), lastCode.CodeHash))
+        {
+            lastCode.Attempts -= 1;
+            await verificationCodeRepository.Update(lastCode, token);
+            return false;
+        }
+
+        await userRepository.UpdateVerifiedMail(userId, true, token);
+
+        var logModel = new LogModel
+        {
+            UserId = userId,
+            Changes = [new LogModel.Value(null, user.Email)],
+            CreatedAt = DateTimeOffset.UtcNow,
+            Metadata = ["VerifiedMail"]
+        };
+        
+        await loggingRepository.Insert(logModel, token);
+        return true;
+    }
+
+    public async Task SendMailVerification(long userId, CancellationToken token)
+    {
+        var user = await GetUserByIdOrThrow(userId, token);
         if (user.IsMailVerified)
         {
-            throw new ServiceException(ErrorCode.UserMailAlreadyVerified);
+            throw new ServiceException(ErrorCode.EmailAlreadyVerified);
+        }
+
+        var oldCodesQuery = new VerificationCodeQuery
+        {
+            UserId = userId,
+            CreatedAfter = DateTimeOffset.UtcNow - TimeSpan.FromDays(1),
+            Type = VerificationCodeType.MailApprove,
+        };
+
+        var oldCodes = await verificationCodeRepository.Query(oldCodesQuery, token);
+        if (oldCodes.Count > 0)
+        {
+            const long dayLimit = 5;
+            
+            var todaySentCodes = oldCodes
+                .Where(x => x.CreatedAt > DateTimeOffset.UtcNow - TimeSpan.FromDays(1))
+                .ToArray();
+            
+            // 5 сообщений на почту - лимит в день
+            if (todaySentCodes.Length > dayLimit)
+            {
+                throw new ServiceException(ErrorCode.VerificationCodeDayLimitExceeded)
+                    .SetData(nameof(dayLimit), 5);
+            }
+            
+            // Проверяем кулдаун
+            var cooldownInMin = TimeSpan.FromMinutes(2);
+            var isExistCodeOnCooldown = oldCodes
+                .Any(code => code.CreatedAt.ToUniversalTime() > DateTimeOffset.UtcNow - cooldownInMin);
+            
+            if (isExistCodeOnCooldown)
+            {
+                throw new ServiceException(ErrorCode.VerificationCodeError)
+                    .SetData(nameof(cooldownInMin), cooldownInMin.Minutes);
+            }
         }
 
         var code = GetRandomNumber();
         
         var message = new MimeMessage();
-        message.From.Add(new MailboxAddress("Подтвердите ваш email", _smtpMailOptions.Email));
+        message.From.Add(new MailboxAddress("insurka.ru", _smtpMailOptions.Email));
         message.To.Add(new MailboxAddress("", user.Email));
         message.Subject = "Подтвердите ваш email";
         message.Body = new TextPart("plain")
@@ -174,76 +237,96 @@ public class UserService : IUserService
         };
 
         await SendEmailMessage(message, token);
-        var cacheKey = GetMailVerificationCodeCacheKey(userId, user.Email);
-        var value = new MailVerificationCacheValue(code, DateTimeOffset.UtcNow);
 
-        _memoryCache.Remove(cacheKey);
-        _memoryCache.Set(cacheKey, value, TimeSpan.FromMinutes(Constants.MailVerificationCodeExpiration));
+        await verificationCodeRepository.ClearTable(
+            userId,
+            TimeSpan.FromDays(1),
+            VerificationCodeType.MailApprove,
+            token);
+
+        await verificationCodeRepository.Insert([
+            new VerificationCode
+            {
+                UserId = userId,
+                CodeHash = GetHash(code.ToString()),
+                ExpiresAt = DateTime.Now.AddMinutes(Constants.MailVerificationCodeExpirationInMinutes),
+                Attempts = 3,
+                Type = (int)VerificationCodeType.MailApprove,
+                Email = user.Email,
+            }
+        ], token);
     }
 
-    public async Task UpdateNickname(long userId, string newNickname, CancellationToken token)
+    public async Task UpdateNickname(long userId, string newNickname, bool isForce, CancellationToken token)
     {
         var user = await GetUserByIdOrThrow(userId, token);
         await ValidateNickname(newNickname, token);
-        await _userRepository.UpdateNickname(user.Id, newNickname, token);
+
+        if (!isForce)
+            throw new ServiceException(ErrorCode.CallWithoutForceFlag);
+        
+        await userRepository.UpdateNickname(user.Id, newNickname, token);
+
+        var logModel = new LogModel
+        {
+            UserId = userId,
+            Changes = [new LogModel.Value(user.Nickname, newNickname)],
+            CreatedAt = DateTimeOffset.UtcNow,
+            Metadata = ["UpdateNickname"]
+        };
+        
+        await loggingRepository.Insert(logModel, token);
     }
 
-    public async Task<User> SendPasswordResetCode(string email, CancellationToken token)
+    public async Task<User> PasswordResetSendCode(string email, CancellationToken token)
     {
         var user = await GetUserByEmailOrThrow(email, token);
         var code = GetRandomNumber();
 
         var message = new MimeMessage();
-        message.From.Add(new MailboxAddress("Восстановление пароля на insurka.ru", _smtpMailOptions.Email));
+        message.From.Add(new MailboxAddress("insurka.ru", _smtpMailOptions.Email));
         message.To.Add(new MailboxAddress("", user.Email));
         message.Subject = "Код для восстановления пароля";
         message.Body = new TextPart("plain")
         {
-            Text = $"Your verification code is: {code}",
+            Text = $"""
+                    Никому его не показывайте!
+                    Ваш код для восстановления пароля: {code}. 
+                    Код действителен в течении {Constants.RestorePasswordCodeExpirationInMinutes} минут.
+                    """
         };
-        
-        var cacheKey = GetPasswordResetCacheKey(user.Id, user.Email);
-        var value = new PasswordResetCacheValue(code, DateTimeOffset.UtcNow);
-        _memoryCache.Remove(cacheKey);
-        _memoryCache.Set(cacheKey, value, TimeSpan.FromMinutes(Constants.RestorePasswordCodeExpiration));
+
+        await verificationCodeRepository.Insert([
+            new VerificationCode
+            {
+                UserId = user.Id,
+                CodeHash = GetHash(code.ToString()),
+                ExpiresAt = DateTimeOffset.UtcNow.AddMinutes(Constants.RestorePasswordCodeExpirationInMinutes),
+                Attempts = 3,
+                Type = (int)VerificationCodeType.PasswordReset,
+                Email = user.Email
+            }
+        ], token);
         await SendEmailMessage(message, token);
 
         return user;
     }
     
-    public async Task<User> VerifyPasswordResetCode(string email, int code, CancellationToken token)
+    public async Task<User> PasswordResetVerifyCode(string email, string code, CancellationToken token)
     {
         var user = await GetUserByEmailOrThrow(email, token);
-        var cacheKey = GetPasswordResetCacheKey(user.Id, user.Email);
-        if (_memoryCache.TryGetValue(cacheKey, out PasswordResetCacheValue? value) && value is not null)
-        {
-            if (DateTimeOffset.UtcNow > value.CreatedAt.AddMinutes(Constants.MailVerificationCodeExpiration))
-            {
-                throw new ServiceException(ErrorCode.PasswordResetError);
-            }
 
-            if (value.AttemptsLeft == 0)
-            {
-                throw new ServiceException(ErrorCode.PasswordResetError);
-            }
-
-            if (value.Code == code)
-            {
-                _memoryCache.Remove(cacheKey);
-                return user;
-            }
-
-            var nextValue = value with { AttemptsLeft = value.AttemptsLeft - 1 };
-            _memoryCache.Remove(cacheKey);
-            _memoryCache.Set(cacheKey, nextValue);
-            throw new ServiceException(ErrorCode.PasswordResetError)
-                .SetData(nameof(nextValue.AttemptsLeft), nextValue.AttemptsLeft.ToString());
-        }
-
-        throw new ServiceException(ErrorCode.PasswordResetForbidden);
+        await InternalVerifyCode(
+            user.Id,
+            user.Email,
+            code,
+            VerificationCodeType.PasswordReset,
+            token: token);
+        
+        return user;
     }
 
-    public async Task ResetPassword(long userId, string email, string newPassword, CancellationToken token)
+    public async Task PasswordReset(long userId, string email, string newPassword, CancellationToken token)
     {
         var emailUser = await GetUserByEmailOrThrow(email, token);
         var userByUserId = await GetUserByIdOrThrow(userId, token);
@@ -256,10 +339,194 @@ public class UserService : IUserService
         var passwordHash = hasher.HashPassword(null!, newPassword);
         if (userByUserId.HashedPassword == passwordHash)
         {
-            throw new ServiceException(ErrorCode.UserPasswordMustBeDifferentThanOld);
+            throw new ServiceException(ErrorCode.PasswordMustBeDifferentThanOld);
         }
         
-        await _userRepository.UpdatePassword(userId, newPassword, token);
+        await userRepository.UpdatePassword(userId, GetHash(newPassword), token);
+        
+        var logModel = new LogModel
+        {
+            UserId = userId,
+            Changes = [new LogModel.Value(emailUser.HashedPassword, passwordHash)],
+            CreatedAt = DateTimeOffset.UtcNow,
+            Metadata = ["PasswordReset"]
+        };
+        
+        await loggingRepository.Insert(logModel, token);
+    }
+    
+    public async Task UpdateMailSendCode(long userId, CancellationToken token)
+    {
+        var user = await GetUserByIdOrThrow(userId, token);
+        var code = GetRandomNumber();
+
+        var message = new MimeMessage();
+        message.From.Add(new MailboxAddress("insurka.ru", _smtpMailOptions.Email));
+        message.To.Add(new MailboxAddress("", user.Email));
+        message.Subject = "Код для изменения почтового адреса";
+        message.Body = new TextPart("plain")
+        {
+            Text = $"""
+                    Ваш код для изменения почтового адреса: {code}. Никому его не показывайте!\n
+                    Код действителен в течении {Constants.MailUpdateCodeExpirationInMinutes} минут.
+                    """
+        };
+        
+        await verificationCodeRepository.Insert([
+            new VerificationCode
+            {
+                UserId = user.Id,
+                CodeHash = GetHash(code.ToString()),
+                ExpiresAt = DateTimeOffset.UtcNow.AddMinutes(Constants.MailUpdateCodeExpirationInMinutes),
+                Attempts = 3,
+                Type = (int)VerificationCodeType.MailUpdate,
+                Email = user.Email
+            }
+        ], token);
+        
+        await SendEmailMessage(message, token);
+    }
+
+    public async Task<User> UpdateMailVerifyCode(long userId, string code, CancellationToken token)
+    {
+        var user = await GetUserByIdOrThrow(userId, token);
+        await InternalVerifyCode(
+            user.Id,
+            user.Email,
+            code,
+            VerificationCodeType.MailUpdate,
+            dayLimit: 1,
+            token: token);
+        
+        return user;
+    }
+
+    public async Task SendVerifyCodeToNewEmail(long userId, string newEmail, CancellationToken token)
+    {
+        var usersByEmail = await userRepository.Query(new UserQuery { Emails = [newEmail] }, token);
+        if (usersByEmail.Count != 0)
+        {
+            throw new ServiceException(ErrorCode.EmailAlreadyUsed);
+        }
+        
+        var user = await GetUserByIdOrThrow(userId, token);
+        
+        var code = GetRandomNumber();
+
+        var message = new MimeMessage();
+        message.From.Add(new MailboxAddress("insurka.ru", _smtpMailOptions.Email));
+        message.To.Add(new MailboxAddress("", newEmail));
+        message.Subject = "Код для подтверждения новой электронной почты";
+        message.Body = new TextPart("plain")
+        {
+            Text = $"""
+                    Ваш код: {code}. Никому его не показывайте!\n
+                    Код действителен в течении {Constants.MailUpdateCodeExpirationInMinutes} минут.
+                    """
+        };
+
+        await verificationCodeRepository.Insert([
+            new VerificationCode
+            {
+                UserId = user.Id,
+                CodeHash = GetHash(code.ToString()),
+                ExpiresAt = DateTimeOffset.UtcNow.AddMinutes(Constants.MailUpdateCodeExpirationInMinutes),
+                Attempts = 3,
+                Type = (int)VerificationCodeType.NewMailApprove,
+                Email = newEmail
+            }
+        ], token);
+
+        await SendEmailMessage(message, token);
+    }
+
+    public async Task VerifyNewEmail(long userId, string newEmail, string code, CancellationToken token)
+    {
+        var usersByEmail = await userRepository.Query(new UserQuery { Emails = [newEmail] }, token);
+        if (usersByEmail.Count != 0)
+        {
+            throw new ServiceException(ErrorCode.EmailAlreadyUsed);
+        }
+
+        var currentUser = await GetUserByIdOrThrow(userId, token);
+        
+        await InternalVerifyCode(
+            currentUser.Id,
+            newEmail,
+            code,
+            VerificationCodeType.NewMailApprove,
+            dayLimit: 1,
+            token: token);
+
+        await userRepository.EmailUpdate(currentUser.Id, newEmail, token);
+        
+        var logModel = new LogModel
+        {
+            UserId = userId,
+            Changes = [new LogModel.Value(currentUser.Email, newEmail)],
+            CreatedAt = DateTimeOffset.UtcNow,
+            Metadata = ["EmailUpdate"]
+        };
+        
+        await loggingRepository.Insert(logModel, token);
+    }
+    
+    private async Task InternalVerifyCode(
+        long userId,
+        string verificationEmail,
+        string verificationCode,
+        VerificationCodeType verificationCodeType,
+        int dayLimit = 5,
+        CancellationToken token = default)
+    {
+        var oldCodesQuery = new VerificationCodeQuery
+        {
+            UserId = userId,
+            CreatedAfter = DateTimeOffset.UtcNow - TimeSpan.FromDays(1),
+            Type = verificationCodeType,
+        };
+
+        var verificationCodes = await verificationCodeRepository.Query(oldCodesQuery, token);
+        if (verificationCodes.IsNullOrEmpty())
+        {
+            throw new ServiceException(ErrorCode.VerificationCodeNotFound);
+        }
+
+        if (verificationCodes.Count(x => x.IsUsed) >= dayLimit)
+        {
+            throw new ServiceException(ErrorCode.VerificationCodeDayLimitExceeded);
+        }
+        
+        var lastCode = verificationCodes.MaxBy(x => x.CreatedAt);
+        var timeoutDate = lastCode.ExpiresAt.ToUniversalTime();
+
+        if (lastCode.Email != verificationEmail)
+        {
+            throw new ServiceException(ErrorCode.VerificationCodeError);
+        }
+        
+        if (DateTimeOffset.UtcNow >= timeoutDate)
+        {
+            throw new ServiceException(ErrorCode.VerificationCodeExpired);
+        }
+
+        if (lastCode.Attempts <= 0)
+        {
+            throw new ServiceException(ErrorCode.VerificationCodeAttemptsLimitExceeded);
+        }
+        
+        if (!IsValidHashedInput(verificationCode, lastCode.CodeHash))
+        {
+            lastCode.Attempts -= 1;
+            await verificationCodeRepository.Update(lastCode, token);
+
+            throw new ServiceException(ErrorCode.VerificationCodeNotFound)
+                .SetData(nameof(lastCode.Attempts), lastCode.Attempts.ToString());
+        }
+
+        lastCode.Attempts -= 1;
+        lastCode.IsUsed = true;
+        await verificationCodeRepository.Update(lastCode, token);
     }
 
     private async Task SendEmailMessage(MimeMessage message, CancellationToken token)
@@ -295,7 +562,7 @@ public class UserService : IUserService
     {
         var usersQuery = await Query(new UserQuery
         {
-            Nicknames = new[] { nickname }
+            Nicknames = [nickname]
         }, token);
         
         if (usersQuery is {Length: >0})
@@ -306,7 +573,7 @@ public class UserService : IUserService
 
     private async Task<UserPermission[]> GetUserPermissions(long userId, CancellationToken token)
     {
-        var userPermissions = await _userPermissionRepository.Query(
+        var userPermissions = await userPermissionRepository.Query(
             new UserPermissionsQuery { UserIds = new[] { userId } },
             token);
         
@@ -316,7 +583,7 @@ public class UserService : IUserService
         }
 
         var userPermissionIds = userPermissions.Select(ur => ur.PermissionId).ToArray();
-        var permissions = await _permissionRepository.Query(
+        var permissions = await permissionRepository.Query(
             new() { Ids = userPermissionIds },
             token);
         
@@ -337,18 +604,6 @@ public class UserService : IUserService
             .ToArray();
 
         return result;
-    }
-
-    private static void ValidateUserPassword(
-        string inputPassword,
-        string hashedPassword)
-    {
-        var hasher = new PasswordHasher<User>();
-        var passwordVerificationResult = hasher.VerifyHashedPassword(null!, hashedPassword, inputPassword);
-        if (passwordVerificationResult == PasswordVerificationResult.Failed)
-        {
-            throw new ArgumentException();
-        }
     }
     
     private async Task<User> GetUserByEmailOrThrow(string email, CancellationToken token)
@@ -382,13 +637,19 @@ public class UserService : IUserService
         return usersQuery.Single();
     }
     
-    private static string GetMailVerificationCodeCacheKey(long userId, string userEmail)
+    private static string GetHash(string input)
     {
-        return $"{MailVerificationCodePrefix}-{userId}-{userEmail}";
+        var hasher = new PasswordHasher<User>();
+
+        return hasher.HashPassword(null, input);
     }
     
-    private static string GetPasswordResetCacheKey(long userId, string userEmail)
+    private static bool IsValidHashedInput(
+        string input,
+        string hashValue)
     {
-        return $"{RestorePasswordCodePrefix}-{userId}-{userEmail}";
+        var hasher = new PasswordHasher<User>();
+        var passwordVerificationResult = hasher.VerifyHashedPassword(null!, hashValue, input);
+        return passwordVerificationResult != PasswordVerificationResult.Failed;
     }
 }

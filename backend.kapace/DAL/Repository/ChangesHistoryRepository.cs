@@ -79,6 +79,9 @@ public class ChangesHistoryRepository : BaseKapaceRepository, IChangesHistoryRep
         {
             switch (query.OrderBy)
             {
+                case HistoryChangesOrderType.ByCreatedDescending:
+                    sql += " ORDER BY created_at DESC ";
+                    break;
                 case HistoryChangesOrderType.ByCreated:
                     sql += " ORDER BY created_at ";
                     break;

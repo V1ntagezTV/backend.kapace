@@ -88,10 +88,10 @@ public class EpisodeRepository : BaseKapaceRepository, IEpisodeRepository
         return orderType switch
         {
             EpisodeOrderType.Unspecified => Array.Empty<string>(),
-            EpisodeOrderType.ByNumber => new[] { "number" },
-            EpisodeOrderType.ByNumberDescending => new[] { "number DESC" },
-            EpisodeOrderType.ByStars => new[] { "stars" },
-            EpisodeOrderType.ByViews => new[] { "views" },
+            EpisodeOrderType.ByNumber => ["number"],
+            EpisodeOrderType.ByNumberDescending => ["number DESC"],
+            EpisodeOrderType.ByStars => ["stars"],
+            EpisodeOrderType.ByViews => ["views"],
             _ or null => Array.Empty<string>()
         };
     }

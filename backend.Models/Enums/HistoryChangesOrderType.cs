@@ -6,4 +6,5 @@ public enum HistoryChangesOrderType
     ById = 1,
     ByName = 2,
     ByCreated = 3,
+    ByCreatedDescending = 4,
 }

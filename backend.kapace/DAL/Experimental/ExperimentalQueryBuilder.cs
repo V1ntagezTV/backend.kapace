@@ -8,6 +8,7 @@ namespace backend.kapace.DAL.Experimental;
 internal sealed class ExperimentalQueryBuilder
 {
     private static readonly Random Random = new();
+    private static readonly int DefaultTimeoutInSeconds = 5;
     private readonly string _initSql;
     private readonly DynamicParameters _dynamicParameters = new();
     private readonly List<string> _whereSqlFilters = new();
@@ -45,17 +46,26 @@ internal sealed class ExperimentalQueryBuilder
         
         if (_limit > 0)
         {
-            sql += " LIMIT @Limit";
+            sql += " LIMIT @Limit ";
             _dynamicParameters.Add("@Limit", _limit);
         }
 
         if (_offset >= 0)
         {
-            sql += " OFFSET @Offset";
+            sql += " OFFSET @Offset ";
             _dynamicParameters.Add("@Offset", _offset);
         }
 
-        return new CommandDefinition(sql, _dynamicParameters, cancellationToken: token);
+        return new CommandDefinition(
+            sql, 
+            _dynamicParameters,
+            commandTimeout: DefaultTimeoutInSeconds,
+            cancellationToken: token);
+    }
+    
+    internal ExperimentalQueryBuilder Where<T>(string columnName, T? value) where T: struct
+    {
+        return value is null ? this : Where(columnName, value.Value);
     }
     
     internal ExperimentalQueryBuilder Where<T>(string columnName, T value) where T: struct
@@ -94,9 +104,22 @@ internal sealed class ExperimentalQueryBuilder
         
         return this;
     }
+
+    internal ExperimentalQueryBuilder Custom<T>(string sql, string sqlValueName, T? value)
+    {
+        if (value == null)
+        {
+            return this;
+        }
+        
+        _dynamicParameters.Add(sqlValueName, value);
+        _whereSqlFilters.Add(sql);
+
+        return this;
+    }
     
     public ExperimentalQueryBuilder Like(string columnName, string? searchInput)
-    {   
+    {
         if (string.IsNullOrEmpty(searchInput))
         {
             return this;
@@ -126,7 +149,7 @@ internal sealed class ExperimentalQueryBuilder
 
     public ExperimentalQueryBuilder OrderBy(params string[] columns)
     {
-        _orderByColumns = columns;
+        _orderByColumns = columns.Where(c => c != null).ToArray();
 
         return this;
     }

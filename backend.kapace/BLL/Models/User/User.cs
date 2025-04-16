@@ -6,4 +6,5 @@ public record User(
     string HashedPassword,
     string Email,
     bool IsMailVerified,
-    DateTimeOffset CreatedAt);
+    DateTimeOffset CreatedAt,
+    string ImageUrl);

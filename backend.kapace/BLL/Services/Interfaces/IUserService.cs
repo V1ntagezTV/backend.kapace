@@ -12,9 +12,13 @@ public interface IUserService
     Task UpdatePassword(long userId, string oldPassword, string newPassword, CancellationToken token);
     Task Register(string nickname, string email, string password, CancellationToken token);
     Task<bool> TryVerifyMail(long userId, int verificationCode, CancellationToken token);
-    Task InitMailVerification(long userId, CancellationToken token);
-    Task UpdateNickname(long userId, string newNickname, CancellationToken token);
-    Task<User> SendPasswordResetCode(string email, CancellationToken token);
-    Task ResetPassword(long userId, string email, string newPassword, CancellationToken token);
-    Task<User> VerifyPasswordResetCode(string email, int code, CancellationToken token);
+    Task SendMailVerification(long userId, CancellationToken token);
+    Task UpdateNickname(long userId, string newNickname, bool isForce, CancellationToken token);
+    Task<User> PasswordResetSendCode(string email, CancellationToken token);
+    Task PasswordReset(long userId, string email, string newPassword, CancellationToken token);
+    Task<User> PasswordResetVerifyCode(string email, string code, CancellationToken token);
+    Task UpdateMailSendCode(long userId, CancellationToken token);
+    Task<User> UpdateMailVerifyCode(long userId, string code, CancellationToken token);
+    Task VerifyNewEmail(long userId, string newEmail, string code, CancellationToken token);
+    Task SendVerifyCodeToNewEmail(long userId, string newEmail, CancellationToken token);
 }

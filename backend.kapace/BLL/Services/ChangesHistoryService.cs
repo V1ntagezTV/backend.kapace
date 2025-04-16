@@ -226,7 +226,7 @@ public class ChangesHistoryService : IChangesHistoryService
             // Для создания контента используется идентификатор из changes_history записи
             var newContentId = await _contentService.InsertAsync(new InsertContentModel(
                 Id: changeUnit.Id,
-                ImageId: contentChanges.ImageId ?? throw new ArgumentException(),
+                ImageId: contentChanges.ImageId ?? 0,
                 Title: contentChanges.Title ?? throw new ArgumentException(),
                 Description: contentChanges.Description ?? throw new ArgumentException(),
                 ContentType: contentChanges.ContentType ?? throw new ArgumentException(),

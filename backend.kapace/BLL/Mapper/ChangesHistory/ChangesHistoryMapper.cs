@@ -1,6 +1,7 @@
 ﻿using backend.kapace.BLL.Models;
 using backend.kapace.BLL.Models.HistoryChanges;
 using backend.kapace.BLL.Models.VideoService;
+using Microsoft.IdentityModel.Tokens;
 
 namespace backend.kapace.BLL.Mapper.ChangesHistory;
 
@@ -48,6 +49,7 @@ internal static class ChangesHistoryMapper
         var model = unit.Changes as HistoryUnit.JsonContentChanges;
         var fieldsComparisons = new Dictionary<string, (string newValue, string oldValue)>();
 
+        // TODO: Необходимо брать последние изменение до текущего, а не текущее состояние
         Content? content = null;
         _ = unit.TargetId.HasValue && !contentsMap.TryGetValue(unit.TargetId.Value, out content);
 
@@ -60,7 +62,7 @@ internal static class ChangesHistoryMapper
         AddChange(fieldsComparisons, "Страна", model?.Country, content?.Country );
         AddChange(fieldsComparisons, "Тип", model?.ContentType, content?.ContentType);
         AddChange(fieldsComparisons, "Длительность", model?.Duration, content?.Duration);
-        AddChange(fieldsComparisons, "Дата выпуска", model?.ReleasedAt, content?.ReleasedAt);
+        AddChange(fieldsComparisons, "Дата выпуска", model?.ReleasedAt?.ToUniversalTime(), content?.ReleasedAt?.ToUniversalTime());
         AddChange(fieldsComparisons, "Запланировано серий", model?.PlannedSeries, content?.PlannedSeries);
         AddChange(fieldsComparisons, "Возраст", model?.MinAge, content?.MinAge);
         AddChange(fieldsComparisons, "Описание", model?.Description, content?.Description);
@@ -91,5 +93,7 @@ internal static class ChangesHistoryMapper
         
         if (newValueStr != oldValueStr)
             changes.Add(name, (newValueStr, oldValueStr));
+        else if (!newValueStr.IsNullOrEmpty() && oldValueStr.IsNullOrEmpty())
+            changes.Add(name, (newValueStr, ""));
     }
 }

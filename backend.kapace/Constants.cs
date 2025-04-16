@@ -2,7 +2,16 @@
 
 internal static class Constants
 {
-    internal static int MailVerificationCodeExpiration = 5;
-    internal static int RestorePasswordCodeExpiration = 2;
-    internal static string ForbiddenAuthorizeClaimScope = "forbidden_authorize_claim";
+    internal const int MailVerificationCodeExpirationInMinutes = 5;
+    internal const int MailUpdateCodeExpirationInMinutes = 5;
+    internal const int RestorePasswordCodeExpirationInMinutes = 5;
+    internal const string ForbiddenAuthorizeClaimScope = "forbidden_authorize_claim";
+    internal const string ClaimTypeTokenType = "token_type";
+    internal const string ClaimTypeTokenScope = "token_scope";
+}
+
+public enum TokenTypes
+{
+    MailUpdateToken,
+    ResetPasswordToken
 }

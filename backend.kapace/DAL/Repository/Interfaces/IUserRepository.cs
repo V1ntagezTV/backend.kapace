@@ -7,7 +7,7 @@ public interface IUserRepository
 {
     Task<IReadOnlyCollection<User>> Query(UserQuery query, CancellationToken token);
 
-    Task Insert(
+    Task<long> Insert(
         string nickname,
         string email,
         string passwordHash,
@@ -17,4 +17,5 @@ public interface IUserRepository
     Task UpdateVerifiedMail(long userId, bool isMailVerified, CancellationToken token);
     Task UpdatePassword(long userId, string passwordHash, CancellationToken token);
     Task UpdateNickname(long userId, string newNickname, CancellationToken token);
+    Task EmailUpdate(long userId, string newEmail, CancellationToken token);
 }

@@ -4,6 +4,7 @@ namespace backend.kapace.Infrastructure.Database;
 
 public class BaseKapaceRepository
 {
+    protected static readonly int DefaultTimeoutInSeconds = 5;
     private readonly NpgsqlDataSource _npgsqlDataSource;
 
     protected BaseKapaceRepository(NpgsqlDataSource npgsqlDataSource)

@@ -58,7 +58,7 @@ public class TranslatorsRepository : BaseKapaceRepository, ITranslatorsRepositor
 
         if (!string.IsNullOrEmpty(query.Search)) {
             parameters.Add($"@{nameof(query.Search)}", query.Search);
-            filters.Add("name LIKE CONCAT('%',@Search,'%')");
+            filters.Add("name ILIKE CONCAT('%', @Search, '%')");
         }
 
         if (filters.Any())

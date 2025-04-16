@@ -6,10 +6,7 @@ namespace backend.Migrator.Migrations;
 public class AddMailVerifyColumn : Migration {
     public override void Up()
     {
-        const string initSql = @"
-ALTER TABLE users 
-    ADD COLUMN is_mail_verified BOOLEAN DEFAULT FALSE;
-";
+        const string initSql = @"ALTER TABLE users ADD COLUMN is_mail_verified BOOLEAN DEFAULT FALSE;";
         Execute.Sql(initSql);
     }
 

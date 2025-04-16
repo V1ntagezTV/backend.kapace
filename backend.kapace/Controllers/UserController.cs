@@ -21,22 +21,17 @@ namespace backend.kapace.Controllers;
 
 [ApiController]
 [Route("v1/user")]
-public class UserController : Controller
+public class UserController(IUserService userService) : ApiController
 {
     private readonly DateTimeOffset _loginDuration = DateTimeOffset.UtcNow.AddDays(1);
-    private readonly IUserService _userService;
-
-    public UserController(IUserService userService)
-    {
-        _userService = userService;
-    }
+    private readonly TimeSpan _temporaryTokensExpiration = TimeSpan.FromMinutes(5);
 
     [Authorize]
     [HttpPost("current")]
     public async Task<ActionResult> V1GetCurrent(CancellationToken token)
     {
         var userId = User.GetUserId();
-        var (user, roles) = await _userService.GetCurrent(userId, token);
+        var (user, roles) = await userService.GetCurrent(userId, token);
 
         var response = new
         {
@@ -45,7 +40,9 @@ public class UserController : Controller
                 Id = user.Id,
                 Nickname = user.Nickname,
                 Email = user.Email,
-                CreatedAt = user.CreatedAt
+                CreatedAt = user.CreatedAt,
+                IsMailVerified = user.IsMailVerified,
+                ImageUrl = user.ImageUrl,
             },
             Roles = roles.Select(r => new
             {
@@ -56,19 +53,12 @@ public class UserController : Controller
 
         return Ok(response);
     }
-    
-    [HttpPost("test-except")]
-    public async Task<ActionResult> Teest(CancellationToken token)
-    {
-        throw new ServiceException(ErrorCode.MailVerificationError, "Что-то пошло не так")
-            .SetData("Да?", "Да!");
-    }
 
     [Authorize(Roles = "admin")]
     [HttpPost("query")]
     public async Task<ActionResult<V1QueryResponse>> V1Query(V1QueryRequest request, CancellationToken token)
     {
-        var users = await _userService.Query(new UserQuery
+        var users = await userService.Query(new UserQuery
         {
             UserIds = request.UserIds ?? [],
             Nicknames = request.Nicknames ?? [],
@@ -89,7 +79,7 @@ public class UserController : Controller
     [HttpPost("register")]
     public async Task<ActionResult> Register(V1RegisterRequest request, CancellationToken token)
     {
-        await _userService.Register(
+        await userService.Register(
             request.Nickname,
             request.Email,
             request.Password,
@@ -103,18 +93,19 @@ public class UserController : Controller
     public async Task<ActionResult> UpdatePassword(V1UpdatePasswordRequest request, CancellationToken token)
     {
         var userId = User.GetUserId();
-
-        await _userService.UpdatePassword(userId, request.OldPassword, request.NewPassword, token);
+        
+        await userService.UpdatePassword(userId, request.OldPassword, request.NewPassword, token);
 
         return Ok();
     }
 
+    [Authorize]
     [HttpPost("update-nickname")]
     public async Task<ActionResult> UpdateNickname(V1UpdateNicknameRequest request, CancellationToken token)
     {
         var userId = User.GetUserId();
 
-        await _userService.UpdateNickname(userId, request.NewNickname, token);
+        await userService.UpdateNickname(userId, request.NewNickname, request.IsForce, token);
 
         return Ok();
     }
@@ -124,18 +115,101 @@ public class UserController : Controller
     public async Task<ActionResult> VerifyMail(V1VerifyMailRequest request, CancellationToken token)
     {
         var userId = User.GetUserId();
-        await _userService.TryVerifyMail(userId, request.VerificationCode, token);
-
+        await userService.TryVerifyMail(userId, request.VerificationCode, token);
         return Ok();
     }
     
     [Authorize]
     [HttpPost("send-mail-verify-code")]
-    public async Task<ActionResult> SendMailVerificationCode(CancellationToken token)
+    public async Task<ActionResult> SendApproveMailVerificationCode(CancellationToken token)
     {
         var userId = User.GetUserId();
 
-        await _userService.InitMailVerification(userId, token);
+        await userService.SendMailVerification(userId, token);
+
+        return Ok();
+    }
+    
+    [Authorize]
+    [HttpPost("update-mail/old-email-send-code")]
+    public async Task<ActionResult> UpdateMailSendCode(CancellationToken token)
+    {
+        var userId = User.GetUserId();
+
+        await userService.UpdateMailSendCode(userId, token);
+
+        return Ok();
+    }
+    
+    [Authorize]
+    [HttpPost("update-mail/old-email-verify-code")]
+    public async Task<ActionResult> UpdateMailVerifyCode(UpdateMailVerifyCodeRequest request, CancellationToken token)
+    {
+        var userId = User.GetUserId();
+
+        var user = await userService.UpdateMailVerifyCode(userId, request.Code, token);
+
+        var claims = new List<Claim>
+        {
+            new(ClaimTypes.Sid, user.Id.ToString()),
+            new(ClaimTypes.WindowsDeviceClaim, HttpContext.Connection.RemoteIpAddress?.ToString() ?? "no_ip"),
+            new(Constants.ClaimTypeTokenScope, Constants.ForbiddenAuthorizeClaimScope),
+            new(Constants.ClaimTypeTokenType, TokenTypes.MailUpdateToken.ToString())
+        };
+        
+        var jwt = new JwtSecurityToken(
+            issuer: AuthOptions.Issuer,
+            audience: AuthOptions.Audience,
+            claims: claims,
+            expires: DateTime.UtcNow.ToUniversalTime().AddMinutes(5),
+            signingCredentials: new SigningCredentials(
+                AuthOptions.GetSymmetricSecurityKey(),
+                SecurityAlgorithms.HmacSha256)
+        );
+
+        var bearerToken = new JwtSecurityTokenHandler().WriteToken(jwt);
+        
+        return Ok(new { Token = bearerToken });
+    }
+    
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+    [HttpPost("update-mail/new-email-send-code")]
+    public async Task<ActionResult> UpdateMail(UpdateMailRequest request, CancellationToken token)
+    {
+        var userIdStr =
+            User.FindFirst(ClaimTypes.Sid)?.Value
+            ?? throw new ServiceException(ErrorCode.EmailUpdateError);
+        if (!long.TryParse(userIdStr, out var userId))
+        {
+            throw new ServiceException(ErrorCode.EmailUpdateError);
+        }
+        
+        ValidateTokenType(TokenTypes.MailUpdateToken, ErrorCode.EmailUpdateError);
+        ValidateTokenIpAddress(ErrorCode.EmailUpdateError);
+        ValidateTokenScopeOrThrow(ErrorCode.EmailUpdateError);
+
+        await userService.SendVerifyCodeToNewEmail(userId, request.NewMail, token);
+        
+        return Ok();
+    }
+    
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+    [HttpPost("update-mail/new-email-verify-code")]
+    public async Task<ActionResult> UpdateMailVerify(UpdateMailVerifyNewMailRequest request, CancellationToken token)
+    {
+        var userIdStr =
+            User.FindFirst(ClaimTypes.Sid)?.Value
+            ?? throw new ServiceException(ErrorCode.EmailUpdateError);
+        if (!long.TryParse(userIdStr, out var userId))
+        {
+            throw new ServiceException(ErrorCode.EmailUpdateError);
+        }
+        
+        ValidateTokenType(TokenTypes.MailUpdateToken, ErrorCode.EmailUpdateError);
+        ValidateTokenIpAddress(ErrorCode.EmailUpdateError);
+        ValidateTokenScopeOrThrow(ErrorCode.EmailUpdateError);
+
+        await userService.VerifyNewEmail(userId, request.NewMail, request.Code, token);
 
         return Ok();
     }
@@ -143,7 +217,7 @@ public class UserController : Controller
     [HttpPost("login-by-bearer")]
     public async Task<ActionResult<V1LogInResponse>> Login(V1LogInRequest request, CancellationToken token)
     {
-        var (user, permissions) = await _userService.AuthorizeUser(
+        var (user, permissions) = await userService.AuthorizeUser(
             request.Email,
             request.Password,
             token);
@@ -177,7 +251,7 @@ public class UserController : Controller
     [HttpPost("login-by-cookie")]
     public async Task<ActionResult> LogInByCookie(V1LogInRequest request, CancellationToken token)
     {
-        var (user, permissions) = await _userService.AuthorizeUser(
+        var (user, permissions) = await userService.AuthorizeUser(
             request.Email,
             request.Password,
             token);
@@ -195,6 +269,10 @@ public class UserController : Controller
             IsPersistent = request.IsRememberMe ?? false,
             // Устанавливаем срок действия куки
             ExpiresUtc = _loginDuration,
+            // Устанавливаем время отсчета срока действия куки
+            IssuedUtc = DateTime.UtcNow,
+            // Устанавливаем параметры обновления куки
+            AllowRefresh = true
         };
 
         await HttpContext.SignInAsync(
@@ -212,31 +290,35 @@ public class UserController : Controller
         return Ok();
     }
     
-    [HttpPost("send-password-reset-code")]
+    [HttpPost("reset-password/send-code")]
     public async Task<ActionResult> SendPasswordResetCode(V1SendPasswordResetCodeRequest request, CancellationToken token)
     {
-        await _userService.SendPasswordResetCode(request.Email, token);
+        await userService.PasswordResetSendCode(request.Email, token);
 
         return Ok();
     }
 
-    [HttpPost("verify-password-reset-code")]
+    [HttpPost("reset-password/verify-code")]
     public async Task<IActionResult> VerifyPasswordReset(V1VerifyPasswordResetRequest request, CancellationToken token)
     {
-        var user = await _userService.VerifyPasswordResetCode(request.Email, request.Code, token);
+        var user = await userService.PasswordResetVerifyCode(
+            request.Email,
+            request.Code.ToString(),
+            token);
 
         var claims = new List<Claim>
         {
             new(ClaimTypes.Sid, user.Id.ToString()),
             new(ClaimTypes.WindowsDeviceClaim, HttpContext.Connection.RemoteIpAddress?.ToString() ?? "no_ip"),
-            new("scope", Constants.ForbiddenAuthorizeClaimScope)
+            new(Constants.ClaimTypeTokenScope, Constants.ForbiddenAuthorizeClaimScope),
+            new(Constants.ClaimTypeTokenType, TokenTypes.ResetPasswordToken.ToString())
         };
         
         var jwt = new JwtSecurityToken(
             issuer: AuthOptions.Issuer,
             audience: AuthOptions.Audience,
             claims: claims,
-            expires: _loginDuration.DateTime,
+            expires: DateTime.UtcNow.ToUniversalTime().Add(_temporaryTokensExpiration),
             signingCredentials: new SigningCredentials(
                 AuthOptions.GetSymmetricSecurityKey(),
                 SecurityAlgorithms.HmacSha256)
@@ -248,37 +330,25 @@ public class UserController : Controller
     }
     
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-    [HttpPost("reset-password")]
+    [HttpPost("reset-password/finish")]
     public async Task<ActionResult> ResetPassword(
         V1ResetPasswordRequest request,
         CancellationToken token)
     {
         var userIdStr =
             User.FindFirst(ClaimTypes.Sid)?.Value
-            ?? throw new ServiceException(ErrorCode.PasswordResetForbidden);
+            ?? throw new ServiceException(ErrorCode.PasswordResetError);
         
         if (!long.TryParse(userIdStr, out var userId))
         {
-            throw new ServiceException(ErrorCode.PasswordResetForbidden);
-        }
-        
-        var tokenIp = User.FindFirst(ClaimTypes.WindowsDeviceClaim)?.Value;
-        var currentIp = HttpContext.Connection.RemoteIpAddress?.ToString();
-        if (tokenIp != currentIp)
-        {
-            // Запрещаем выполнение запроса, если IP не совпадает
-            throw new ServiceException(ErrorCode.PasswordResetForbidden);
-        }
-        
-        var scope =
-            User.FindFirst("ip_address")?.Value
-            ?? throw new ServiceException(ErrorCode.PasswordResetForbidden);
-        if (scope != Constants.ForbiddenAuthorizeClaimScope)
-        {
-            throw new ServiceException(ErrorCode.PasswordResetForbidden);
+            throw new ServiceException(ErrorCode.PasswordResetError);
         }
 
-        await _userService.ResetPassword(userId, request.Email, request.NewPassword, token);
+        ValidateTokenType(TokenTypes.ResetPasswordToken, ErrorCode.PasswordResetError);
+        ValidateTokenIpAddress(ErrorCode.PasswordResetError);
+        ValidateTokenScopeOrThrow(ErrorCode.PasswordResetError);
+
+        await userService.PasswordReset(userId, request.Email, request.NewPassword, token);
 
         return Ok();
     }
